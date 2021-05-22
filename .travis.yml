@@ -25,7 +25,7 @@ install:
   - composer require --dev php-coveralls/php-coveralls
 
 before_script:
-  - cp .env.travis .env.testing
+  - cp .env.travis .env
   - mysql -e 'CREATE DATABASE bcadenpasar_chatbot'
   - php artisan key:generate
   - php artisan migrate --no-interaction -vvv
