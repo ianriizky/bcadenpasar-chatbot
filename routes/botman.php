@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\BotManController;
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Facades\BotMan as BotManFacade;
 
 /*
 |--------------------------------------------------------------------------
