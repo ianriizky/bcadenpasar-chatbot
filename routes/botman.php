@@ -18,7 +18,7 @@ Route::match(['get', 'post'], '/botman', function (BotMan $botman) {
         $botman->reply('Hello!');
     });
 
-    $botman->hears('Start conversation', [BotmanController::class, 'startConversation']);
+    $botman->hears('Start conversation', BotmanController::class . '@startConversation');
 
     $botman->listen();
 });
