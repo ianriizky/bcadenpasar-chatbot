@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BotManController;
+use App\Http\Controllers\CoegController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['get', 'post'], '/', [BotManController::class, 'handle']);
+Route::match(['get', 'post'], '/', [CoegController::class, 'handle']);

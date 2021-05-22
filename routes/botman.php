@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BotManController;
+use App\Http\Controllers\CoegController;
 use BotMan\BotMan\BotMan;
 
 /*
@@ -19,4 +19,4 @@ $botman->hears('Hi', function (BotMan $botman) {
     $botman->reply('Hello!');
 });
 
-$botman->hears('Start conversation', BotManController::class . '@startConversation');
+$botman->hears('Start conversation', CoegController::class . '@startConversation');

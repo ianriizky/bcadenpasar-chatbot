@@ -6,7 +6,7 @@ use App\Conversations\ExampleConversation;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Facades\BotMan as BotManFacade;
 
-class BotManController extends Controller
+class CoegController extends Controller
 {
     /**
      * The BotMan instance.
