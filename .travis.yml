@@ -8,6 +8,14 @@ dist: xenial
 php:
   - 8.0
 
+services:
+  - mysql
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+
 env:
   global:
     - XDEBUG_MODE=coverage
@@ -18,7 +26,7 @@ install:
 
 before_script:
   - cp .env.travis .env.testing
-  - sudo mysql -e 'CREATE DATABASE bcadenpasar_chatbot'
+  - mysql -e 'CREATE DATABASE bcadenpasar_chatbot'
   - php artisan key:generate
   - php artisan migrate --no-interaction -vvv
 
