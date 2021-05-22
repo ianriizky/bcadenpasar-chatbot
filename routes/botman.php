@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\BotmanController;
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Facades\BotMan as BotManFacade;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +13,12 @@ use BotMan\BotMan\Facades\BotMan as BotManFacade;
 |
 */
 
-/** @var \BotMan\BotMan\BotMan $botman */
-$botman = BotManFacade::getFacadeRoot();
+Route::match(['get', 'post'], '/botman', function (BotMan $botman) {
+    $botman->hears('Hi', function (BotMan $botman) {
+        $botman->reply('Hello!');
+    });
 
-$botman->hears('Hi', function (BotMan $botman) {
-    $botman->reply('Hello!');
+    $botman->hears('Start conversation', [BotmanController::class, 'startConversation']);
+
+    $botman->listen();
 });
-
-$botman->hears('Start conversation', [BotmanController::class, 'startConversation']);
