@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\BotmanController;
+use App\Http\Controllers\BotManController;
 use BotMan\BotMan\BotMan;
-use Illuminate\Support\Facades\Route;
+use BotMan\BotMan\Facades\BotMan as BotManFacade;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['get', 'post'], '/botman', function (BotMan $botman) {
-    $botman->hears('Hi', function (BotMan $botman) {
-        $botman->reply('Hello!');
-    });
+/** @var \BotMan\BotMan\BotMan $botman */
+$botman = resolve('botman');
 
-    $botman->hears('Start conversation', BotmanController::class . '@startConversation');
-
-    $botman->listen();
+$botman->hears('Hi', function (BotMan $botman) {
+    $botman->reply('Hello!');
 });
+
+$botman->hears('Start conversation', BotManController::class . '@startConversation');

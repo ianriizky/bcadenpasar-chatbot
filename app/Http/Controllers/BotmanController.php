@@ -4,18 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Conversations\ExampleConversation;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Facades\BotMan as BotManFacade;
 
-class BotmanController extends Controller
+class BotManController extends Controller
 {
+    /**
+     * The BotMan instance.
+     *
+     * @var \BotMan\BotMan\BotMan
+     */
+    protected BotMan $botman;
+
     /**
      * Create a new instance class.
      *
      * @return void
      */
-    public function __construct(
-        protected BotMan $botman
-    ) {
-        $this->botman = $botman;
+    public function __construct()
+    {
+        $this->botman = BotManFacade::getFacadeRoot();
+    }
+
+    /**
+     * Place for BotMan logic.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $this->botman->listen();
     }
 
     /**

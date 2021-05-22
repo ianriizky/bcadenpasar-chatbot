@@ -46,9 +46,12 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            $this->mapWebBotManCommands();
         });
 
         $this->mapBotManCommands();
+
     }
 
     /**
@@ -71,5 +74,18 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapBotManCommands()
     {
         require base_path('routes/botman.php');
+    }
+
+    /**
+     * Defines the BotMan web route.
+     *
+     * @return void
+     */
+    protected function mapWebBotManCommands()
+    {
+        Route::middleware('web_without_csrf')
+            ->prefix('/botman')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web-botman.php'));
     }
 }
