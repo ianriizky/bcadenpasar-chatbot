@@ -16,6 +16,12 @@ install:
   - composer install --no-interaction
   - composer require --dev php-coveralls/php-coveralls
 
+before_script:
+  - cp .env.travis .env.testing
+  - sudo mysql -e 'CREATE DATABASE bcadenpasar_chatbot'
+  - php artisan key:generate
+  - php artisan migrate --no-interaction -vvv
+
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
