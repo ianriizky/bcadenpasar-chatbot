@@ -18,7 +18,7 @@ Source code ini sudah dilengkapi dengan *unit test* menggunakan [phpunit](https:
 
 ## Instalasi
 
-Untuk menginstal repository ini di lokal anda, jalankan perintah di bawah ini melalui terminal.
+Untuk menginstal *repository* ini di lokal anda, jalankan perintah di bawah ini melalui terminal.
 
 ```bash
 composer create-project ianriizky/bcadenpasar-chatbot
