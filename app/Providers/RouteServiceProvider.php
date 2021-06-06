@@ -47,7 +47,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
 
-            $this->mapWebBotManCommands();
+            Route::match(['get', 'post'], '/botman', function () {
+                /** @var \BotMan\BotMan\BotMan $botman */
+                $botman = resolve('botman');
+
+                $botman->listen();
+            })->middleware('web_without_csrf');
         });
 
         $this->mapBotManCommands();
@@ -69,23 +74,12 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Defines the BotMan "hears" commands.
      *
+     * Note: Please don't remove this below file, as it will be used also on the artisan command `botman:tinker`
+     *
      * @return void
      */
     protected function mapBotManCommands()
     {
         require base_path('routes/botman.php');
-    }
-
-    /**
-     * Defines the BotMan web route.
-     *
-     * @return void
-     */
-    protected function mapWebBotManCommands()
-    {
-        Route::middleware('web_without_csrf')
-            ->prefix('/botman')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/web-botman.php'));
     }
 }

@@ -14,7 +14,7 @@ class ExampleConversation extends Conversation
     /**
      * Start the conversation.
      *
-     * {@inheritDoc}
+     * @return $this
      */
     public function run()
     {

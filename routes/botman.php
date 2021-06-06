@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\BotManController;
+use App\Conversations\ExampleConversation;
+use App\Conversations\HomeConservation;
 use BotMan\BotMan\BotMan;
 
 /*
@@ -15,8 +16,6 @@ use BotMan\BotMan\BotMan;
 /** @var \BotMan\BotMan\BotMan $botman */
 $botman = resolve('botman');
 
-$botman->hears('Hi', function (BotMan $botman) {
-    $botman->reply('Hello!');
-});
+$botman->hears('Hi', fn (BotMan $botman) => $botman->startConversation(new ExampleConversation));
 
-$botman->hears('/start', BotManController::class . '@startConversation');
+$botman->hears('/start', fn (BotMan $botman) => $botman->startConversation(new HomeConservation));
