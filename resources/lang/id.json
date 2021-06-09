@@ -142,7 +142,7 @@
     "Cook Islands": "Kepulauan Cook",
     "Costa Rica": "Kosta Rika",
     "Cote D'Ivoire": "Pantai Gading",
-    "could not be found.": "tidak adpat ditemukan.",
+    "could not be found.": "tidak dapat ditemukan.",
     "Country": "Country",
     "Coupon": "Coupon",
     "Create": "Buat",
@@ -707,5 +707,14 @@
     "Zambia": "Zambia",
     "Zimbabwe": "Zimbabwe",
     "Zip \/ Postal Code": "Zip \/ Postal Code",
-    "Åland Islands": "Åland Islands"
+    "Åland Islands": "Åland Islands",
+    "Don't have an account?": "Tidak punya akun?",
+    "Good Morning": "Selamat Pagi",
+    "Good Afternoon": "Selamat Siang",
+    "Good Evening": "Selamat Sore",
+    "Good Night": "Selamat Malam",
+    "Welcome": "Selamat Datang",
+    "Welcome to": "Selamat Datang di",
+    "Before you get started, you must login or register if you don't already have an account.": "Sebelum memulai, Anda harus login atau mendaftar jika Anda belum memiliki akun.",
+    "Phone Number": "Nomor Telepon"
 }

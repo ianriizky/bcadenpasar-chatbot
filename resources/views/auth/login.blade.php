@@ -1,53 +1,98 @@
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+    <section class="section">
+        <div class="d-flex flex-wrap align-items-stretch">
+            <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
+                <div class="p-4 m-3">
+                    <img src="{{ asset('img/stisla/stisla-fill.svg') }}" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+                    <h4 class="text-dark font-weight-normal">{{ __('Welcome to') }} <span class="font-weight-bold">{{ config('app.name') }}</span></h4>
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <p class="text-muted">{{ __('Before you get started, you must login or register if you don\'t already have an account.') }}</p>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+                    {{-- <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" /> --}}
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                        <div class="form-group">
+                            <label for="identifier" class="control-label">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}</label>
+
+                            <input type="text" name="identifier" id="identifier" class="form-control @error('identifier') is-invalid @enderror" tabindex="1" required autofocus>
+
+                            @error('identifier')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <div class="d-block">
+                                <label for="password" class="control-label">{{ __('Password') }}</label>
+                            </div>
+
+                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" tabindex="2" required>
+
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" name="remember" id="remember" class="custom-control-input" tabindex="3">
+
+                                <label for="remember" class="custom-control-label">{{ __('Remember me') }}</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-right">
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="float-left mt-3">
+                                    {{ __('Forgot your password?') }}
+                                </a>
+                            @endif
+
+                            <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right" tabindex="4">
+                                {{ __('Log in') }}
+                            </button>
+                        </div>
+
+                        <div class="mt-5 text-center">
+                            {{ __('Don\'t have an account?') }} <a href="{{ route('register') }}">{{ __('Create Account') }}</a>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-5 text-small">
+                        Copyright &copy; {{ config('app.name') }}. Made with 💙 by Stisla
+
+                        <div class="mt-2">
+                            <a href="#">{{ __('Privacy Policy') }}</a>
+
+                            <div class="bullet"></div>
+
+                            <a href="#">{{ __('Terms of Service') }}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="{{ asset('img/unsplash/login-bg.jpg') }}">
+                <div class="absolute-bottom-left index-2">
+                    <div class="text-light p-5 pb-2">
+                        <div class="mb-5 pb-3">
+                            <h1 class="mb-2 display-4 font-weight-bold">{{ greeting() }}</h1>
 
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+                            <h5 class="font-weight-normal text-muted-transparent">Bali, Indonesia</h5>
+                        </div>
+
+                        Photo by <a class="text-light bb" target="_blank" href="https://unsplash.com/photos/a8lTjWJJgLA">Justin Kauffman</a> on <a class="text-light bb" target="_blank" href="https://unsplash.com">Unsplash</a>
+                    </div>
+                </div>
             </div>
-
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
+        </div>
+    </section>
 </x-guest-layout>

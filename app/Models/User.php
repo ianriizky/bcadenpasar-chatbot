@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Infrastructure\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,
+        Concerns\User\Attribute;
 
     /**
      * The attributes that are mass assignable.
@@ -17,8 +19,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'username',
+        'fullname',
         'email',
+        'phone',
         'password',
     ];
 
@@ -38,6 +42,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'phone' => E164PhoneNumberCast::class,
         'email_verified_at' => 'datetime',
     ];
 }
