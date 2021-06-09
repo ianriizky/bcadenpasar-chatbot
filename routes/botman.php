@@ -1,7 +1,6 @@
 <?php
 
 use App\Conversations\ExampleConversation;
-use App\Conversations\HomeConservation;
 use BotMan\BotMan\BotMan;
 
 /*
@@ -18,4 +17,8 @@ $botman = resolve('botman');
 
 $botman->hears('Hi', fn (BotMan $botman) => $botman->startConversation(new ExampleConversation));
 
-$botman->hears('/start', fn (BotMan $botman) => $botman->startConversation(new HomeConservation));
+$botman->fallback(function (BotMan $botman) {
+    $message = __("Maaf, kami tidak mengenali maksud dari '{$botman->getMessage()->getText()}'.");
+
+    $botman->reply($message);
+});
