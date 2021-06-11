@@ -2,7 +2,7 @@ build:
   nodes:
     analysis:
       environment:
-        - node: '16.3.0'
+        node: '16.3.0'
       project_setup:
         override: true
       tests:
