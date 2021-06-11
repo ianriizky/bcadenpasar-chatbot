@@ -1,4 +1,6 @@
 build:
+  environment:
+    - node: '12.14'
   nodes:
     analysis:
       project_setup:
