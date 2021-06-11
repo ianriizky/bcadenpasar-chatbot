@@ -1,12 +1,12 @@
 build:
   nodes:
     coverage:
-      environment:
-        node: '16.3.0'
       tests:
         override:
           - command: 'npm install'
     analysis:
+      environment:
+        node: '16.3.0'
       project_setup:
         override: true
       tests:
