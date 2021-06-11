@@ -1,18 +1,16 @@
 build:
   nodes:
-    coverage:
-      tests:
-        override:
-          - command: 'npm install'
     analysis:
       environment:
         node: '16.3.0'
+      dependencies:
+        before:
+          - npm install
       project_setup:
         override: true
       tests:
         override:
           - php-scrutinizer-run --enable-security-analysis
-          - command: 'npm install'
 
 filter:
   excluded_paths:
