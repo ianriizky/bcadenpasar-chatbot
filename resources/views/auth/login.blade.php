@@ -12,33 +12,23 @@
                     <x-auth-session-status class="mb-4" :status="session('status')" />
                     {{-- <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" /> --}}
 
-                    <form method="POST" action="{{ route('login') }}">
+                    <form action="{{ route('login') }}" method="post">
                         @csrf
 
                         <div class="form-group">
-                            <label for="identifier" class="control-label">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}</label>
+                            <label for="identifier">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}</label>
 
                             <input type="text" name="identifier" id="identifier" class="form-control @error('identifier') is-invalid @enderror" tabindex="1" required autofocus>
 
-                            @error('identifier')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-invalid-feedback :name="'identifier'"/>
                         </div>
 
                         <div class="form-group">
-                            <div class="d-block">
-                                <label for="password" class="control-label">{{ __('Password') }}</label>
-                            </div>
+                            <label for="password">{{ __('Password') }}</label>
 
                             <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" tabindex="2" required>
 
-                            @error('password')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <x-invalid-feedback :name="'identifier'"/>
                         </div>
 
                         <div class="form-group">
@@ -67,7 +57,7 @@
                     </form>
 
                     <div class="text-center mt-5 text-small">
-                        Copyright &copy; {{ config('app.name') }}. Made with 💙 by Stisla
+                        Copyright &copy; {{ config('app.name') }} 2021. Made with 💙 by Stisla
 
                         <div class="mt-2">
                             <a href="#">{{ __('Privacy Policy') }}</a>
