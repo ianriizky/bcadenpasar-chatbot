@@ -875,7 +875,6 @@ tr:first-child > td > .fc-day-grid-event {
   position: absolute;
   top: 1px;
   right: 1px;
-  width: 40px;
   min-height: 42px;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice {

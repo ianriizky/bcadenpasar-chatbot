@@ -17,25 +17,25 @@
                                 @csrf
 
                                 <div class="row">
-                                    <div class="form-group col-lg-6 col-12">
-                                        <label for="first_name">First Name</label>
+                                    <div class="form-group col-lg-4 col-12">
+                                        <label for="username">{{ __('Username') }}</label>
 
-                                        <input type="text" name="first_name" id="first_name" class="form-control" required autofocus autocomplete="on">
+                                        <input type="text" name="username" id="username" class="form-control" required autocomplete="on">
 
-                                        <x-invalid-feedback :name="'first_name'"/>
+                                        <x-invalid-feedback :name="'username'"/>
                                     </div>
 
-                                    <div class="form-group col-lg-6 col-12">
-                                        <label for="last_name">Last Name</label>
+                                    <div class="form-group col-lg-8 col-12">
+                                        <label for="fullname">{{ __('Full name') }}</label>
 
-                                        <input type="text" name="last_name" id="last_name" class="form-control" required autocomplete="on">
+                                        <input type="text" name="fullname" id="fullname" class="form-control" required autofocus autocomplete="on">
 
-                                        <x-invalid-feedback :name="'last_name'"/>
+                                        <x-invalid-feedback :name="'fullname'"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">{{ __('Email') }}</label>
 
                                     <input type="email" name="email" id="email" class="form-control" required autocomplete="on">
 
@@ -44,7 +44,7 @@
 
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="password">Password</label>
+                                        <label for="password">{{ __('Password') }}</label>
 
                                         <input type="password" name="password" id="password" class="form-control">
 
@@ -52,7 +52,7 @@
                                     </div>
 
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="password_confirmation">Password Confirmation</label>
+                                        <label for="password_confirmation">{{ __('Confirm Password') }}</label>
 
                                         <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
 
@@ -73,6 +73,34 @@
                                     </div>
                                 </div>
 
+                                <div class="form-divider">{{ __('Data Diri') }}</div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-4 col-12">
+                                        <label for="gender">{{ __('Gender') }}</label>
+
+                                        <select name="gender"
+                                            id="gender"
+                                            class="form-control select2"
+                                            data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
+                                            data-allow-clear="true">
+                                            @foreach (\App\Enum\Gender::toArray() as $value => $label)
+                                                <option value="{{ $value }}">{{ $label }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <x-invalid-feedback :name="'gender'"/>
+                                    </div>
+
+                                    <div class="form-group col-lg-8 col-12">
+                                        <label for="phone">{{ __('Phone Number') }}</label>
+
+                                        <input type="tel" name="phone" id="phone" class="form-control" required autofocus autocomplete="on">
+
+                                        <x-invalid-feedback :name="'phone'"/>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary btn-lg btn-block">{{ __('Register') }}</button>
                                 </div>
@@ -87,4 +115,19 @@
             </div>
         </div>
     </section>
+
+    @section('pre-style')
+        <link rel="stylesheet" href="{{ asset('css/stisla/select2.min.css') }}">
+    @endsection
+
+    @section('script')
+        <script src="{{ asset('js/stisla/select2.full.min.js') }}"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.select2').select2()
+                $('.select2').val(null).trigger('change');
+            });
+        </script>
+    @endsection
 </x-guest-layout>

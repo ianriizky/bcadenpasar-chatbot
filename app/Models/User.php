@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\Gender;
 use App\Infrastructure\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +22,9 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'fullname',
+        'gender',
         'email',
+        'phone_country',
         'phone',
         'password',
     ];
@@ -42,6 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'gender' => Gender::class,
         'phone' => E164PhoneNumberCast::class,
         'email_verified_at' => 'datetime',
     ];

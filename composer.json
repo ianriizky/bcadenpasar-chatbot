@@ -13,7 +13,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
-        "propaganistas/laravel-phone": "^4.3"
+        "propaganistas/laravel-phone": "^4.3",
+        "spatie/laravel-enum": "^2.5"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

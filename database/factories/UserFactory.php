@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enum\Gender;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class UserFactory extends Factory
@@ -22,11 +24,17 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $gender = $this->faker->randomElement(['male', 'female']);
+
         return [
-            'name' => $this->faker->name(),
+            'username' => $this->faker->userName,
+            'fullname' => $this->faker->name($gender),
+            'gender' => $gender,
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'phone_country' => env('PHONE_COUNTRY', 'ID'),
+            'phone' => $this->faker->numerify('081#########'),
+            'email_verified_at' => Carbon::now(),
+            'password' => 'password',
             'remember_token' => Str::random(10),
         ];
     }
