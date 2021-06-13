@@ -18,7 +18,14 @@
                         <div class="form-group">
                             <label for="identifier">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}</label>
 
-                            <input type="text" name="identifier" id="identifier" class="form-control @error('identifier') is-invalid @enderror" tabindex="1" required autofocus>
+                            <input type="text"
+                                name="identifier"
+                                id="identifier"
+                                class="form-control @error('identifier') is-invalid @enderror"
+                                value="{{ old('identifier') }}"
+                                tabindex="1"
+                                required
+                                autofocus>
 
                             <x-invalid-feedback :name="'identifier'"/>
                         </div>
@@ -26,14 +33,24 @@
                         <div class="form-group">
                             <label for="password">{{ __('Password') }}</label>
 
-                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" tabindex="2" required>
+                            <input type="password"
+                                name="password"
+                                id="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                tabindex="2"
+                                required>
 
                             <x-invalid-feedback :name="'identifier'"/>
                         </div>
 
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="remember" id="remember" class="custom-control-input" tabindex="3">
+                                <input type="checkbox"
+                                    name="remember"
+                                    id="remember"
+                                    class="custom-control-input"
+                                    @if (old('checked', false)) checked @endif
+                                    tabindex="3">
 
                                 <label for="remember" class="custom-control-label">{{ __('Remember me') }}</label>
                             </div>

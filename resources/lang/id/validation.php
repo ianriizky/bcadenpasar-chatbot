@@ -122,6 +122,9 @@ return [
     'uploaded'             => ':Attribute gagal diunggah.',
     'url'                  => 'Format :attribute tidak valid.',
     'uuid'                 => ':Attribute harus merupakan UUID yang valid.',
+
+    'phone' => 'Format :attribute tidak valid.',
+
     'custom'               => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

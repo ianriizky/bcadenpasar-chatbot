@@ -3,14 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Notifications\VerifyEmailQueued;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Illuminate\Support\Facades\Notification;
 
 class RegistrationTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_registration_screen_can_be_rendered()
     {
         $response = $this->get(route('register'));
@@ -20,6 +18,8 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register()
     {
+        Notification::fake();
+
         $user = User::factory()->raw();
 
         $response = $this->post(route('register'), [
@@ -31,9 +31,12 @@ class RegistrationTest extends TestCase
             'phone' => $user['phone'],
             'password' => $user['password'],
             'password_confirmation' => $user['password'],
+            'agree_with_terms' => true,
         ]);
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+
+        Notification::assertSentTo(User::firstWhere('username', $user['username']), VerifyEmailQueued::class);
     }
 }

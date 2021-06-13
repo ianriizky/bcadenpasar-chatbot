@@ -3,15 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Notifications\ResetPasswordQueued;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_reset_password_link_screen_can_be_rendered()
     {
         $response = $this->get(route('password.request'));
@@ -27,7 +23,7 @@ class PasswordResetTest extends TestCase
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        Notification::assertSentTo($user, ResetPasswordQueued::class);
     }
 
     public function test_reset_password_screen_can_be_rendered()
@@ -38,7 +34,7 @@ class PasswordResetTest extends TestCase
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+        Notification::assertSentTo($user, ResetPasswordQueued::class, function ($notification) {
             $response = $this->get(route('password.reset', ['token' => $notification->token]));
 
             $response->assertStatus(200);
@@ -55,7 +51,7 @@ class PasswordResetTest extends TestCase
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        Notification::assertSentTo($user, ResetPasswordQueued::class, function ($notification) use ($user) {
             $response = $this->post(route('password.update'), [
                 'token' => $notification->token,
                 'email' => $user->email,

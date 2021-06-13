@@ -1,2 +1,2 @@
 web: vendor/bin/heroku-php-apache2 public/
-sqs: php artisan queue:work --timeout=1800
+sqs: php artisan queue:restart && php artisan queue:work --tries=3

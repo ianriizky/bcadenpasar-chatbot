@@ -4,15 +4,18 @@ namespace App\Models;
 
 use App\Enum\Gender;
 use App\Infrastructure\Foundation\Auth\User as Authenticatable;
+use App\Notifications\ResetPasswordQueued;
+use App\Notifications\VerifyEmailQueued;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable,
-        Concerns\User\Attribute;
+        Concerns\User\Attribute,
+        Concerns\User\Relation;
 
     /**
      * The attributes that are mass assignable.
@@ -49,4 +52,20 @@ class User extends Authenticatable
         'phone' => E164PhoneNumberCast::class,
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmailQueued);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordQueued($token));
+    }
 }

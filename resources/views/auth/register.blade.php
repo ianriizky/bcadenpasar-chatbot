@@ -20,7 +20,15 @@
                                     <div class="form-group col-lg-4 col-12">
                                         <label for="username">{{ __('Username') }}</label>
 
-                                        <input type="text" name="username" id="username" class="form-control" required autocomplete="on">
+                                        <input type="text"
+                                            name="username"
+                                            id="username"
+                                            class="form-control @error('username') is-invalid @enderror"
+                                            value="{{ old('username') }}"
+                                            required
+                                            tabindex="1"
+                                            autofocus
+                                            autocomplete="on">
 
                                         <x-invalid-feedback :name="'username'"/>
                                     </div>
@@ -28,7 +36,14 @@
                                     <div class="form-group col-lg-8 col-12">
                                         <label for="fullname">{{ __('Full name') }}</label>
 
-                                        <input type="text" name="fullname" id="fullname" class="form-control" required autofocus autocomplete="on">
+                                        <input type="text"
+                                            name="fullname"
+                                            id="fullname"
+                                            class="form-control @error('fullname') is-invalid @enderror"
+                                            value="{{ old('fullname') }}"
+                                            required
+                                            tabindex="2"
+                                            autocomplete="on">
 
                                         <x-invalid-feedback :name="'fullname'"/>
                                     </div>
@@ -37,7 +52,14 @@
                                 <div class="form-group">
                                     <label for="email">{{ __('Email') }}</label>
 
-                                    <input type="email" name="email" id="email" class="form-control" required autocomplete="on">
+                                    <input type="email"
+                                        name="email"
+                                        id="email"
+                                        class="form-control @error('email') is-invalid @enderror"
+                                        value="{{ old('email') }}"
+                                        required
+                                        tabindex="3"
+                                        autocomplete="on">
 
                                     <x-invalid-feedback :name="'email'"/>
                                 </div>
@@ -46,7 +68,12 @@
                                     <div class="form-group col-lg-6 col-12">
                                         <label for="password">{{ __('Password') }}</label>
 
-                                        <input type="password" name="password" id="password" class="form-control">
+                                        <input type="password"
+                                            name="password"
+                                            id="password"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            required
+                                            tabindex="4">
 
                                         <x-invalid-feedback :name="'password'"/>
                                     </div>
@@ -54,7 +81,12 @@
                                     <div class="form-group col-lg-6 col-12">
                                         <label for="password_confirmation">{{ __('Confirm Password') }}</label>
 
-                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                                        <input type="password"
+                                            name="password_confirmation"
+                                            id="password_confirmation"
+                                            class="form-control @error('password_confirmation') is-invalid @enderror"
+                                            required
+                                            tabindex="5">
 
                                         <x-invalid-feedback :name="'password_confirmation'"/>
                                     </div>
@@ -62,7 +94,14 @@
 
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="agree_with_terms" id="agree_with_terms" class="custom-control-input">
+                                        <input type="checkbox"
+                                            name="agree_with_terms"
+                                            id="agree_with_terms"
+                                            class="custom-control-input @error('agree_with_terms') is-invalid @enderror"
+                                            value="1"
+                                            @if (old('agree_with_terms', false)) checked @endif
+                                            required
+                                            tabindex="6">
 
                                         <label class="custom-control-label" for="agree_with_terms">
                                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
@@ -70,6 +109,8 @@
                                                 'privacy_policy' => '<a href="#">' . __('Privacy Policy') . '</a>',
                                             ]) !!}
                                         </label>
+
+                                        <x-invalid-feedback :name="'agree_with_terms'"/>
                                     </div>
                                 </div>
 
@@ -81,11 +122,12 @@
 
                                         <select name="gender"
                                             id="gender"
-                                            class="form-control select2"
+                                            class="form-control select2 @error('gender') is-invalid @enderror"
                                             data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
-                                            data-allow-clear="true">
+                                            data-allow-clear="true"
+                                            tabindex="7">
                                             @foreach (\App\Enum\Gender::toArray() as $value => $label)
-                                                <option value="{{ $value }}">{{ $label }}</option>
+                                                <option value="{{ $value }}" @if (old('gender') === $value) selected @endif>{{ $label }}</option>
                                             @endforeach
                                         </select>
 
@@ -95,7 +137,14 @@
                                     <div class="form-group col-lg-8 col-12">
                                         <label for="phone">{{ __('Phone Number') }}</label>
 
-                                        <input type="tel" name="phone" id="phone" class="form-control" required autofocus autocomplete="on">
+                                        <input type="tel"
+                                            name="phone"
+                                            id="phone"
+                                            class="form-control @error('phone') is-invalid @enderror"
+                                            value="{{ old('phone') }}"
+                                            required
+                                            tabindex="8"
+                                            autocomplete="on">
 
                                         <x-invalid-feedback :name="'phone'"/>
                                     </div>
