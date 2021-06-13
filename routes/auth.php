@@ -24,13 +24,14 @@ Route::middleware('guest:web')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
+Route::middleware('auth_on_verifying:web', 'throttle:6,1')->group(function () {
+    Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)->middleware('signed')->name('verification.verify');
+    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->name('verification.send');
+});
+
 Route::middleware('auth:web')->group(function () {
     Route::get('/verify-email', EmailVerificationPromptController::class)->name('verification.notice');
-
-    Route::middleware('throttle:6,1')->group(function () {
-        Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)->middleware('signed')->name('verification.verify');
-        Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->name('verification.send');
-    });
+    Route::view('/verify-email-success', 'auth.verify-email-success')->middleware('verified')->name('verification.success');
 
     Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
     Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);

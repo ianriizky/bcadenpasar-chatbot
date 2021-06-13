@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Notifications\VerifyEmailQueued;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Notification;
 
 class RegistrationTest extends TestCase
@@ -35,7 +34,7 @@ class RegistrationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
+        $response->assertRedirect(route('verification.notice'));
 
         Notification::assertSentTo(User::firstWhere('username', $user['username']), VerifyEmailQueued::class);
     }

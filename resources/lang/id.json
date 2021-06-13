@@ -724,5 +724,7 @@
     "Mr.": "Bapak",
     "Mrs.": "Ibu",
     "Gender": "Jenis Kelamin",
-    "Phone Country": "Kode Telepon Negara"
+    "Phone Country": "Kode Telepon Negara",
+    "Please login first before start email verification process.": "Mohon login terlebih dahulu sebelum melakukan proses verifikasi akun.",
+    "Verification email has been run successfully.": "Proses verifikasi email telah berhasil."
 }

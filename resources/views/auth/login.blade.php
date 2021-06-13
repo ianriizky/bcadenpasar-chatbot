@@ -7,7 +7,11 @@
 
                     <h4 class="text-dark font-weight-normal">{{ __('Welcome to') }} <span class="font-weight-bold">{{ config('app.name') }}</span></h4>
 
-                    <p class="text-muted">{{ __('Before you get started, you must login or register if you don\'t already have an account.') }}</p>
+                    @if (session('verifying'))
+                        <p class="text-danger">{{ __('Please login first before start email verification process.') }}</p>
+                    @else
+                        <p class="text-muted">{{ __('Before you get started, you must login or register if you don\'t already have an account.') }}</p>
+                    @endif
 
                     <x-auth-session-status class="mb-4" :status="session('status')" />
                     {{-- <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" /> --}}

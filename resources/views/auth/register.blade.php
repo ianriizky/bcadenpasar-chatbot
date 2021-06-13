@@ -151,15 +151,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block">{{ __('Register') }}</button>
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg btn-block"
+                                        tabindex="9">{{ __('Register') }}</button>
                                 </div>
                             </form>
                         </div>
                     </div>
 
-                    <div class="simple-footer">
-                        Copyright &copy; {{ config('app.name') }} 2021. Made with 💙 by Stisla
-                    </div>
+                    @include('components.footer')
                 </div>
             </div>
         </div>
