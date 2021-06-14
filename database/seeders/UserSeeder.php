@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
             'phone' => env('ADMIN_PHONE', '081000111000'),
             'email_verified_at' => Carbon::now(),
             'password' => env('ADMIN_PASSWORD', 'admin12345'),
+            'is_active' => true,
         ]);
 
         $user->assignRole(Role::ROLE_ADMIN);

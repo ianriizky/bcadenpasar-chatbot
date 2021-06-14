@@ -726,5 +726,6 @@
     "Gender": "Jenis Kelamin",
     "Phone Country": "Kode Telepon Negara",
     "Please login first before start email verification process.": "Mohon login terlebih dahulu sebelum melakukan proses verifikasi akun.",
-    "Verification email has been run successfully.": "Proses verifikasi email telah berhasil."
+    "Verification email has been run successfully.": "Proses verifikasi email telah berhasil.",
+    "Your account have not been activated. Please wait for the confirmation from the administrator before you can start to use the application.": "Akun Anda belum diaktifkan. Harap tunggu konfirmasi dari administrator sebelum Anda dapat mulai menggunakan aplikasi."
 }

@@ -51,6 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender' => Gender::class,
         'phone' => E164PhoneNumberCast::class,
         'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     /**

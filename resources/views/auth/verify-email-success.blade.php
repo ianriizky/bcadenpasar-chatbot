@@ -13,9 +13,13 @@
                         </div>
 
                         <div class="card-body">
-                            <p class="text-muted">
-                                {{ __('Verification email has been run successfully.') }}
-                            </p>
+                            <p class="text-muted">{{ __('Verification email has been run successfully.') }}</p>
+
+                            @if (Auth::check() && !Auth::user()->is_active)
+                                <div class="alert alert-warning">
+                                    <p>{{ __('Your account have not been activated. Please wait for the confirmation from the administrator before you can start to use the application.') }}</p>
+                                </div>
+                            @endif
 
                             <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('Go to page :page', ['page' => __('Dashboard')]) }}</a>
                         </div>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
  * @property \Illuminate\Support\Carbon $email_verified_at
  * @property string $password
  * @property string $remember_token
+ * @property boolean $is_active
  *
  * @see \App\Models\User
  */
