@@ -2,7 +2,10 @@
 
 namespace App\Conversations;
 
-use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\Answer;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use Illuminate\Support\Str;
 
 class HomeConservation extends Conversation
 {
@@ -13,6 +16,59 @@ class HomeConservation extends Conversation
      */
     public function run()
     {
-        // return;
+        $title = Str::ucfirst($this->getTitle($this->getUserStorage()->get('gender')));
+        $name = Str::ucfirst($this->getUser()->getFirstName());
+
+        return $this->ask(Question::create(view('conversations.home.ask-menu', compact('title', 'name'))->render())
+            ->callbackId('select_menu')
+            ->addButtons([
+                Button::create(view('conversations.home.reply-menu-exchange')->render())->value('exchange'),
+            ]), function (Answer $answer) {
+            if (!$answer->isInteractiveMessageReply()) {
+                return;
+            }
+
+            if (!$conversation = $this->getConversation($answer->getValue())) {
+                $menu = $answer->getText();
+
+                return $this->say(view('conversations.home.ask-menu-fallback', compact('menu'))->render());
+            }
+
+            return $this->getBot()->startConversation($conversation);
+        });
+    }
+
+    /**
+     * Return specific title based on the given gender.
+     *
+     * @param  string  $gender
+     * @return string|null
+     */
+    protected function getTitle(string $gender): ?string
+    {
+        switch ($gender) {
+            case 'male':
+                return __('Mr.');
+
+            case 'female':
+                return __('Mrs.');
+        }
+    }
+
+    /**
+     * Return specific conversation instance based on the given name.
+     *
+     * @param  string  $name
+     * @return \BotMan\BotMan\Messages\Conversations\Conversation|null
+     */
+    protected function getConversation(string $name): ?Conversation
+    {
+        switch ($name) {
+            case 'exchange':
+                return new ExchangeConversation;
+
+            default:
+                return null;
+        }
     }
 }
