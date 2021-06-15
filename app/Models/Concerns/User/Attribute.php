@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $fullname
  * @property string $email
  * @property string $phone_country
- * @property \Propaganistas\LaravelPhone\PhoneNumber|null $phone
+ * @property \Propaganistas\LaravelPhone\PhoneNumber $phone
  * @property \Illuminate\Support\Carbon $email_verified_at
  * @property string $password
  * @property string $remember_token

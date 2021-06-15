@@ -37,7 +37,7 @@ class ExchangeConversation extends Conversation
             $validator = RegisterRequest::createValidator($value, 'fullname');
 
             if ($validator->fails()) {
-                return $this->askFullName($validator->errors()->first('username'));
+                return $this->askFullName($validator->errors()->first('fullname'));
             }
 
             $this->setUserStorage(['fullname' => $validator->validated()['fullname']]);
@@ -95,7 +95,7 @@ class ExchangeConversation extends Conversation
                 return $this->askAccountNumber($validator->errors()->first('accountnumber'));
             }
 
-            $this->setUserStorage(['customer_accountnumber' => $validator->validated()['accountnumber']]);
+            $this->setUserStorage(['accountnumber' => $validator->validated()['accountnumber']]);
 
             return $this->askPhone();
         });
@@ -119,7 +119,7 @@ class ExchangeConversation extends Conversation
                 return $this->askIdentityCardNumber($validator->errors()->first('identitycardnumber'));
             }
 
-            $this->setUserStorage(['customer_identitycardnumber' => $validator->validated()['identitycardnumber']]);
+            $this->setUserStorage(['identitycardnumber' => $validator->validated()['identitycardnumber']]);
 
             return $this->askPhone();
         });
@@ -147,7 +147,8 @@ class ExchangeConversation extends Conversation
 
             $this->setUserStorage(['phone' => $validator->validated()['phone']]);
 
-            return $this->askLocation();
+            // return $this->askLocation();
+            return $this->askEmail();
         }, additionalParameters: ['reply_markup' => json_encode([
             'keyboard' => [[['text' => '☎️ ' . trans('Send My Phone Number'), 'request_contact' => true]]],
             'resize_keyboard' => true,
@@ -168,15 +169,41 @@ class ExchangeConversation extends Conversation
             $response = json_decode($this->getBot()->getMessage()->getPayload(), true);
 
             $this->setUserStorage([
-                'customer_location_latitude' => data_get($response, 'location.latitude'),
-                'customer_location_longitude' => data_get($response, 'location.longitude'),
+                'location_latitude' => data_get($response, 'location.latitude'),
+                'location_longitude' => data_get($response, 'location.longitude'),
             ]);
 
-            return $this->askDataConfirmation();
+            return $this->askEmail();
         }, additionalParameters: ['reply_markup' => json_encode([
             'keyboard' => [[['text' => '📍 ' . trans('Send My Location'), 'request_location' => true]]],
             'resize_keyboard' => true,
         ])]);
+    }
+
+    /**
+     * Ask customer email.
+     *
+     * @param  string|null  $validationErrorMessage
+     * @return mixed
+     */
+    protected function askEmail(string $validationErrorMessage = null)
+    {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
+        return $this->askRenderable('conversations.exchange.ask-email', function (Answer $answer) {
+            $value = $answer->getText();
+            $validator = Customer\StoreRequest::createValidator($value, 'email');
+
+            if ($validator->fails()) {
+                return $this->askEmail($validator->errors()->first('email'));
+            }
+
+            $this->setUserStorage(['email' => $validator->validated()['email']]);
+
+            return $this->askDataConfirmation();
+        }, additionalParameters: [
+            'reply_markup' => json_encode(['remove_keyboard' => true]),
+        ]);
     }
 
     /**
@@ -186,13 +213,16 @@ class ExchangeConversation extends Conversation
      */
     protected function askDataConfirmation()
     {
-        $response = $this->getUserStorage()->toJson();
+        $user = $this->getUser();
+        $userStorage = $this->getUserStorage();
+        $response = $this->getUserStorage()->all();
 
         $this->destroyUserStorage();
 
-        return $this->say($response, [
-            'reply_markup' => json_encode(['remove_keyboard' => true]),
-        ]);
+        return $this->sayRenderable(
+            'conversations.exchange.ask-dataconfirmation',
+            viewData: compact('user', 'userStorage', 'response')
+        );
     }
 
     /**

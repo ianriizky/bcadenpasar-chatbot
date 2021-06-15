@@ -732,5 +732,9 @@
     "Identity Card Number": "Nomor KTP",
     "Identity Card Image": "Foto KTP",
     "Send My Phone Number": "Kirim nomor HP saya",
-    "Send My Location": "Kirim lokasi saya"
+    "Send My Location": "Kirim lokasi saya",
+    "Whatsapp Phone Country": "Kode Telepon Negara Whatsapp",
+    "Whatsapp Phone Number": "Nomor Telepon Whatsapp",
+    "Latitude": "Lintang",
+    "Longitude": "Bujur"
 }
