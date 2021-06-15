@@ -19,19 +19,21 @@ class HomeConservation extends Conversation
         $title = Str::ucfirst($this->getTitle($this->getUserStorage()->get('gender')));
         $name = Str::ucfirst($this->getUser()->getFirstName());
 
-        return $this->ask(Question::create(view('conversations.home.ask-menu', compact('title', 'name'))->render())
-            ->callbackId('select_menu')
+        $question = Question::create(view('conversations.home.ask-menu', compact('title', 'name'))->render())
+            ->callbackId('ask_menu')
             ->addButtons([
                 Button::create(view('conversations.home.reply-menu-exchange')->render())->value('exchange'),
-            ]), function (Answer $answer) {
+            ]);
+
+        return $this->ask($question, function (Answer $answer) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
 
             if (!$conversation = $this->getConversation($answer->getValue())) {
-                $menu = $answer->getText();
+                $text = $answer->getText();
 
-                return $this->say(view('conversations.home.ask-menu-fallback', compact('menu'))->render());
+                return $this->say(view('components.conversations.fallback', compact('text'))->render());
             }
 
             return $this->getBot()->startConversation($conversation);

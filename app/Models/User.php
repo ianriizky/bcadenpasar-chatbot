@@ -18,9 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
         Concerns\User\Relation;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $fillable = [
         'username',
@@ -33,9 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $hidden = [
         'password',
@@ -43,9 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $casts = [
         'gender' => Gender::class,

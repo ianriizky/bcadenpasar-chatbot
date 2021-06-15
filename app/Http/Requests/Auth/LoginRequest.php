@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Support\Auth\MultipleIdentifier;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,16 +14,6 @@ use Illuminate\Validation\ValidationException;
 class LoginRequest extends FormRequest
 {
     use MultipleIdentifier;
-
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
     /**
      * Get the validation rules that apply to the request.

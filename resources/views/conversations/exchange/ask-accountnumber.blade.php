@@ -1,1 +1,1 @@
-<i>Mohon sebutkan nomor rekening BCA anda.</i>
+<strong>✏️ Mohon sebutkan nomor rekening BCA anda.</strong>

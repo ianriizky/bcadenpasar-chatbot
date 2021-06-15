@@ -3,9 +3,10 @@
 namespace App\Http\Requests\Auth;
 
 use App\Enum\Gender;
+use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -13,21 +14,9 @@ use Propaganistas\LaravelPhone\PhoneNumber;
 class RegisterRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public static function getRules()
     {
         return [
             'username' => 'required|string|max:255|unique:users,username',
@@ -35,20 +24,26 @@ class RegisterRequest extends FormRequest
             'gender' => ['sometimes', 'nullable', Rule::in(Gender::toValues())],
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone_country' => 'sometimes|in:ID',
-            'phone' => ['required', 'string', 'phone:ID', Rule::unique('users')->where(function ($query) {
-                $query->where('phone', PhoneNumber::make($this->input('phone'), 'ID')->formatE164());
-            })],
+            'phone' => ['required', 'string', 'phone:ID', function ($attribute, $phone, $fail) {
+                $validator = Validator::make(compact('phone'), [
+                    'phone' => Rule::unique('users')->where(function ($query) use ($phone) {
+                        $query->where('phone', PhoneNumber::make($phone, 'ID')->formatE164());
+                    }),
+                ]);
+
+                if ($validator->fails()) {
+                    $fail(trans('validation.phone', compact('attribute')));
+                }
+            }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'agree_with_terms' => 'required|boolean|in:1',
         ];
     }
 
     /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
+     * {@inheritDoc}
      */
-    public function attributes()
+    public static function getAttributes()
     {
         return [
             'username' => trans('Username'),
@@ -69,8 +64,7 @@ class RegisterRequest extends FormRequest
      */
     public function register(): User
     {
-        /** @var \App\Models\User $user */
-        $user = User::create($this->only([
+        return tap(User::create($this->only([
             'name',
             'email',
             'password',
@@ -81,10 +75,8 @@ class RegisterRequest extends FormRequest
             'phone_country',
             'phone',
             'password',
-        ]));
-
-        $user->assignRole(Role::ROLE_ADMIN);
-
-        return $user;
+        ])), function (User $user) {
+            $user->assignRole(Role::ROLE_ADMIN);
+        });
     }
 }

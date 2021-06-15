@@ -68,6 +68,7 @@
             "@php artisan config:cache"
         ],
         "laravel-log-clear": "rm -f storage/logs/*.log",
+        "laravel-session-clear": "rm -f storage/framework/sessions/*",
         "debugbar-clear": "rm -f storage/debugbar/*.json",
         "botman-clear": "rm -f storage/botman/*.json"
     },
