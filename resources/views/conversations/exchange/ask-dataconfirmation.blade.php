@@ -10,6 +10,6 @@ whatsapp_phone_country: {{ env('PHONE_COUNTRY') }}
 whatsapp_phone: {{ $response['whatsapp_phone'] ?? '-' }}
 accountnumber: {{ $response['accountnumber'] ?? '-' }}
 identitycardnumber: {{ $response['identitycardnumber'] ?? '-' }}
-identitycardimage: {{ $response['identitycardimage'] ? '-' }}
+identitycardimage: {{ $response['identitycardimage'] ?? '-' }}
 location_latitude: {{ $response['location_latitude'] ?? '-' }}
 location_longitude: {{ $response['location_longitude'] ?? '-' }}
