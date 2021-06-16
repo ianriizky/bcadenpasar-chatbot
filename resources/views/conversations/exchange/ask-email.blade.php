@@ -1,1 +1,1 @@
-<strong>✏️ Mohon sebutkan email anda.</strong>
+<strong>✏️ Mohon balas pesan ini dengan mengetikkan email anda.</strong>

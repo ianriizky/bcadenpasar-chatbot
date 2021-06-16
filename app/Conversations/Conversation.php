@@ -59,13 +59,21 @@ abstract class Conversation extends BaseConversation
     /**
      * Return BotMan user storage data.
      *
-     * @return \Illuminate\Support\Collection
+     * @param  mixed|null  $key
+     * @param  mixed|null  $default
+     * @return \Illuminate\Support\Collection|mixed
      */
-    protected function getUserStorage(): Collection
+    protected function getUserStorage($key = null, $default = null)
     {
-        return $this->getBot()->userStorage()->find(
+        $storage = $this->getBot()->userStorage()->find(
             $this->getUser()->getId()
         );
+
+        if (is_null($key)) {
+            return $storage;
+        }
+
+        return $storage->get($key, $default);
     }
 
     /**
@@ -84,10 +92,112 @@ abstract class Conversation extends BaseConversation
      * Destroy BotMan user storage data.
      *
      * @param  string|null  $key
+     * @param  array  $excepts
      * @return void
      */
-    protected function destroyUserStorage(string $key = null)
+    protected function destroyUserStorage(string $key = null, array $excepts = [])
     {
+        $excepts[] = '_previous_conversation';
+
+        /** @var \Illuminate\Support\Collection $storage */
+        $storage = $this->getUserStorage();
+
         $this->getBot()->userStorage()->delete($key);
+
+        $this->setUserStorage($storage->only($excepts)->toArray());
+    }
+
+    /**
+     * Return raw message payload from BotMan.
+     *
+     * @param  string|array|int|null  $key
+     * @param  mixed  $default
+     * @return array|mixed
+     */
+    protected function getMessagePayload($key = null, $default = null)
+    {
+        return data_get(
+            json_decode($this->getBot()->getMessage()->getPayload(), true),
+            $key, $default
+        );
+    }
+
+    /**
+     * Return reply response with the given validation error message.
+     *
+     * @param  string|null  $validationErrorMessage
+     * @return void
+     */
+    protected function displayValidationErrorMessage(string $validationErrorMessage = null)
+    {
+        if ($validationErrorMessage) {
+            $this->say('⛔️ ' . $validationErrorMessage);
+        }
+    }
+
+    /**
+     * Return reply response with the fallback message.
+     *
+     * @param  string  $text
+     * @param  string  $view
+     * @return $this
+     */
+    protected function displayFallback(string $text, string $view = 'components.conversations.fallback')
+    {
+        return $this->say(view($view, compact('text'))->render());
+    }
+
+    /**
+     * Return previous conversation value.
+     *
+     * @return \BotMan\BotMan\Messages\Conversations\Conversation
+     */
+    protected function getPreviousConversation()
+    {
+        $conversation = $this->getUserStorage('_previous_conversation');
+
+        return new $conversation;
+    }
+
+    /**
+     * Set previous conversation value.
+     *
+     * @param  string|\BotMan\BotMan\Messages\Conversations\Conversation  $conversation
+     * @return $this
+     */
+    protected function setPreviousConversation($conversation)
+    {
+        if (is_a($conversation, BaseConversation::class)) {
+            $conversation = is_object($conversation) ? get_class($conversation) : $conversation;
+
+            $this->setUserStorage(['_previous_conversation' => $conversation]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Start previous conversation.
+     *
+     * @return void
+     */
+    protected function startPreviousConversation()
+    {
+        $this->getBot()->startConversation($this->getPreviousConversation());
+    }
+
+    /**
+     * Start conversation.
+     *
+     * @param  string|\BotMan\BotMan\Messages\Conversations\Conversation  $conversation
+     * @return void
+     */
+    protected function startConversation($conversation)
+    {
+        if (is_a($conversation, BaseConversation::class)) {
+            $conversation = is_object($conversation) ? $conversation : new $conversation;
+
+            $this->getBot()->startConversation($conversation);
+        }
     }
 }

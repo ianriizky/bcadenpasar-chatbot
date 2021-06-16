@@ -16,10 +16,10 @@ class HomeConservation extends Conversation
      */
     public function run()
     {
-        $title = Str::ucfirst($this->getTitle($this->getUserStorage()->get('gender')));
+        $title = Str::ucfirst($this->getTitle($this->getUserStorage('gender')));
         $name = Str::ucfirst($this->getUser()->getFirstName());
 
-        $question = Question::create(view('conversations.home.ask-menu', compact('title', 'name'))->render())
+        $question = Question::create(view('conversations.home.confirm-menu', compact('title', 'name'))->render())
             ->callbackId('ask_menu')
             ->addButtons([
                 Button::create(view('conversations.home.reply-menu-exchange')->render())->value('exchange'),
@@ -31,9 +31,7 @@ class HomeConservation extends Conversation
             }
 
             if (!$conversation = $this->getConversation($answer->getValue())) {
-                $text = $answer->getText();
-
-                return $this->say(view('components.conversations.fallback', compact('text'))->render());
+                return $this->displayFallback($answer->getText());
             }
 
             return $this->getBot()->startConversation($conversation);
