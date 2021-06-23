@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\Enum\Gender;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -16,11 +17,11 @@ class HomeConservation extends Conversation
      */
     public function run()
     {
-        $title = Str::ucfirst($this->getTitle($this->getUserStorage('gender')));
+        $title = Str::ucfirst(Gender::title($this->getUserStorage('gender')));
         $name = Str::ucfirst($this->getUser()->getFirstName());
 
         $question = Question::create(view('conversations.home.confirm-menu', compact('title', 'name'))->render())
-            ->callbackId('ask_menu')
+            ->callbackId('home_confirm_menu')
             ->addButtons([
                 Button::create(view('conversations.home.reply-menu-exchange')->render())->value('exchange'),
             ]);
@@ -34,25 +35,8 @@ class HomeConservation extends Conversation
                 return $this->displayFallback($answer->getText());
             }
 
-            return $this->getBot()->startConversation($conversation);
+            return $this->startConversation($conversation);
         });
-    }
-
-    /**
-     * Return specific title based on the given gender.
-     *
-     * @param  string  $gender
-     * @return string|null
-     */
-    protected function getTitle(string $gender): ?string
-    {
-        switch ($gender) {
-            case 'male':
-                return __('Mr.');
-
-            case 'female':
-                return __('Mrs.');
-        }
     }
 
     /**

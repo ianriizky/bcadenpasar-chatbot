@@ -5,7 +5,6 @@ namespace App\Conversations;
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Conversations\Conversation as BaseConversation;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Collection;
 
 abstract class Conversation extends BaseConversation
 {
@@ -93,18 +92,23 @@ abstract class Conversation extends BaseConversation
      *
      * @param  string|null  $key
      * @param  array  $excepts
+     * @param  bool  $forceDestroy
      * @return void
      */
-    protected function destroyUserStorage(string $key = null, array $excepts = [])
+    protected function destroyUserStorage(string $key = null, array $excepts = [], bool $forceDestroy = false)
     {
-        $excepts[] = '_previous_conversation';
+        if (!$forceDestroy) {
+            $excepts[] = '_previous_conversation';
 
-        /** @var \Illuminate\Support\Collection $storage */
-        $storage = $this->getUserStorage();
+            /** @var \Illuminate\Support\Collection $storage */
+            $storage = $this->getUserStorage();
+        }
 
         $this->getBot()->userStorage()->delete($key);
 
-        $this->setUserStorage($storage->only($excepts)->toArray());
+        if (!$forceDestroy) {
+            $this->setUserStorage($storage->only($excepts)->toArray());
+        }
     }
 
     /**
@@ -150,11 +154,13 @@ abstract class Conversation extends BaseConversation
     /**
      * Return previous conversation value.
      *
-     * @return \BotMan\BotMan\Messages\Conversations\Conversation
+     * @return \BotMan\BotMan\Messages\Conversations\Conversation|null
      */
-    protected function getPreviousConversation()
+    protected function getPreviousConversation(): ?BaseConversation
     {
-        $conversation = $this->getUserStorage('_previous_conversation');
+        if (!$conversation = $this->getUserStorage('_previous_conversation')) {
+            return null;
+        }
 
         return new $conversation;
     }

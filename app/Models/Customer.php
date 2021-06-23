@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\Gender;
 use BotMan\BotMan\Interfaces\UserInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,15 @@ use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 class Customer extends Model
 {
     use HasFactory,
-        Concerns\Customer\Attribute;
+        Concerns\Customer\Attribute,
+        Concerns\Customer\Event;
+
+    /**
+     * Path value for identitycard_image storage.
+     *
+     * @var string
+     */
+    const IDENTITYCARD_IMAGE_PATH = 'identity_card';
 
     /**
      * {@inheritDoc}
@@ -37,6 +46,7 @@ class Customer extends Model
      * {@inheritDoc}
      */
     protected $casts = [
+        'gender' => Gender::class,
         'phone' => E164PhoneNumberCast::class,
         'whatsapp_phone' => E164PhoneNumberCast::class,
         'location_latitude' => 'float',
@@ -78,9 +88,12 @@ class Customer extends Model
      * @param  \Illuminate\Support\Collection  $storage
      * @return static
      */
-    public static function createByBotManUser(UserInterface $user, Collection $storage)
+    public static function updateOrCreateByBotManUser(UserInterface $user, Collection $storage)
     {
-        return static::create([
+        return static::updateOrCreate([
+            'telegram_chat_id' => $user->getId(),
+            'username' => $user->getUsername(),
+        ], [
             'telegram_chat_id' => $user->getId(),
             'username' => $user->getUsername(),
             'fullname' => $storage->get('fullname'),

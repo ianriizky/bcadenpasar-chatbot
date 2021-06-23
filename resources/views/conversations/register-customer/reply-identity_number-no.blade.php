@@ -1,1 +1,1 @@
-❌ Tidak, gunakan nomor KTP saya
+❌ Tidak, gunakan KTP saya

@@ -1,1 +1,1 @@
-{{ ucwords(greeting()) }} <strong>Bapak/Ibu {{ ucwords($name) }}</strong> Nasabah BCA Denpasar 🙏
+{{ ucwords(greeting()) }} <strong>{{ $title }} {{ ucwords($name) }}</strong> Nasabah BCA Denpasar 🙏

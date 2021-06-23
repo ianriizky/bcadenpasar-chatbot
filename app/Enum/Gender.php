@@ -35,4 +35,19 @@ class Gender extends Enum
             'female' => trans('Mrs.'),
         ][$this->value] ?? null;
     }
+
+    /**
+     * Return specified title based on the given value.
+     *
+     * @param  string|int  $value
+     * @return string|null
+     */
+    public static function title($value)
+    {
+        try {
+            return static::from($value)->getTitle();
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
 }

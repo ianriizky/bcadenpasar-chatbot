@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * {@inheritDoc}
@@ -21,7 +21,7 @@ class StoreRequest extends FormRequest
                 $validator = Validator::make(compact('phone'), [
                     'phone' => Rule::unique(Customer::class)->where(function ($query) use ($phone) {
                         $query->where('phone', PhoneNumber::make($phone, 'ID')->formatE164());
-                    }),
+                    })->ignore($phone, 'phone'),
                 ]);
 
                 if ($validator->fails()) {
@@ -34,7 +34,15 @@ class StoreRequest extends FormRequest
             'username' => 'required|string|max:255',
             'fullname' => 'required|string|max:255',
             'gender' => ['sometimes', 'nullable', Rule::in(Gender::toValues())],
-            'email' => 'required|string|email|max:255|unique:' . Customer::class . ',email',
+            'email' => ['required', 'string', 'email', 'max:255', function ($attribute, $email, $fail) {
+                $validator = Validator::make(compact('email'), [
+                    'email' => Rule::unique(Customer::class)->ignore($email, 'email'),
+                ]);
+
+                if ($validator->fails()) {
+                    $fail(trans('validation.unique', compact('attribute')));
+                }
+            }],
             'phone_country' => 'sometimes|in:ID',
             'phone' => value($phoneRule),
             'whatsapp_phone_country' => 'sometimes|in:ID',

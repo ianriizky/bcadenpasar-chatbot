@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
@@ -79,5 +82,47 @@ if (! function_exists('greeting')) {
             default:
                 return trans('Good Night');
         }
+    }
+}
+
+if (! function_exists('download_telegram_photo')) {
+    /**
+     * Uncommented function.
+     *
+     * @param  array  $photos (from $this->getBot()->getMessage()->getPayload())
+     * @param  string  $path
+     * @return string
+     *
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \InvalidArgumentException
+     */
+    function download_telegram_photo(array $photos, string $path)
+    {
+        $photos = Arr::sort($photos, fn ($photo) => $photo['file_size']);
+
+        $photoId = Arr::last($photos)['file_id'];
+
+        throw_unless($photoId, InvalidArgumentException::class, sprintf(
+            'Telegram file_id is not found', $photoId
+        ));
+
+        $photoFilePath = Http::get(sprintf('https://api.telegram.org/bot%s/getFile', env('TELEGRAM_TOKEN')), [
+            'file_id' => $photoId,
+        ])->throw()->json('result.file_path', null);
+
+        throw_unless($photoFilePath, InvalidArgumentException::class, sprintf(
+            'Telegram file path for file_id %s is not found', $photoId
+        ));
+
+        $photo = file_get_contents(sprintf(
+            'https://api.telegram.org/file/bot%s/%s',
+            env('TELEGRAM_TOKEN'), $photoFilePath
+        ));
+
+        $filename = Str::random() . '.' . pathinfo($photoFilePath, PATHINFO_EXTENSION);
+
+        Storage::put($path . '/' . $filename, $photo);
+
+        return $filename;
     }
 }

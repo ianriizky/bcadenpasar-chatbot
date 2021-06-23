@@ -736,5 +736,8 @@
     "Whatsapp Phone Country": "Kode Telepon Negara Whatsapp",
     "Whatsapp Phone Number": "Nomor Telepon Whatsapp",
     "Latitude": "Lintang",
-    "Longitude": "Bujur"
+    "Longitude": "Bujur",
+    "Please wait": "Mohon tunggu sebentar",
+    "could not be saved.": "tidak dapat disimpan.",
+    ":action ran successfully!": ":action berjalan dengan sukses!"
 }
