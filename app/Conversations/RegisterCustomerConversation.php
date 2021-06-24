@@ -176,9 +176,13 @@ class RegisterCustomerConversation extends Conversation
                     return $this->askIdentityCard('❌ Foto KTP ' . trans('could not be found.'));
                 }
 
-                $this->say(sprintf('⏳ <em>%s</em>', trans('Please wait')));
+                $response = $this->reply(sprintf('⏳ <em>%s</em>', trans('Please wait')));
 
-                if (!$filename = download_telegram_photo($this->getMessagePayload('photo'), Customer::IDENTITYCARD_IMAGE_PATH)) {
+                $filename = download_telegram_photo($this->getMessagePayload('photo'), Customer::IDENTITYCARD_IMAGE_PATH);
+
+                $this->deleteTelegramMessageFromResponse($response);
+
+                if (!$filename) {
                     return $this->askIdentityCard('❌ Foto KTP ' . trans('could not be saved.'));
                 }
 
@@ -306,19 +310,23 @@ class RegisterCustomerConversation extends Conversation
      */
     protected function askDataConfirmation()
     {
+        $this->sayRenderable('conversations.register-customer.thankyou', additionalParameters: ['reply_markup' => json_encode([
+            'remove_keyboard' => true,
+        ])]);
+
         $user = $this->getUser();
         $userStorage = $this->getUserStorage();
 
-        $question = Question::create(view('conversations.register-customer.confirm-customer_data', compact('user', 'userStorage'))->render())
-            ->callbackId('register_confirm_customer_data')
-            ->addButtons([
-                Button::create(view('conversations.register-customer.reply-customer_data-yes')->render())->value('yes'),
-                Button::create(view('conversations.register-customer.reply-customer_data-no')->render())->value('no'),
-            ]);
+        $response = $this->reply(
+            $question = view('conversations.register-customer.confirm-customer_data', compact('user', 'userStorage'))->render(),
+            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
+                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-yes')->render())->callbackData('yes')
+            )->addRow(
+                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-no')->render())->callbackData('no')
+            )->toArray()
+        );
 
-        return $this->sayRenderable('conversations.register-customer.thankyou', additionalParameters: ['reply_markup' => json_encode([
-            'remove_keyboard' => true,
-        ])])->ask($question, function (Answer $answer) use ($user, $userStorage) {
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($user, $userStorage, $response) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
@@ -336,7 +344,9 @@ class RegisterCustomerConversation extends Conversation
             Customer::updateOrCreateByBotManUser($user, $userStorage);
             $this->destroyUserStorage();
 
+            $this->deleteTelegramMessageFromResponse($response);
+
             return $this->startPreviousConversation();
-        });
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 }

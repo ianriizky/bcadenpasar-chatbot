@@ -70,7 +70,15 @@
         "laravel-log-clear": "rm -f storage/logs/*.log",
         "laravel-session-clear": "rm -f storage/framework/sessions/*",
         "debugbar-clear": "rm -f storage/debugbar/*.json",
-        "botman-clear": "rm -f storage/botman/*.json"
+        "botman-clear": "rm -f storage/botman/*.json",
+        "botman-dev-clear": [
+            "composer laravel-clear",
+            "composer botman-clear",
+            "composer laravel-log-clear",
+            "composer laravel-session-clear",
+            "composer debugbar-clear",
+            "@php artisan migrate:refresh --seed"
+        ]
     },
     "extra": {
         "laravel": {

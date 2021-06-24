@@ -4,7 +4,9 @@ namespace App\Conversations;
 
 use BotMan\BotMan\Interfaces\UserInterface;
 use BotMan\BotMan\Messages\Conversations\Conversation as BaseConversation;
+use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class Conversation extends BaseConversation
 {
@@ -205,5 +207,54 @@ abstract class Conversation extends BaseConversation
 
             $this->getBot()->startConversation($conversation);
         }
+    }
+
+    /**
+     * Send reply message request and return the given response.
+     *
+     * @param  string|\BotMan\BotMan\Messages\Outgoing\OutgoingMessage|\BotMan\BotMan\Messages\Outgoing\Question  $message
+     * @param  array  $additionalParameters
+     * @param  \Closure|null  $callback
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function reply($message, array $additionalParameters = [], Closure $callback = null)
+    {
+        $response = $this->getBot()->reply($message, $additionalParameters);
+
+        if (is_callable($callback)) {
+            $callback($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Send request to Telegram API for deleting specified message.
+     *
+     * @param  int|string  $chat_id
+     * @param  int  $message
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \BadMethodCallException
+     */
+    protected function deleteTelegramMessage($chat_id, $message_id)
+    {
+        return $this->getBot()->sendRequest('deleteMessage', compact('chat_id', 'message_id'));
+    }
+
+    /**
+     * Send request to Telegram API for deleting specified message based on the given response.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Response  $response
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function deleteTelegramMessageFromResponse(Response $response)
+    {
+        $responseBody = json_decode($response->getContent(), true);
+
+        return $this->deleteTelegramMessage(
+            data_get($responseBody, 'result.chat.id'),
+            data_get($responseBody, 'result.message_id')
+        );
     }
 }

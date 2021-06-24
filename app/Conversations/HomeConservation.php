@@ -6,6 +6,8 @@ use App\Enum\Gender;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Telegram\Extensions\Keyboard;
+use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
 use Illuminate\Support\Str;
 
 class HomeConservation extends Conversation
@@ -20,23 +22,26 @@ class HomeConservation extends Conversation
         $title = Str::ucfirst(Gender::title($this->getUserStorage('gender')));
         $name = Str::ucfirst($this->getUser()->getFirstName());
 
-        $question = Question::create(view('conversations.home.confirm-menu', compact('title', 'name'))->render())
-            ->callbackId('home_confirm_menu')
-            ->addButtons([
-                Button::create(view('conversations.home.reply-menu-exchange')->render())->value('exchange'),
-            ]);
+        $response = $this->reply(
+            $question = view('conversations.home.confirm-menu', compact('title', 'name'))->render(),
+            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
+                KeyboardButton::create(view('conversations.home.reply-menu-exchange')->render())->callbackData('exchange')
+            )->toArray()
+        );
 
-        return $this->ask($question, function (Answer $answer) {
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
+
+            $this->deleteTelegramMessageFromResponse($response);
 
             if (!$conversation = $this->getConversation($answer->getValue())) {
                 return $this->displayFallback($answer->getText());
             }
 
             return $this->startConversation($conversation);
-        });
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**

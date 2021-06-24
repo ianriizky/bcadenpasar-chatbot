@@ -35,6 +35,7 @@ class ExchangeConversation extends Conversation
             if (!$customer = Customer::retrieveByUsernameAndEmail(compact('username', 'email'))) {
                 return $this
                     ->setPreviousConversation($this)
+                    ->say('⚠️ Mohon lakukan registrasi terlebih dulu sebelum melakukan transaksi penukaran uang')
                     ->startConversation(new RegisterCustomerConversation);
             }
         }
@@ -63,7 +64,7 @@ class ExchangeConversation extends Conversation
                 Button::create(view('conversations.register-customer.reply-customer_data-no')->render())->value('no'),
             ]);
 
-        return $this->ask($question, next: function (Answer $answer) use ($customer) {
+        return $this->ask($question, next: function (Answer $answer) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }

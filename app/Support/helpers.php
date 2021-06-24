@@ -85,9 +85,22 @@ if (! function_exists('greeting')) {
     }
 }
 
+if (! function_exists('telegram_url')) {
+    /**
+     * Return base telegram bot API url.
+     *
+     * @param  string  $method
+     * @return string
+     */
+    function telegram_url(string $method): string
+    {
+        return sprintf('https://api.telegram.org/bot%s/%s', env('TELEGRAM_TOKEN'), $method);
+    }
+}
+
 if (! function_exists('download_telegram_photo')) {
     /**
-     * Uncommented function.
+     * Download telegram photo based on the given photo list.
      *
      * @param  array  $photos (from $this->getBot()->getMessage()->getPayload())
      * @param  string  $path
@@ -106,7 +119,7 @@ if (! function_exists('download_telegram_photo')) {
             'Telegram file_id is not found', $photoId
         ));
 
-        $photoFilePath = Http::get(sprintf('https://api.telegram.org/bot%s/getFile', env('TELEGRAM_TOKEN')), [
+        $photoFilePath = Http::get(telegram_url('getFile'), [
             'file_id' => $photoId,
         ])->throw()->json('result.file_path', null);
 

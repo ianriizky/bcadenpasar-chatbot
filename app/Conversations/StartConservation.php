@@ -31,7 +31,17 @@ class StartConservation extends Conversation
             return $this->startConversation(new HomeConservation);
         }
 
-        return $this->askRenderable('conversations.start.confirm-gender', next: function (Answer $answer) use ($name) {
+        $response = $this->reply(
+            $question = view('conversations.start.confirm-gender')->render(),
+            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
+                KeyboardButton::create(view('conversations.start.reply-gender-male')->render())->callbackData('male'),
+                KeyboardButton::create(view('conversations.start.reply-gender-female')->render())->callbackData('female')
+            )->addRow(
+                KeyboardButton::create(view('conversations.start.reply-gender-undefined')->render())->callbackData('unknown')
+            )->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($name, $response) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
@@ -40,15 +50,12 @@ class StartConservation extends Conversation
 
             $title = $this->getTitle($gender);
 
+            $this->deleteTelegramMessageFromResponse($response);
+
             return $this
                 ->sayRenderable('conversations.start.thankyou', compact('name', 'title'))
                 ->startConversation(new HomeConservation);
-        }, additionalParameters: Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
-            KeyboardButton::create(view('conversations.start.reply-gender-male')->render())->callbackData('male'),
-            KeyboardButton::create(view('conversations.start.reply-gender-female')->render())->callbackData('female')
-        )->addRow(
-            KeyboardButton::create(view('conversations.start.reply-gender-undefined')->render())->callbackData('unknown')
-        )->toArray());
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**

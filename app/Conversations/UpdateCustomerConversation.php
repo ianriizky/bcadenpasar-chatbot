@@ -24,20 +24,27 @@ class UpdateCustomerConversation extends RegisterCustomerConversation
      */
     protected function askGender()
     {
-        return $this->askRenderable('conversations.update-customer.confirm-gender', next: function (Answer $answer) {
+        $response = $this->reply(
+            $question = view('conversations.update-customer.confirm-gender')->render(),
+            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
+                KeyboardButton::create(view('conversations.start.reply-gender-male')->render())->callbackData('male'),
+                KeyboardButton::create(view('conversations.start.reply-gender-female')->render())->callbackData('female')
+            )->addRow(
+                KeyboardButton::create(view('conversations.start.reply-gender-undefined')->render())->callbackData('unknown')
+            )->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
 
             $this->setUserStorage(['gender' => $answer->getValue()]);
 
+            $this->deleteTelegramMessageFromResponse($response);
+
             return $this->askEmail();
-        }, additionalParameters: Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
-            KeyboardButton::create(view('conversations.start.reply-gender-male')->render())->callbackData('male'),
-            KeyboardButton::create(view('conversations.start.reply-gender-female')->render())->callbackData('female')
-        )->addRow(
-            KeyboardButton::create(view('conversations.start.reply-gender-undefined')->render())->callbackData('unknown')
-        )->toArray());
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**
