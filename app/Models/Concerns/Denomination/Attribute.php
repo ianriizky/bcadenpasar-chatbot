@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @property string $name
  * @property float $value
- * @property string $type
+ * @property \App\Enum\DenominationType $type
  * @property int $quantity_per_bundle
  * @property int $minimum_order_bundle
  * @property int $maximum_order_bundle

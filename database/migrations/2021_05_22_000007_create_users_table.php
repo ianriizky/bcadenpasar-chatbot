@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
 
             $table->string('username');
             $table->string('fullname');
-            $table->enum('gender', Gender::toValues())->default(Gender::undefined());
+            $table->string('gender')->default(Gender::undefined())->comment('Enum of ' . Gender::class);
             $table->string('email')->unique();
             $table->string('phone_country')->default(env('PHONE_COUNTRY', 'ID'));
             $table->string('phone')->unique();

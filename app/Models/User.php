@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enum\Gender;
 use App\Infrastructure\Foundation\Auth\User as Authenticatable;
+use App\Models\Contracts\Issuerable;
+use App\Models\Support\HasIssuerable;
 use App\Notifications\ResetPasswordQueued;
 use App\Notifications\VerifyEmailQueued;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -11,9 +13,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, Issuerable
 {
-    use HasFactory, Notifiable,
+    use HasFactory, Notifiable, HasIssuerable,
         Concerns\User\Attribute,
         Concerns\User\Relation;
 

@@ -5,10 +5,12 @@ namespace App\Models\Concerns\Order;
 use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\OrderStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $customer_id Foreign key of \App\Models\Customer.
@@ -17,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \App\Models\User|null $user
  * @property int|null $branch_id Foreign key of \App\Models\Branch.
  * @property-read \App\Models\Branch|null $branch
+ * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\OrderStatus> $statuses
+ * @property-read \App\Models\OrderStatus $latestStatus
  * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\Item> $items
  *
  * @see \App\Models\Order
@@ -120,6 +124,61 @@ trait Relation
         $this->branch()->associate($branch);
 
         return $this;
+    }
+
+    /**
+     * Define a one-to-many relationship with App\Models\OrderStatus.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function statuses(): HasMany
+    {
+        return $this->hasMany(OrderStatus::class);
+    }
+
+    /**
+     * Return collection of \App\Models\OrderStatus model relation value.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\OrderStatus>
+     */
+    public function getStatusesRelationValue(): Collection
+    {
+        return $this->getCollectionValue('statuses', OrderStatus::class);
+    }
+
+    /**
+     * Set collection of \App\Models\OrderStatus model relation value.
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection<\App\Models\OrderStatus>  $statuses
+     * @return $this
+     */
+    public function setStatusesRelationValue(Collection $statuses)
+    {
+        if ($this->isCollectionValid($statuses, OrderStatus::class)) {
+            $this->setRelation('statuses', $statuses);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Define a one-to-one relationship with \App\Models\OrderStatus from a larger one-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function latestStatus(): HasOne
+    {
+        return $this->hasOne(OrderStatus::class)->latestOfMany('created_at');
+    }
+
+    /**
+     * Return \App\Models\OrderStatus model relation value.
+     *
+     * @return \App\Models\OrderStatus
+     */
+    public function getLatestStatusRelationValue(): ?OrderStatus
+    {
+        return $this->getRelationValue('latestStatus');
     }
 
     /**

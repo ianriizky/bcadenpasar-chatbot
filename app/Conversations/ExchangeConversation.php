@@ -6,6 +6,8 @@ use App\Models\Customer;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Telegram\Extensions\Keyboard;
+use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
 
 class ExchangeConversation extends Conversation
 {
@@ -64,7 +66,7 @@ class ExchangeConversation extends Conversation
                 Button::create(view('conversations.register-customer.reply-customer_data-no')->render())->value('no'),
             ]);
 
-        return $this->ask($question, next: function (Answer $answer) {
+        return $this->ask($question, next: function (Answer $answer) use ($customer) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
@@ -81,17 +83,33 @@ class ExchangeConversation extends Conversation
                     ->startConversation(new UpdateCustomerConversation);
             }
 
-            return $this->recordOrder();
+            return $this->recordOrder($customer);
         });
     }
 
     /**
      * Record customer order data.
      *
+     * @param  \App\Models\Customer  $customer
      * @return $this
      */
-    protected function recordOrder()
+    protected function recordOrder(Customer $customer)
     {
         return $this->say('terima kasih :)');
+
+        $response = $this->reply(
+            $question = view('conversations.register-customer.confirm-customer_data', compact('user', 'userStorage'))->render(),
+            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
+                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-yes')->render())->callbackData('yes')
+            )->addRow(
+                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-no')->render())->callbackData('no')
+            )->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
+            if (!$answer->isInteractiveMessageReply()) {
+                return;
+            }
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 }

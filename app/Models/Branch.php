@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Branch extends Model
 {

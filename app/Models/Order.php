@@ -24,4 +24,13 @@ class Order extends Model
     protected $casts = [
         'schedule_date' => 'datetime',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $appends = [
+        'status',
+        // 'total_item_quantity_bundle',
+        // 'total_item_value',
+    ];
 }

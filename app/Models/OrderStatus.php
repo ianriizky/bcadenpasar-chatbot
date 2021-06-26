@@ -2,28 +2,28 @@
 
 namespace App\Models;
 
+use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Item extends Model
+class OrderStatus extends Model
 {
     use HasFactory,
-        Concerns\Item\Attribute,
-        Concerns\Item\Relation;
+        Concerns\OrderStatus\Attribute,
+        Concerns\OrderStatus\Relation;
 
     /**
      * {@inheritDoc}
      */
     protected $fillable = [
-        'quantity_per_bundle',
-        'bundle_quantity',
+        'status',
+        'note',
     ];
 
     /**
      * {@inheritDoc}
      */
     protected $casts = [
-        'quantity_per_bundle' => 'integer',
-        'bundle_quantity' => 'integer',
+        'status' => EnumOrderStatus::class,
     ];
 }

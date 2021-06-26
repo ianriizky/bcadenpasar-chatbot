@@ -3,7 +3,8 @@
 namespace App\Models\Concerns\Item;
 
 /**
- * @property int $order_bundle
+ * @property int $quantity_per_bundle
+ * @property int $bundle_quantity
  *
  * @see \App\Models\Item
  */

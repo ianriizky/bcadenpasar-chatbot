@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
  * @property string $telegram_chat_id
  * @property string $username
  * @property string $fullname
- * @property string $gender
+ * @property \App\Enum\Gender $gender
  * @property string $email
  * @property string $phone_country
  * @property \Propaganistas\LaravelPhone\PhoneNumber $phone

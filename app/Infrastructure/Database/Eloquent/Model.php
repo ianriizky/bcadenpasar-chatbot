@@ -3,14 +3,18 @@
 namespace App\Infrastructure\Database\Eloquent;
 
 use App\Support\Model\HasAttributes;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
-/**
- * @property int $id
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- */
 abstract class Model extends BaseModel
 {
     use HasAttributes;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }

@@ -1,12 +1,13 @@
 <?php
 
-use App\Enum\DenominationType;
+use App\Models\Denomination;
+use App\Models\Order;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * @see \App\Models\Denomination
+ * @see \App\Models\Item
  */
 return new class extends Migration
 {
@@ -17,16 +18,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('denominations', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Denomination::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
 
-            $table->string('name');
-            $table->decimal('value');
-            $table->enum('type', DenominationType::toValues());
             $table->unsignedInteger('quantity_per_bundle');
-            $table->unsignedInteger('minimum_order_bundle');
-            $table->unsignedInteger('maximum_order_bundle');
-            $table->string('image')->nullable();
+            $table->unsignedInteger('bundle_quantity');
             $table->timestamps();
         });
     }
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('denominations');
+        Schema::dropIfExists('items');
     }
 };
