@@ -1,12 +1,27 @@
 @section('title', __('Register'))
 
+@section('pre-style')
+    <link rel="stylesheet" href="{{ asset('node_modules/select2/dist/css/select2.min.css') }}">
+@endsection
+
+@section('script')
+    <script src="{{ asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2()
+            $('.select2').val(null).trigger('change');
+        });
+    </script>
+@endsection
+
 <x-guest-layout>
     <section class="section">
         <div class="container mt-5">
             <div class="row">
                 <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
                     <div class="login-brand">
-                        <img src="{{ asset('img/stisla/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
+                        <img src="{{ asset('img/logo.jpeg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
                     </div>
 
                     <div class="card card-primary">
@@ -161,24 +176,13 @@
                         </div>
                     </div>
 
+                    <div class="mt-5 text-center text-muted">
+                        {{ __('Already registered?') }} <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </div>
+
                     @include('components.footer')
                 </div>
             </div>
         </div>
     </section>
-
-    @section('pre-style')
-        <link rel="stylesheet" href="{{ asset('css/stisla/select2.min.css') }}">
-    @endsection
-
-    @section('script')
-        <script src="{{ asset('js/stisla/select2.full.min.js') }}"></script>
-
-        <script>
-            $(document).ready(function () {
-                $('.select2').select2()
-                $('.select2').val(null).trigger('change');
-            });
-        </script>
-    @endsection
 </x-guest-layout>
