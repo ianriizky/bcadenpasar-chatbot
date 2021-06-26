@@ -139,3 +139,21 @@ if (! function_exists('download_telegram_photo')) {
         return $filename;
     }
 }
+
+if (! function_exists('google_map_url')) {
+    /**
+     * Return google map url based on the given latitude and longitude.
+     *
+     * @param  float  $latitude
+     * @param  float  $longitude
+     * @param  string  $zoom
+     * @return string
+     */
+    function google_map_url(float $latitude, float $longitude, string $zoom = '20z'): string
+    {
+        return sprintf(
+            'https://www.google.com/maps/@%s,%s,%s',
+            $latitude, $longitude, $zoom
+        );
+    }
+}

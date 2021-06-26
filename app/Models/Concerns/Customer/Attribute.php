@@ -48,11 +48,7 @@ trait Attribute
     public function getGoogleMapUrlAttribute(): ?string
     {
         if (!is_null($this->location_latitude) && !is_null($this->location_longitude)) {
-            return sprintf(
-                'https://www.google.com/maps/@%s,%s,%s',
-                $this->location_latitude, $this->location_longitude,
-                '20z'
-            );
+            return google_map_url($this->location_latitude, $this->location_longitude);
         }
 
         return null;
