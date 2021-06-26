@@ -2,6 +2,7 @@
 /public/node_modules
 /public/hot
 /public/storage
+/public/css/stisla/*
 /storage/*.key
 /vendor
 .env
