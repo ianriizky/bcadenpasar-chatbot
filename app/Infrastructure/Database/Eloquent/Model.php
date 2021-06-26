@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Database\Eloquent;
 
+use App\Support\Model\HasAttributes;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
 /**
@@ -11,5 +12,5 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
  */
 abstract class Model extends BaseModel
 {
-    //
+    use HasAttributes;
 }

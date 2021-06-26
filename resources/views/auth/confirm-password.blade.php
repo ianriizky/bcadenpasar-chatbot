@@ -1,3 +1,5 @@
+@section('title', __('Confirm Password'))
+
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">

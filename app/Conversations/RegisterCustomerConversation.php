@@ -176,7 +176,7 @@ class RegisterCustomerConversation extends Conversation
                     return $this->askIdentityCard('❌ Foto KTP ' . trans('could not be found.'));
                 }
 
-                $response = $this->reply(sprintf('⏳ <em>%s</em>', trans('Please wait')));
+                $response = $this->reply(view('components.conversations.please-wait')->render());
 
                 $filename = download_telegram_photo($this->getMessagePayload('photo'), Customer::IDENTITYCARD_IMAGE_PATH);
 

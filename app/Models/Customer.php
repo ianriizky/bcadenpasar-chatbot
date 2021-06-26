@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enum\Gender;
+use App\Infrastructure\Database\Eloquent\Model;
 use BotMan\BotMan\Interfaces\UserInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
@@ -13,7 +13,8 @@ class Customer extends Model
 {
     use HasFactory,
         Concerns\Customer\Attribute,
-        Concerns\Customer\Event;
+        Concerns\Customer\Event,
+        Concerns\Customer\Relation;
 
     /**
      * Path value for identitycard_image storage.

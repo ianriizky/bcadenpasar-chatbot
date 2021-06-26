@@ -19,9 +19,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
             $table->string('username');
             $table->string('fullname');
-            $table->string('gender')->default(Gender::undefined());
+            $table->enum('gender', Gender::toValues())->default(Gender::undefined());
             $table->string('email')->unique();
             $table->string('phone_country')->default(env('PHONE_COUNTRY', 'ID'));
             $table->string('phone')->unique();

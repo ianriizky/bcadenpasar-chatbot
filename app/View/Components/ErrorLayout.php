@@ -4,13 +4,13 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class AppLayout extends Component
+class ErrorLayout extends Component
 {
     /**
      * {@inheritDoc}
      */
     public function render()
     {
-        return view('layouts.app');
+        return view('layouts.error');
     }
 }

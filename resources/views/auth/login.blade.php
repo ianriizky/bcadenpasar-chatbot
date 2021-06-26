@@ -1,3 +1,5 @@
+@section('title', __('Login'))
+
 <x-guest-layout>
     <section class="section">
         <div class="d-flex flex-wrap align-items-stretch">

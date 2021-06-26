@@ -1,3 +1,5 @@
+@section('title', __('Verify Email Address'))
+
 <x-guest-layout>
     <section class="section">
         <div class="container mt-5">

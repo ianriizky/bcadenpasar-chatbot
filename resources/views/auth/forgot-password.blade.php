@@ -1,3 +1,5 @@
+@section('title', __('Forgot Your Password?'))
+
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@isset($title) {{ $title . ' &mdash; ' }} @endisset{{ config('app.name', 'Laravel') }}</title>
+    <title>@hasSection('title') @yield('title') &mdash; @endif{{ config('app.name', 'Laravel') }}</title>
 
     {{-- General CSS Files --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -21,7 +21,13 @@
 
 <body>
     <main id="app">
-        {{ $slot }}
+        @isset($slot)
+            {{ $slot }}
+        @endisset
+
+        @hasSection ('content')
+            @yield('content')
+        @endif
     </main>
 
     {{-- Script --}}

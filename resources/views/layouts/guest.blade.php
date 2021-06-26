@@ -1,3 +1,3 @@
-@component('components.master-layout')
+@component('layouts.master')
     {{ $slot }}
 @endcomponent

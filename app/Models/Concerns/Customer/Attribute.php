@@ -31,13 +31,13 @@ trait Attribute
      * @param  mixed  $value
      * @return string|null
      */
-    public function getIdentitycardImageAttribute($value)
+    public function getIdentitycardImageAttribute($value): ?string
     {
-        if ($value) {
-            return Storage::url(static::IDENTITYCARD_IMAGE_PATH . '/' . $value);
+        if (is_null($value)) {
+            return null;
         }
 
-        return null;
+        return Storage::url(static::IDENTITYCARD_IMAGE_PATH . '/' . $value);
     }
 
     /**
