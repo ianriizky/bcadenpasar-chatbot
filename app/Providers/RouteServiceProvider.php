@@ -48,15 +48,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
 
             Route::match(['get', 'post'], '/botman', function () {
-                /** @var \BotMan\BotMan\BotMan $botman */
-                $botman = resolve('botman');
-
-                $botman->listen();
+                $this->mapBotManCommands();
             })->middleware('web_without_csrf');
         });
-
-        $this->mapBotManCommands();
-
     }
 
     /**

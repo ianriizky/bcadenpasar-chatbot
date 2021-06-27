@@ -49,6 +49,10 @@
                         </div>
                     </div>
 
+                    <div class="mt-5 text-center text-muted">
+                        {{ __('Already registered?') }} <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </div>
+
                     @include('components.footer')
                 </div>
             </div>

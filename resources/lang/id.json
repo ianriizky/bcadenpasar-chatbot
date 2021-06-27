@@ -197,7 +197,7 @@
     "El Salvador": "El Salvador",
     "Email": "Surel",
     "Email Address": "Alamat Surel",
-    "Email Addresses": "Email Addresses",
+    "Email Addresses": "Daftar Alamat Surel",
     "Email Password Reset Link": "Tautan Pengaturan Ulang Kata Sandi Surel",
     "Enable": "Nyalakan",
     "Ensure your account is using a long, random password to stay secure.": "Pastikan akun Anda menggunakan kata sandi yang panjang dan acak agar aman.",
@@ -740,5 +740,13 @@
     "Please wait": "Mohon tunggu sebentar",
     "could not be saved.": "tidak dapat disimpan.",
     ":action ran successfully!": ":action berjalan dengan sukses!",
-    "Settings": "Pengaturan"
+    "Settings": "Pengaturan",
+    "List :name": "Daftar :name",
+    "Add :name": "Tambah :name",
+    "Create :name": "Buat :name",
+    "Edit :name": "Edit :name",
+    "Update :name": "Ubah :name",
+    "Delete :name": "Hapus :name",
+    "Active": "Aktif",
+    "Not Active": "Tidak Aktif"
 }

@@ -34,3 +34,5 @@ $botman->fallback(function (BotMan $botman) use ($exchange) {
         KeyboardButton::create($exchange)
     )->toArray());
 });
+
+$botman->listen();

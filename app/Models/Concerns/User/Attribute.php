@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $password
  * @property string $remember_token
  * @property boolean $is_active
+ * @property string $is_active_badge
  *
  * @see \App\Models\User
  */
@@ -30,5 +31,23 @@ trait Attribute
         $this->attributes['password'] = Hash::make($value);
 
         return $this;
+    }
+
+    /**
+     * Return "is_active_badge" attribute value.
+     *
+     * @return string
+     */
+    public function getIsActiveBadgeAttribute(): string
+    {
+        if ($this->is_active) {
+            return sprintf(<<<'html'
+            <div class="badge badge-success">%s</div>
+            html, trans('Active'));
+        }
+
+        return sprintf(<<<'html'
+        <div class="badge badge-danger">%s</div>
+        html, trans('Not Active'));
     }
 }
