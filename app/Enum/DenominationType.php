@@ -10,5 +10,14 @@ use Spatie\Enum\Laravel\Enum;
  */
 class DenominationType extends Enum
 {
-    //
+    /**
+     * {@inheritDoc}
+     */
+    protected static function labels(): array
+    {
+        return [
+            'coin' => trans('denomination-type.coin'),
+            'banknote' => trans('denomination-type.banknote'),
+        ];
+    }
 }
