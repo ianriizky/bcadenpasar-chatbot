@@ -23,10 +23,6 @@ class RolePermissionSeeder extends Seeder
                 'name' => Role::ROLE_STAFF,
                 'guard_name' => 'web',
             ],
-            [
-                'name' => Role::ROLE_CUSTOMER,
-                'guard_name' => 'web',
-            ],
         ] as $role) {
             Role::create($role);
         }

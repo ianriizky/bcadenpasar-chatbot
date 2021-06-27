@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Branch;
 use App\Models\User;
 use App\Notifications\ResetPasswordQueued;
 use Illuminate\Support\Facades\Notification;
@@ -19,7 +20,11 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
@@ -30,7 +35,11 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
@@ -47,7 +56,11 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 

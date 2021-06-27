@@ -4,6 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use App\Enum\Gender;
 use App\Infrastructure\Foundation\Http\FormRequest;
+use App\Models\Branch;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -19,20 +20,17 @@ class RegisterRequest extends FormRequest
     public static function getRules()
     {
         return [
+            'branch_name' => 'required|exists:branches,name',
             'username' => 'required|string|max:255|unique:users,username',
             'fullname' => 'required|string|max:255',
             'gender' => ['sometimes', 'nullable', Rule::in(Gender::toValues())],
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone_country' => 'sometimes|in:ID',
             'phone' => ['required', 'string', 'phone:ID', function ($attribute, $phone, $fail) {
-                $validator = Validator::make(compact('phone'), [
-                    'phone' => Rule::unique('users')->where(function ($query) use ($phone) {
-                        $query->where('phone', PhoneNumber::make($phone, 'ID')->formatE164());
-                    }),
-                ]);
+                $user = User::where('phone', PhoneNumber::make($phone, request()->input('phone_country', env('PHONE_COUNTRY', 'ID')))->formatE164())->count();
 
-                if ($validator->fails()) {
-                    $fail(trans('validation.phone', compact('attribute')));
+                if ($user > 0) {
+                    $fail(trans('validation.unique', ['attribute' => static::getAttributes()[$attribute]]));
                 }
             }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -64,7 +62,7 @@ class RegisterRequest extends FormRequest
      */
     public function register(): User
     {
-        return tap(User::create($this->only([
+        $attributes = $this->only([
             'name',
             'email',
             'password',
@@ -75,8 +73,15 @@ class RegisterRequest extends FormRequest
             'phone_country',
             'phone',
             'password',
-        ])), function (User $user) {
-            $user->assignRole(Role::ROLE_ADMIN);
-        });
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = User::make($attributes);
+
+        $user->setBranchRelationValue(Branch::where('name', $this->input('branch_name'))->first())->save();
+
+        $user->syncRoles(Role::ROLE_STAFF);
+
+        return $user;
     }
 }

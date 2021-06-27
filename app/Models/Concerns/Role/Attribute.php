@@ -23,11 +23,4 @@ interface Attribute
      * @var string
      */
     const ROLE_STAFF = 'staff';
-
-    /**
-     * Role name for "customer".
-     *
-     * @var string
-     */
-    const ROLE_CUSTOMER = 'customer';
 }

@@ -15,6 +15,7 @@ class Order extends Model
      * {@inheritDoc}
      */
     protected $fillable = [
+        'code',
         'schedule_date',
     ];
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Branch;
 use App\Models\User;
 
 class AuthenticationTest extends TestCase
@@ -15,8 +16,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen_using_email()
     {
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
         /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->email,
@@ -29,8 +33,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen_using_phone()
     {
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
         /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->phone,
@@ -43,8 +50,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen_using_username()
     {
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
         /** @var \App\Models\User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->username,
@@ -57,7 +67,11 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_not_authenticate_with_invalid_password()
     {
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $this->post('/login', [
             'email' => $user->email,

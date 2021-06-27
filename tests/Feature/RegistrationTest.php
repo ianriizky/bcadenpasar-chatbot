@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Branch;
 use App\Models\User;
 use App\Notifications\VerifyEmailQueued;
 use Illuminate\Support\Facades\Notification;
@@ -19,9 +20,13 @@ class RegistrationTest extends TestCase
     {
         Notification::fake();
 
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
         $user = User::factory()->raw();
 
         $response = $this->post(route('register'), [
+            'branch_name' => $branch->name,
             'username' => $user['username'],
             'fullname' => $user['fullname'],
             'gender' => $user['gender'],

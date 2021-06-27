@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(Branch::class)->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
 
+            $table->string('code')->unique();
             $table->timestamp('schedule_date')->nullable();
             $table->timestamps();
         });

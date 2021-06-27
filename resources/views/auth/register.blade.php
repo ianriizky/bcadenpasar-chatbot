@@ -10,7 +10,15 @@
     <script>
         $(document).ready(function () {
             $('.select2').select2()
-            $('.select2').val(null).trigger('change');
+
+            const olds = @json(Arr::except(old(), '_token'));
+
+            $('select.select2').each(function (index) {
+                name = $(this).attr('name')
+                old = name in olds ? olds[name] : null;
+
+                $(this).val(old).trigger('change');
+            });
         });
     </script>
 @endsection
@@ -32,6 +40,8 @@
                         <div class="card-body">
                             <form action="{{ route('register') }}" method="post">
                                 @csrf
+
+                                <input type="hidden" name="phone_country" value="{{ env('PHONE_COUNTRY', 'ID') }}">
 
                                 <div class="row">
                                     <div class="form-group col-lg-4 col-12">
@@ -66,20 +76,40 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="email">{{ __('Email') }}</label>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label for="branch_name">{{ __('dashboard-lang.branch') }}</label>
 
-                                    <input type="email"
-                                        name="email"
-                                        id="email"
-                                        class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ old('email') }}"
-                                        required
-                                        tabindex="3"
-                                        autocomplete="on">
+                                        <select name="branch_name"
+                                            id="branch_name"
+                                            class="form-control select2 @error('branch_name') is-invalid @enderror"
+                                            data-placeholder="--{{ __('Choose :field', ['field' => __('dashboard-lang.branch') ]) }}--"
+                                            data-allow-clear="true"
+                                            tabindex="3">
+                                            @foreach (\App\Models\Branch::pluck('name', 'name') as $value => $label)
+                                                <option value="{{ $value }}" @if (old('branch_name') == $value) selected @endif>{{ $label }}</option>
+                                            @endforeach
+                                        </select>
 
-                                    <x-invalid-feedback :name="'email'"/>
+                                        <x-invalid-feedback :name="'branch_name'"/>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label for="email">{{ __('Email') }}</label>
+
+                                        <input type="email"
+                                            name="email"
+                                            id="email"
+                                            class="form-control @error('email') is-invalid @enderror"
+                                            value="{{ old('email') }}"
+                                            required
+                                            tabindex="4"
+                                            autocomplete="on">
+
+                                        <x-invalid-feedback :name="'email'"/>
+                                    </div>
                                 </div>
+
 
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-12">
@@ -90,7 +120,7 @@
                                             id="password"
                                             class="form-control @error('password') is-invalid @enderror"
                                             required
-                                            tabindex="4">
+                                            tabindex="5">
 
                                         <x-invalid-feedback :name="'password'"/>
                                     </div>
@@ -103,7 +133,7 @@
                                             id="password_confirmation"
                                             class="form-control @error('password_confirmation') is-invalid @enderror"
                                             required
-                                            tabindex="5">
+                                            tabindex="6">
 
                                         <x-invalid-feedback :name="'password_confirmation'"/>
                                     </div>
@@ -118,7 +148,7 @@
                                             value="1"
                                             @if (old('agree_with_terms', false)) checked @endif
                                             required
-                                            tabindex="6">
+                                            tabindex="7">
 
                                         <label class="custom-control-label" for="agree_with_terms">
                                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
@@ -142,9 +172,9 @@
                                             class="form-control select2 @error('gender') is-invalid @enderror"
                                             data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
                                             data-allow-clear="true"
-                                            tabindex="7">
+                                            tabindex="8">
                                             @foreach (\App\Enum\Gender::toArray() as $value => $label)
-                                                <option value="{{ $value }}" @if (old('gender') === $value) selected @endif>{{ $label }}</option>
+                                                <option value="{{ $value }}" @if (old('gender') == $value) selected @endif>{{ $label }}</option>
                                             @endforeach
                                         </select>
 
@@ -160,7 +190,7 @@
                                             class="form-control @error('phone') is-invalid @enderror"
                                             value="{{ old('phone') }}"
                                             required
-                                            tabindex="8"
+                                            tabindex="9"
                                             autocomplete="on">
 
                                         <x-invalid-feedback :name="'phone'"/>

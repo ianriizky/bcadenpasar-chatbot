@@ -2,13 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Models\Branch;
 use App\Models\User;
 
 class PasswordConfirmationTest extends TestCase
 {
     public function test_confirm_password_screen_can_be_rendered()
     {
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->actingAs($user)->get(route('password.confirm'));
 
@@ -17,7 +22,11 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_password_can_be_confirmed()
     {
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->actingAs($user)->post(route('password.confirm'), [
             'password' => 'password',
@@ -29,7 +38,11 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_password_is_not_confirmed_with_invalid_password()
     {
-        $user = User::factory()->create();
+        /** @var \App\Models\Branch $branch */
+        $branch = Branch::factory()->create();
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->for($branch)->create();
 
         $response = $this->actingAs($user)->post(route('password.confirm'), [
             'password' => 'wrong-password',

@@ -5,6 +5,7 @@ namespace App\Models\Concerns\Order;
 use App\Enum\OrderStatus;
 
 /**
+ * @property string $code
  * @property \App\Enum\OrderStatus $status
  * @property \Illuminate\Support\Carbon $schedule_date
  *
