@@ -16,7 +16,7 @@ class BranchController extends Controller
      */
     public function index()
     {
-        return view('branch.index');
+        return view('admin.branch.index');
     }
 
     /**
@@ -38,7 +38,7 @@ class BranchController extends Controller
      */
     public function create()
     {
-        return view('branch.create');
+        return view('admin.branch.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
-        return view('branch.edit', compact('branch'));
+        return view('admin.branch.edit', compact('branch'));
     }
 
     /**

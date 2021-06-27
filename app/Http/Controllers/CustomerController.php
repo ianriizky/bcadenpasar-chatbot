@@ -16,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('customer.index');
+        return view('admin.customer.index');
     }
 
     /**
@@ -38,7 +38,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer.create');
+        return view('admin.customer.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        return view('customer.edit', compact('customer'));
+        return view('admin.customer.edit', compact('customer'));
     }
 
     /**

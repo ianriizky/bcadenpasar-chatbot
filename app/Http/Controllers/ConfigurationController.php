@@ -16,7 +16,7 @@ class ConfigurationController extends Controller
      */
     public function index()
     {
-        return view('configuration.index');
+        return view('admin.configuration.index');
     }
 
     /**
@@ -38,7 +38,7 @@ class ConfigurationController extends Controller
      */
     public function create()
     {
-        return view('configuration.create');
+        return view('admin.configuration.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class ConfigurationController extends Controller
      */
     public function edit(Configuration $configuration)
     {
-        return view('configuration.edit', compact('configuration'));
+        return view('admin.configuration.edit', compact('configuration'));
     }
 
     /**

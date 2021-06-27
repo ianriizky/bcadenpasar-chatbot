@@ -16,7 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('order.index');
+        return view('admin.order.index');
     }
 
     /**
@@ -38,7 +38,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('order.create');
+        return view('admin.order.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('order.edit', compact('order'));
+        return view('admin.order.edit', compact('order'));
     }
 
     /**
