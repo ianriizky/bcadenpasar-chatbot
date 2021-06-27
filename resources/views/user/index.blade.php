@@ -24,7 +24,7 @@
                     [1, 'asc'],
                 ],
                 columns: [
-                    { data: 'checkbox', searchable: false, orderable: false },
+                    { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'branch_name', searchable: true },
                     { data: 'username', searchable: true },
                     { data: 'fullname', searchable: true },
@@ -43,7 +43,7 @@
 <x-app-layout>
     <section class="section">
         <div class="section-header">
-            <h1>{{ __('List :name', ['name' => __('dashboard-lang.user')]) }}</h1>
+            <h1>{{ __('List :name', ['name' => __('admin-lang.user')]) }}</h1>
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
@@ -54,12 +54,12 @@
 
                 <div class="breadcrumb-item">
                     <a href="{{ route('user.index') }}">
-                        <i class="fas fa-id-badge"></i> <span>{{ __('dashboard-lang.user') }}</span>
+                        <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('dashboard-lang.user')]) }}</span>
+                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.user')]) }}</span>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
                     <div class="card">
                         <div class="card-header">
                             <a href="{{ route('user.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('dashboard-lang.user')]) }}</span>
+                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.user')]) }}</span>
                             </a>
                         </div>
 
@@ -79,14 +79,8 @@
                                 <table class="table table-striped datatable">
                                     <thead>
                                         <tr>
-                                            <th class="text-center" style="width: 5%;">
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
-
-                                                    <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th>{{ __('dashboard-lang.branch') }}</th>
+                                            <th>@include('components.datatables.checkbox-all')</th>
+                                            <th>{{ __('admin-lang.branch') }}</th>
                                             <th>Username</th>
                                             <th>{{ __('Full name') }}</th>
                                             <th>{{ __('Email Address') }}</th>

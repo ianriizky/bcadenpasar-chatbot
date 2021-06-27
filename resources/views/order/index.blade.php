@@ -7,13 +7,14 @@
     <script src="{{ asset('node_modules/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/stisla/data-checkboxes.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('.datatable').dataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('customer.datatable') }}',
+                    url: '{{ route('order.datatable') }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -24,10 +25,10 @@
                 ],
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-                    { data: 'username', searchable: true },
-                    { data: 'fullname', searchable: true },
-                    { data: 'email', searchable: true },
-                    { data: 'phone', searchable: true },
+                    { data: 'code', searchable: true },
+                    { data: 'customer_fullname', searchable: true},
+                    { data: 'schedule_date', searchable: true },
+                    { data: 'status', searchable: true },
                     { data: 'action', searchable: false, orderable: false },
                 ],
                 language: {
@@ -41,7 +42,7 @@
 <x-app-layout>
     <section class="section">
         <div class="section-header">
-            <h1>{{ __('List :name', ['name' => __('admin-lang.customer')]) }}</h1>
+            <h1>{{ __('List :name', ['name' => __('admin-lang.order')]) }}</h1>
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
@@ -51,13 +52,13 @@
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('customer.index') }}">
-                        <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.customer') }}</span>
+                    <a href="{{ route('order.index') }}">
+                        <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.order') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.customer')]) }}</span>
+                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.order')]) }}</span>
                 </div>
             </div>
         </div>
@@ -67,8 +68,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('customer.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.customer')]) }}</span>
+                            <a href="{{ route('order.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.order')]) }}</span>
                             </a>
                         </div>
 
@@ -78,10 +79,10 @@
                                     <thead>
                                         <tr>
                                             <th>@include('components.datatables.checkbox-all')</th>
-                                            <th>Username</th>
-                                            <th>{{ __('Full name') }}</th>
-                                            <th>{{ __('Email Address') }}</th>
-                                            <th>{{ __('Phone Number') }}</th>
+                                            <th>{{ __('Code') }}</th>
+                                            <th>{{ __('Full Name') }} {{ __('admin-lang.customer') }}</th>
+                                            <th>{{ __('Schedule Date') }}</th>
+                                            <th>Status</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>

@@ -3,10 +3,11 @@
 return [
     'transaction' => 'Transaction',
     'order' => 'Order',
-    'role' => 'Role',
+    'master' => 'Master',
     'user' => 'Staff',
     'customer' => 'Customer',
     'branch' => 'Branch',
     'utility' => 'Utility',
+    'role' => 'Role',
     'configuration' => 'Configuration',
 ];

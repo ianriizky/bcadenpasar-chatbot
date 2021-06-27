@@ -3,10 +3,11 @@
 return [
     'transaction' => 'Transaksi',
     'order' => 'Pesanan',
-    'role' => 'Peran',
+    'master' => 'Master',
     'user' => 'Staf',
     'customer' => 'Pelanggan',
     'branch' => 'Cabang',
     'utility' => 'Utilitas',
+    'role' => 'Peran',
     'configuration' => 'Konfigurasi',
 ];

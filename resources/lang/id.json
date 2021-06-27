@@ -227,6 +227,7 @@
     "French Polynesia": "Polinesia Prancis",
     "French Southern Territories": "Daratan Selatan Prancis",
     "Full name": "Nama lengkap",
+    "Full Name": "Nama Lengkap",
     "Gabon": "Gabon",
     "Gambia": "Gambia",
     "Georgia": "Georgia",
@@ -748,5 +749,7 @@
     "Update :name": "Ubah :name",
     "Delete :name": "Hapus :name",
     "Active": "Aktif",
-    "Not Active": "Tidak Aktif"
+    "Not Active": "Tidak Aktif",
+    "Schedule Date": "Jadwal Penukaran",
+    "Description": "Keterangan"
 }

@@ -78,12 +78,12 @@
 
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="branch_name">{{ __('dashboard-lang.branch') }}</label>
+                                        <label for="branch_name">{{ __('admin-lang.branch') }}</label>
 
                                         <select name="branch_name"
                                             id="branch_name"
                                             class="form-control select2 @error('branch_name') is-invalid @enderror"
-                                            data-placeholder="--{{ __('Choose :field', ['field' => __('dashboard-lang.branch') ]) }}--"
+                                            data-placeholder="--{{ __('Choose :field', ['field' => __('admin-lang.branch') ]) }}--"
                                             data-allow-clear="true"
                                             tabindex="3">
                                             @foreach (\App\Models\Branch::pluck('name', 'name') as $value => $label)
