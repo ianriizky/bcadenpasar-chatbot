@@ -14,7 +14,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('role.datatable') }}',
+                    url: '{{ route('denomination.datatable') }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -26,7 +26,9 @@
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'name', searchable: true },
-                    { data: 'guard_name', searchable: true },
+                    { data: 'value', searchable: true },
+                    { data: 'type', searchable: true },
+                    { data: 'quantity_per_bundle', searchable: true },
                     { data: 'action', searchable: false, orderable: false },
                 ],
                 language: {
@@ -40,7 +42,7 @@
 <x-app-layout>
     <section class="section">
         <div class="section-header">
-            <h1>{{ __('List :name', ['name' => __('admin-lang.role')]) }}</h1>
+            <h1>{{ __('List :name', ['name' => __('admin-lang.denomination')]) }}</h1>
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active">
@@ -50,13 +52,13 @@
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('role.index') }}">
-                        <i class="fas fa-user-tag"></i> <span>{{ __('admin-lang.role') }}</span>
+                    <a href="{{ route('denomination.index') }}">
+                        <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.role')]) }}</span>
+                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.denomination')]) }}</span>
                 </div>
             </div>
         </div>
@@ -66,8 +68,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('role.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.role')]) }}</span>
+                            <a href="{{ route('denomination.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.denomination')]) }}</span>
                             </a>
                         </div>
 
@@ -78,7 +80,9 @@
                                         <tr>
                                             <th>@include('components.datatables.checkbox-all')</th>
                                             <th>{{ __('Name') }}</th>
-                                            <th>{{ __('Guard Name') }}</th>
+                                            <th>{{ __('Value') }}</th>
+                                            <th>{{ __('Type') }}</th>
+                                            <th>{{ __('Quantity Per Bundle') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>

@@ -52,7 +52,7 @@
 
                 <div class="breadcrumb-item">
                     <a href="{{ route('customer.index') }}">
-                        <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.customer') }}</span>
+                        <i class="fas fa-user-tie"></i> <span>{{ __('admin-lang.customer') }}</span>
                     </a>
                 </div>
 

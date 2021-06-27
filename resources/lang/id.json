@@ -751,5 +751,9 @@
     "Active": "Aktif",
     "Not Active": "Tidak Aktif",
     "Schedule Date": "Jadwal Penukaran",
-    "Description": "Keterangan"
+    "Description": "Keterangan",
+    "Type": "Tipe",
+    "Quantity Per Bundle": "Jumlah Per Bundel",
+    "Bundle": "Bundel",
+    "bundle": "bundel"
 }

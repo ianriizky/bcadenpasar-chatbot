@@ -21,7 +21,7 @@
 
             <li @if (Route::is('order.*')) class="active" @endif>
                 <a href="{{ route('order.index') }}" class="nav-link">
-                    <i class="fa fa-money-bill-wave"></i> <span>{{ __('admin-lang.order') }}</span>
+                    <i class="fa fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
                 </a>
             </li>
 
@@ -42,6 +42,12 @@
             <li @if (Route::is('customer.*')) class="active" @endif>
                 <a href="{{ route('customer.index') }}" class="nav-link">
                     <i class="fa fa-user-tie"></i> <span>{{ __('admin-lang.customer') }}</span>
+                </a>
+            </li>
+
+            <li @if (Route::is('denomination.*')) class="active" @endif>
+                <a href="{{ route('denomination.index') }}" class="nav-link">
+                    <i class="fa fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
                 </a>
             </li>
 

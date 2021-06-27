@@ -26,7 +26,7 @@
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'key', searchable: true },
-                    { data: 'value', searchable: true},
+                    { data: 'value', searchable: true },
                     { data: 'description', searchable: true },
                     { data: 'action', searchable: false, orderable: false },
                 ],

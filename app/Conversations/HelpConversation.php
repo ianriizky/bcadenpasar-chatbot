@@ -12,7 +12,7 @@ class HelpConversation extends Conversation
     public function run()
     {
         return $this
-            ->sayRenderable(view('conversations.help.index'))
-            ->sayRenderable(view('conversations.help.command-list'));
+            ->sayRenderable('conversations.help.index')
+            ->sayRenderable('conversations.help.command-list');
     }
 }

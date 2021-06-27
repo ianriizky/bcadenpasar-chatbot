@@ -6,6 +6,7 @@ return [
     'master' => 'Master',
     'user' => 'Staff',
     'customer' => 'Customer',
+    'denomination' => 'Denomination',
     'branch' => 'Branch',
     'utility' => 'Utility',
     'role' => 'Role',

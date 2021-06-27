@@ -26,7 +26,7 @@
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'code', searchable: true },
-                    { data: 'customer_fullname', searchable: true},
+                    { data: 'customer_fullname', searchable: true },
                     { data: 'schedule_date', searchable: true },
                     { data: 'status', searchable: true },
                     { data: 'action', searchable: false, orderable: false },
@@ -53,7 +53,7 @@
 
                 <div class="breadcrumb-item">
                     <a href="{{ route('order.index') }}">
-                        <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.order') }}</span>
+                        <i class="fas fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
                     </a>
                 </div>
 

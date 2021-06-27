@@ -6,6 +6,7 @@ return [
     'master' => 'Master',
     'user' => 'Staf',
     'customer' => 'Pelanggan',
+    'denomination' => 'Nominal',
     'branch' => 'Cabang',
     'utility' => 'Utilitas',
     'role' => 'Peran',

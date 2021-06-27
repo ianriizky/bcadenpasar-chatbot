@@ -26,7 +26,7 @@
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'name', searchable: true },
-                    { data: 'address', searchable: true},
+                    { data: 'address', searchable: true },
                     { data: 'google_map_url', searchable: true },
                     { data: 'action', searchable: false, orderable: false },
                 ],
@@ -52,7 +52,7 @@
 
                 <div class="breadcrumb-item">
                     <a href="{{ route('branch.index') }}">
-                        <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.branch') }}</span>
+                        <i class="fas fa-building"></i> <span>{{ __('admin-lang.branch') }}</span>
                     </a>
                 </div>
 

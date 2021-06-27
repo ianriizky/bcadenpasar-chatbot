@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DenominationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,9 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->group(function () {
 
     Route::post('/customer/datatable', [CustomerController::class, 'datatable'])->name('customer.datatable');
     Route::resource('/customer', CustomerController::class)->except('show');
+
+    Route::post('/denomination/datatable', [DenominationController::class, 'datatable'])->name('denomination.datatable');
+    Route::resource('/denomination', DenominationController::class)->except('show');
 
     Route::post('/role/datatable', [RoleController::class, 'datatable'])->name('role.datatable');
     Route::resource('/role', RoleController::class)->except('show');

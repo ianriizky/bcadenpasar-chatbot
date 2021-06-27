@@ -5,9 +5,9 @@ namespace App\Http\Resources\DataTables;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property \App\Models\Role $resource
+ * @property \App\Models\Denomination $resource
  */
-class RoleResource extends JsonResource
+class DenominationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,12 +19,14 @@ class RoleResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'role_' . $this->resource->getKey(),
+                'id' => 'denomination_' . $this->resource->getKey(),
             ])->render(),
             'name' => $this->resource->name,
-            'guard_name' => $this->resource->guard_name,
+            'value' => $this->resource->value,
+            'type' => $this->resource->type->label,
+            'quantity_per_bundle' => $this->resource->quantity_per_bundle,
             'action' => view('components.datatables.link', [
-                'url' => route('role.edit', $this->resource),
+                'url' => route('denomination.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),
