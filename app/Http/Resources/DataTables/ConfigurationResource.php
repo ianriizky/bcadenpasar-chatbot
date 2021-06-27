@@ -5,9 +5,9 @@ namespace App\Http\Resources\DataTables;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property \App\Models\Customer $resource
+ * @property \App\Models\Configuration $resource
  */
-class CustomerResource extends JsonResource
+class ConfigurationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,14 +19,13 @@ class CustomerResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'customer_' . $this->resource->getKey(),
+                'id' => 'configuration_' . $this->resource->getKey(),
             ])->render(),
-            'username' => $this->resource->username,
-            'fullname' => $this->resource->fullname,
-            'email' => $this->resource->email,
-            'phone' => $this->resource->phone,
+            'key' => $this->resource->key,
+            'value' => $this->resource->value,
+            'description' => $this->resource->description,
             'action' => view('components.datatables.link', [
-                'url' => route('customer.edit', $this->resource),
+                'url' => route('configuration.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

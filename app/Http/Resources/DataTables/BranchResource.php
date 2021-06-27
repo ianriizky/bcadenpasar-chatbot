@@ -5,9 +5,9 @@ namespace App\Http\Resources\DataTables;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property \App\Models\User $resource
+ * @property \App\Models\Branch $resource
  */
-class UserResource extends JsonResource
+class BranchResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,18 +19,17 @@ class UserResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'user_' . $this->resource->getKey(),
+                'id' => 'branch_' . $this->resource->getKey(),
             ])->render(),
-            'branch_name' => view('components.datatables.link', [
-                'url' => route('branch.edit', $this->resource->branch),
-                'name' => $this->resource->branch->name,
+            'name' => $this->resource->name,
+            'address' => $this->resource->address,
+            'google_map_url' => view('components.datatables.link', [
+                'url' => $this->resource->google_map_url,
+                'name' => $this->resource->address_latitude . ' | ' . $this->resource->address_longitude,
+                'is_new_tab' => true,
             ])->render(),
-            'username' => $this->resource->username,
-            'fullname' => $this->resource->fullname,
-            'email' => $this->resource->email,
-            'is_active' => $this->resource->is_active_badge,
             'action' => view('components.datatables.link', [
-                'url' => route('user.edit', $this->resource),
+                'url' => route('branch.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

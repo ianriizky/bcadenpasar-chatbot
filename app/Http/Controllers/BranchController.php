@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DataTables\CustomerResource;
-use App\Models\Customer;
+use App\Http\Resources\DataTables\BranchResource;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class CustomerController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('customer.index');
+        return view('branch.index');
     }
 
     /**
@@ -26,8 +26,8 @@ class CustomerController extends Controller
      */
     public function datatable()
     {
-        return DataTables::eloquent(Customer::query())
-            ->setTransformer(fn ($model) => CustomerResource::make($model)->resolve())
+        return DataTables::eloquent(Branch::query())
+            ->setTransformer(fn ($model) => BranchResource::make($model)->resolve())
             ->toJson();
     }
 
@@ -38,7 +38,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer.create');
+        return view('branch.create');
     }
 
     /**
@@ -49,46 +49,46 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        Customer::create($request->all());
+        Branch::create($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('branch.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit(Customer $customer)
+    public function edit(Branch $branch)
     {
-        return view('customer.edit', compact('customer'));
+        return view('branch.edit', compact('branch'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Branch $branch)
     {
-        $customer->update($request->all());
+        $branch->update($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('branch.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Customer $customer)
+    public function destroy(Branch $branch)
     {
-        $customer->delete();
+        $branch->delete();
 
-        return redirect()->route('customer.index');
+        return redirect()->route('branch.index');
     }
 }

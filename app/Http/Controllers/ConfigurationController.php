@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DataTables\CustomerResource;
-use App\Models\Customer;
+use App\Http\Resources\DataTables\ConfigurationResource;
+use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class CustomerController extends Controller
+class ConfigurationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('customer.index');
+        return view('configuration.index');
     }
 
     /**
@@ -26,8 +26,8 @@ class CustomerController extends Controller
      */
     public function datatable()
     {
-        return DataTables::eloquent(Customer::query())
-            ->setTransformer(fn ($model) => CustomerResource::make($model)->resolve())
+        return DataTables::eloquent(Configuration::query())
+            ->setTransformer(fn ($model) => ConfigurationResource::make($model)->resolve())
             ->toJson();
     }
 
@@ -38,7 +38,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer.create');
+        return view('configuration.create');
     }
 
     /**
@@ -49,46 +49,46 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        Customer::create($request->all());
+        Configuration::create($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('configuration.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit(Customer $customer)
+    public function edit(Configuration $configuration)
     {
-        return view('customer.edit', compact('customer'));
+        return view('configuration.edit', compact('configuration'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Configuration $configuration)
     {
-        $customer->update($request->all());
+        $configuration->update($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('configuration.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Customer $customer)
+    public function destroy(Configuration $configuration)
     {
-        $customer->delete();
+        $configuration->delete();
 
-        return redirect()->route('customer.index');
+        return redirect()->route('configuration.index');
     }
 }

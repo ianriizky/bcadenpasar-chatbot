@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\DataTables\CustomerResource;
-use App\Models\Customer;
+use App\Http\Resources\DataTables\OrderResource;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class CustomerController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return view('customer.index');
+        return view('order.index');
     }
 
     /**
@@ -26,8 +26,8 @@ class CustomerController extends Controller
      */
     public function datatable()
     {
-        return DataTables::eloquent(Customer::query())
-            ->setTransformer(fn ($model) => CustomerResource::make($model)->resolve())
+        return DataTables::eloquent(Order::query()->with('user:id,name'))
+            ->setTransformer(fn ($model) => OrderResource::make($model)->resolve())
             ->toJson();
     }
 
@@ -38,7 +38,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customer.create');
+        return view('order.create');
     }
 
     /**
@@ -49,46 +49,46 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        Customer::create($request->all());
+        Order::create($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('order.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit(Customer $customer)
+    public function edit(Order $order)
     {
-        return view('customer.edit', compact('customer'));
+        return view('order.edit', compact('order'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, Order $order)
     {
-        $customer->update($request->all());
+        $order->update($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('order.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Customer $customer)
+    public function destroy(Order $order)
     {
-        $customer->delete();
+        $order->delete();
 
-        return redirect()->route('customer.index');
+        return redirect()->route('order.index');
     }
 }
