@@ -17,6 +17,7 @@
         "axios": "^0.21",
         "datatables": "^1.10.18",
         "datatables.net-responsive-bs4": "^2.2.3",
+        "datatables.net-plugins": "^1.10.24",
         "datatables.net-select-bs4": "^1.2.7",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
@@ -31,8 +32,5 @@
     "engines": {
         "node": "16.x",
         "npm": "7.x"
-    },
-    "dependencies": {
-        "datatables.net-plugins": "^1.10.24"
     }
 }

@@ -152,7 +152,8 @@ if (! function_exists('google_map_url')) {
     function google_map_url(float $latitude, float $longitude, string $zoom = '20z'): string
     {
         return sprintf(
-            'https://www.google.com/maps/@%s,%s,%s',
+            'https://maps.google.com/?q=%s,%s&z=%s',
+            // 'https://www.google.com/maps/@%s,%s,%s',
             $latitude, $longitude, $zoom
         );
     }
