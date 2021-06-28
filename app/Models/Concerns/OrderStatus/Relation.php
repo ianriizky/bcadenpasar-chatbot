@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns\OrderStatus;
 
+use App\Models\Contracts\Issuerable;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -61,5 +62,28 @@ trait Relation
     public function issuerable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Return \App\Models\Issuerable model relation value.
+     *
+     * @return \App\Models\Contracts\Issuerable
+     */
+    public function getIssuerableRelationValue(): Issuerable
+    {
+        return $this->getRelationValue('issuerable');
+    }
+
+    /**
+     * Set \App\Models\Issuerable model relation value.
+     *
+     * @param  \App\Models\Contracts\Issuerable  $issuerable
+     * @return $this
+     */
+    public function setIssuerableRelationValue(Issuerable $issuerable)
+    {
+        $this->issuerable()->associate($issuerable);
+
+        return $this;
     }
 }

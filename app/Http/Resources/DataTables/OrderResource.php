@@ -25,9 +25,9 @@ class OrderResource extends JsonResource
             'customer_fullname' => view('components.datatables.link', [
                 'url' => route('customer.edit', $this->resource->customer),
                 'name' => $this->resource->customer->fullname,
-            ]),
+            ])->render(),
             'schedule_date' => $this->resource->schedule_date,
-            'status' => $this->resource->status,
+            'status' => $this->resource->status->label,
             'action' => view('components.datatables.link', [
                 'url' => route('order.edit', $this->resource),
                 'name' => __('Details'),

@@ -2,7 +2,12 @@
 
 namespace App\Conversations;
 
+use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Models\Customer;
+use App\Models\Denomination;
+use App\Models\Item;
+use App\Models\Order;
+use App\Models\OrderStatus as ModelOrderStatus;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -37,7 +42,7 @@ class ExchangeConversation extends Conversation
             if (!$customer = Customer::retrieveByUsernameAndEmail(compact('username', 'email'))) {
                 return $this
                     ->setPreviousConversation($this)
-                    ->say('⚠️ Mohon lakukan registrasi terlebih dulu sebelum melakukan transaksi penukaran uang')
+                    ->sayRenderable('conversations.exchange.alert-registration-first')
                     ->startConversation(new RegisterCustomerConversation);
             }
         }
@@ -49,10 +54,13 @@ class ExchangeConversation extends Conversation
      * Reply with customer data.
      *
      * @param  \App\Models\Customer  $customer
+     * @param  string|null  $validationErrorMessage
      * @return $this
      */
-    protected function displayCustomerData(Customer $customer)
+    protected function displayCustomerData(Customer $customer, string $validationErrorMessage = null)
     {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
         if (!$this->getPreviousConversation() instanceof static) {
             $this->say('<em>Data anda sebelumnya sudah pernah terekam di database kami.</em>');
         }
@@ -72,7 +80,7 @@ class ExchangeConversation extends Conversation
             }
 
             if (!in_array($value = $answer->getValue(), ['yes', 'no'])) {
-                return $this->displayFallback($answer->getText());
+                return $this->displayCustomerData($customer, $this->fallbackMessage($answer->getText()));
             }
 
             if ($value === 'no') {
@@ -91,25 +99,66 @@ class ExchangeConversation extends Conversation
      * Record customer order data.
      *
      * @param  \App\Models\Customer  $customer
+     * @param  string|null  $validationErrorMessage
      * @return $this
      */
-    protected function recordOrder(Customer $customer)
+    protected function recordOrder(Customer $customer, string $validationErrorMessage = null)
     {
-        return $this->say('terima kasih :)');
+        $denominations = Denomination::all('id', 'name', 'value');
+        $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
+
+        foreach ($denominations as $denomination) {
+            $keyboard->addRow(
+                KeyboardButton::create(
+                    view('conversations.exchange.reply-denomination', compact('denomination'))->render()
+                )->callbackData($denomination->getKey())
+            );
+        }
 
         $response = $this->reply(
-            $question = view('conversations.register-customer.confirm-customer_data', compact('user', 'userStorage'))->render(),
-            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
-                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-yes')->render())->callbackData('yes')
-            )->addRow(
-                KeyboardButton::create(view('conversations.register-customer.reply-customer_data-no')->render())->callbackData('no')
-            )->toArray()
+            $question = view('conversations.exchange.alert-denomination')->render(),
+            $additionalParameters = $keyboard->toArray()
         );
 
-        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $customer, $denominations) {
             if (!$answer->isInteractiveMessageReply()) {
                 return;
             }
+
+            if (!$denominations->contains($answer->getValue()) ||
+                !$denomination = Denomination::find($answer->getValue())) {
+                return $this->recordOrder($customer, $this->fallbackMessage($answer->getText()));
+            }
+
+            /** @var \App\Models\Order $order */
+            $order = Order::where('code', $this->getUserStorage('order_code'))->firstOr(function () use ($customer) {
+                $order = new Order;
+
+                $order->setCustomerRelationValue($customer)->save();
+
+                $orderStatus = new ModelOrderStatus(['status' => EnumOrderStatus::draft()]);
+
+                $order->statuses()->save(
+                    $orderStatus->setIssuerableRelationValue($customer)
+                );
+
+                $this->setUserStorage(['order_code' => $order->code]);
+
+                return $order;
+            });
+
+            $item = new Item([
+                'quantity_per_bundle' => $denomination->quantity_per_bundle,
+                'bundle_quantity' => 1,
+            ]);
+
+            $item->setDenominationRelationValue($denomination);
+
+            $order->items()->save($item);
+
+            $this->deleteTelegramMessageFromResponse($response);
+
+            return $this->say('thanks :)');
         }, question: $question, additionalParameters: $additionalParameters);
     }
 }

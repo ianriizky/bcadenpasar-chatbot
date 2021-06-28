@@ -79,10 +79,13 @@ class RegisterCustomerConversation extends Conversation
     /**
      * Ask if customer want to input account number or identity card number.
      *
+     * @param  string|null  $validationErrorMessage
      * @return $this
      */
-    protected function askIdentityNumberOption()
+    protected function askIdentityNumberOption(string $validationErrorMessage = null)
     {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
         $this->setUserStorage([
             'account_number' => null,
             'identitycard_number' => null,
@@ -102,13 +105,35 @@ class RegisterCustomerConversation extends Conversation
             }
 
             if (!in_array($value = $answer->getValue(), ['yes', 'no'])) {
-                return $this->displayFallback($answer->getText());
+                return $this->askIdentityNumberOption($this->fallbackMessage($answer->getText()));
             }
 
             return $value === 'yes'
                 ? $this->askAccountNumber()
                 : $this->askIdentityCard();
         });
+    }
+
+    /**
+     * Create text to back into identity option menu.
+     *
+     * @return string
+     */
+    protected function backToIdentityNumberOption(): string
+    {
+        return trim(view('components.conversations.back', ['text' => 'opsi rekening/KTP'])->render());
+    }
+
+    /**
+     * Create keyboard instance to back into identity option menu.
+     *
+     * @return \BotMan\Drivers\Telegram\Extensions\Keyboard
+     */
+    protected function keyboardBackToIdentityNumberOption()
+    {
+        return Keyboard::create(Keyboard::TYPE_KEYBOARD)->resizeKeyboard()->oneTimeKeyboard()->addRow(
+            KeyboardButton::create($this->backToIdentityNumberOption())
+        );
     }
 
     /**
@@ -121,8 +146,15 @@ class RegisterCustomerConversation extends Conversation
     {
         $this->displayValidationErrorMessage($validationErrorMessage);
 
-        return $this->askRenderable('conversations.register-customer.ask-account_number', function (Answer $answer) {
-            if ($answer->getText() === '⏪ Kembali ke menu opsi rekening/KTP') {
+        $response = $this->reply(
+            $question = view('conversations.register-customer.ask-account_number')->render(),
+            $additionalParameters = $this->keyboardBackToIdentityNumberOption()->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
+            if (trim($answer->getText()) === $this->backToIdentityNumberOption()) {
+                $this->deleteTelegramMessageFromResponse($response);
+
                 return $this->askIdentityNumberOption();
             }
 
@@ -136,9 +168,7 @@ class RegisterCustomerConversation extends Conversation
             $this->setUserStorage(['account_number' => $validator->validated()['account_number']]);
 
             return $this->askPhone();
-        }, additionalParameters: Keyboard::create(Keyboard::TYPE_KEYBOARD)->resizeKeyboard()->oneTimeKeyboard()->addRow(
-            KeyboardButton::create('⏪ Kembali ke menu opsi rekening/KTP')
-        )->toArray());
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**
@@ -151,8 +181,15 @@ class RegisterCustomerConversation extends Conversation
     {
         $this->displayValidationErrorMessage($validationErrorMessage);
 
-        return $this->askRenderable('conversations.register-customer.ask-identitycard_number', function (Answer $answer) {
-            if ($answer->getText() === '⏪ Kembali ke menu opsi rekening/KTP') {
+        $response1 = $this->reply(
+            $question = view('conversations.register-customer.ask-identitycard_number')->render(),
+            $additionalParameters = $this->keyboardBackToIdentityNumberOption()->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response1) {
+            if (trim($answer->getText()) === $this->backToIdentityNumberOption()) {
+                $this->deleteTelegramMessageFromResponse($response1);
+
                 return $this->askIdentityNumberOption();
             }
 
@@ -165,8 +202,15 @@ class RegisterCustomerConversation extends Conversation
 
             $this->setUserStorage(['identitycard_number' => $validator->validated()['identitycard_number']]);
 
-            return $this->askRenderable('conversations.register-customer.ask-identitycard_image', function (Answer $answer) {
-                if ($answer->getText() === '⏪ Kembali ke menu opsi rekening/KTP') {
+            $response2 = $this->reply(
+                $question = view('conversations.register-customer.ask-identitycard_image')->render()
+            );
+
+            return $this->getBot()->storeConversation($this, function (Answer $answer) use ($response1, $response2) {
+                if (trim($answer->getText()) === $this->backToIdentityNumberOption()) {
+                    $this->deleteTelegramMessageFromResponse($response1);
+                    $this->deleteTelegramMessageFromResponse($response2);
+
                     return $this->askIdentityNumberOption();
                 }
 
@@ -191,10 +235,8 @@ class RegisterCustomerConversation extends Conversation
                 return $this
                     ->say('✅ ' . trans(':action ran successfully!', ['action' => 'Upload foto KTP']))
                     ->askPhone();
-            });
-        }, additionalParameters: Keyboard::create(Keyboard::TYPE_KEYBOARD)->resizeKeyboard()->oneTimeKeyboard()->addRow(
-            KeyboardButton::create('⏪ Kembali ke menu opsi rekening/KTP')
-        )->toArray());
+            }, $question);
+        }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**
@@ -249,33 +291,35 @@ class RegisterCustomerConversation extends Conversation
             }
 
             if (!in_array($value = $answer->getValue(), ['yes', 'no'])) {
-                return $this->displayFallback($answer->getText());
+                return $this->askWhatsappPhone($this->fallbackMessage($answer->getText()));
             }
 
             $phone = $this->getUserStorage('phone');
 
-            if ($value === 'no') {
-                $callback = function (string $validationErrorMessage = null) use (&$callback) {
-                    $this->displayValidationErrorMessage($validationErrorMessage);
+            if ($value === 'yes') {
+                $this->setUserStorage(['whatsapp_phone' => $phone]);
 
-                    $this->askRenderable('conversations.register-customer.ask-whatsapp_phone', function (Answer $answer) use (&$phone, $callback) {
-                        $value = $answer->getText();
-                        $validator = CustomerStoreRequest::createValidator($value, 'whatsapp_phone');
-
-                        if ($validator->fails()) {
-                            return $callback($validator->errors()->first('whatsapp_phone'));
-                        }
-
-                        $phone = $validator->validated()['whatsapp_phone'];
-                    });
-                };
-
-                return value($callback);
+                return $this->askLocation();
             }
 
-            $this->setUserStorage(['whatsapp_phone' => $phone]);
+            return value(function (string $validationErrorMessage = null) use (&$callback) {
+                $this->displayValidationErrorMessage($validationErrorMessage);
 
-            return $this->askLocation();
+                $this->askRenderable('conversations.register-customer.ask-whatsapp_phone', function (Answer $answer) use (&$phone, $callback) {
+                    $value = $answer->getText();
+                    $validator = CustomerStoreRequest::createValidator($value, 'whatsapp_phone');
+
+                    if ($validator->fails()) {
+                        return $callback($validator->errors()->first('whatsapp_phone'));
+                    }
+
+                    $phone = $validator->validated()['whatsapp_phone'];
+
+                    $this->setUserStorage(['whatsapp_phone' => $phone]);
+
+                    return $this->askLocation();
+                });
+            });
         });
     }
 
@@ -306,10 +350,13 @@ class RegisterCustomerConversation extends Conversation
     /**
      * Ask if the inputed data from customer is correct or not.
      *
+     * @param  string|null  $validationErrorMessage
      * @return $this
      */
-    protected function askDataConfirmation()
+    protected function askDataConfirmation(string $validationErrorMessage = null)
     {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
         $this->sayRenderable('conversations.register-customer.thankyou', additionalParameters: ['reply_markup' => json_encode([
             'remove_keyboard' => true,
         ])]);
@@ -332,7 +379,7 @@ class RegisterCustomerConversation extends Conversation
             }
 
             if (!in_array($value = $answer->getValue(), ['yes', 'no'])) {
-                return $this->displayFallback($answer->getText());
+                return $this->askDataConfirmation($this->fallbackMessage($answer->getText()));
             }
 
             if ($value === 'no') {

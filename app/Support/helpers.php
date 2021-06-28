@@ -157,3 +157,17 @@ if (! function_exists('google_map_url')) {
         );
     }
 }
+
+if (! function_exists('format_rupiah')) {
+    /**
+     * Return number in rupiah format.
+     *
+     * @param  float  $value
+     * @param  string|null  $prefix
+     * @return string
+     */
+    function format_rupiah(float $value, string $prefix = null): string
+    {
+        return $prefix . number_format($value, 0, ',', '.');
+    }
+}

@@ -37,7 +37,7 @@ class HomeConservation extends Conversation
             $this->deleteTelegramMessageFromResponse($response);
 
             if (!$conversation = $this->getConversation($answer->getValue())) {
-                return $this->displayFallback($answer->getText());
+                return $this->sayFallbackMessage($answer->getText());
             }
 
             return $this->startConversation($conversation);

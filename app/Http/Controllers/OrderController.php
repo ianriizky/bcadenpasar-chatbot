@@ -26,8 +26,28 @@ class OrderController extends Controller
      */
     public function datatable()
     {
-        return DataTables::eloquent(Order::query()->with('user:id,name'))
+        return DataTables::eloquent(Order::query()->with('user:id,fullname'))
             ->setTransformer(fn ($model) => OrderResource::make($model)->resolve())
+            ->orderColumn('customer_fullname', function ($query, $direction) {
+                $query->with(['customer' => function ($query) use ($direction) {
+                    $query->orderBy('name', $direction);
+                }]);
+            })
+            ->filterColumn('customer_fullname', function ($query, $keyword) {
+                $query->with(['customer' => function ($query) use ($keyword) {
+                    $query->where('name', 'like', $keyword);
+                }]);
+            })
+            ->orderColumn('status', function ($query, $direction) {
+                $query->with(['latestStatus' => function ($query) use ($direction) {
+                    $query->orderBy('status', $direction);
+                }]);
+            })
+            ->filterColumn('status', function ($query, $keyword) {
+                $query->with(['latestStatus' => function ($query) use ($keyword) {
+                    $query->where('status', 'like', $keyword);
+                }]);
+            })
             ->toJson();
     }
 

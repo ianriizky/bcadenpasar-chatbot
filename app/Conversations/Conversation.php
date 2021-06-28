@@ -132,13 +132,27 @@ abstract class Conversation extends BaseConversation
      * Return reply response with the given validation error message.
      *
      * @param  string|null  $validationErrorMessage
-     * @return void
+     * @return $this
      */
     protected function displayValidationErrorMessage(string $validationErrorMessage = null)
     {
         if ($validationErrorMessage) {
             $this->say('⛔️ ' . $validationErrorMessage);
         }
+
+        return $this;
+    }
+
+    /**
+     * Create reply response format with the fallback message.
+     *
+     * @param  string  $text
+     * @param  string  $view
+     * @return string
+     */
+    protected function fallbackMessage(string $text, string $view = 'components.conversations.fallback'): string
+    {
+        return view($view, compact('text'))->render();
     }
 
     /**
@@ -148,9 +162,9 @@ abstract class Conversation extends BaseConversation
      * @param  string  $view
      * @return $this
      */
-    protected function displayFallback(string $text, string $view = 'components.conversations.fallback')
+    protected function sayFallbackMessage(string $text, string $view = 'components.conversations.fallback')
     {
-        return $this->say(view($view, compact('text'))->render());
+        return $this->say($this->fallbackMessage($text, $view));
     }
 
     /**

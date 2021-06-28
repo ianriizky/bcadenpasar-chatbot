@@ -8,6 +8,8 @@ use App\Enum\OrderStatus;
  * @property string $code
  * @property \App\Enum\OrderStatus $status
  * @property \Illuminate\Support\Carbon $schedule_date
+ * @property-read mixed $item_total_bundle_quantity
+ * @property-read mixed $item_total
  *
  * @see \App\Models\Order
  */
@@ -21,5 +23,25 @@ trait Attribute
     public function getStatusAttribute(): OrderStatus
     {
         return $this->latestStatus->status;
+    }
+
+    /**
+     * Return "item_total_bundle_quantity" attribute value.
+     *
+     * @return int
+     */
+    public function getItemTotalBundleQuantityAttribute($value): int
+    {
+        return $this->items->sum->bundle_quantity;
+    }
+
+    /**
+     * Return "item_total" attribute value.
+     *
+     * @return float
+     */
+    public function getItemTotalAttribute($value): float
+    {
+        return $this->items->sum->total;
     }
 }

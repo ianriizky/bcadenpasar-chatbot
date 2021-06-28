@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
  * @property-read float $value_per_bundle
  * @property-read float $minimum_order_value
  * @property-read float $maximum_order_value
+ * @property-read string $value_rupiah
  *
  * @see \App\Models\Denomination
  */
@@ -63,5 +64,15 @@ trait Attribute
     public function getMaximumOrderValueAttribute(): float
     {
         return $this->value_per_bundle * $this->maximum_order_bundle;
+    }
+
+    /**
+     * Return "value_rupiah" attribute value.
+     *
+     * @return string
+     */
+    public function getValueRupiahAttribute(): string
+    {
+        return format_rupiah($this->value, 'Rp');
     }
 }
