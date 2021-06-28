@@ -30,14 +30,13 @@ class UserController extends Controller
         return DataTables::eloquent(User::query()->with('branch:id,name'))
             ->setTransformer(fn ($model) => UserResource::make($model)->resolve())
             ->orderColumn('branch_name', function ($query, $direction) {
-                $query->with(['branch' => function ($query) use ($direction) {
-                    $query->orderBy('name', $direction);
-                }]);
+                $query->join('branches', 'users.branch_id', '=', 'branches.id')
+                    ->orderBy('branches.name', $direction);
             })
             ->filterColumn('branch_name', function ($query, $keyword) {
-                $query->with(['branch' => function ($query) use ($keyword) {
-                    $query->where('name', 'like', $keyword);
-                }]);
+                $query->whereHas('branch', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                });
             })
             ->filterColumn('is_active', function ($query, $keyword) {
                 $active = Str::lower(trans('Active'));

@@ -29,24 +29,22 @@ class OrderController extends Controller
         return DataTables::eloquent(Order::query()->with('user:id,fullname'))
             ->setTransformer(fn ($model) => OrderResource::make($model)->resolve())
             ->orderColumn('customer_fullname', function ($query, $direction) {
-                $query->with(['customer' => function ($query) use ($direction) {
-                    $query->orderBy('name', $direction);
-                }]);
+                $query->join('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->orderBy('customers.fullname', $direction);
             })
             ->filterColumn('customer_fullname', function ($query, $keyword) {
-                $query->with(['customer' => function ($query) use ($keyword) {
-                    $query->where('name', 'like', $keyword);
-                }]);
+                $query->whereHas('customer', function ($query) use ($keyword) {
+                    $query->where('fullname', 'like', '%' . $keyword . '%');
+                });
             })
             ->orderColumn('status', function ($query, $direction) {
-                $query->with(['latestStatus' => function ($query) use ($direction) {
-                    $query->orderBy('status', $direction);
-                }]);
+                $query->join('order_statuses', 'order_statuses.order_id', '=', 'orders.id')
+                    ->orderBy('order_statuses.status', $direction);
             })
             ->filterColumn('status', function ($query, $keyword) {
-                $query->with(['latestStatus' => function ($query) use ($keyword) {
-                    $query->where('status', 'like', $keyword);
-                }]);
+                $query->whereHas('latestStatus', function ($query) use ($keyword) {
+                    $query->where('status', 'like', '%' . $keyword . '%');
+                });
             })
             ->toJson();
     }

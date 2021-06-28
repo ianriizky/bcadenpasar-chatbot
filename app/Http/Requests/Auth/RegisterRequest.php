@@ -7,8 +7,6 @@ use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
@@ -23,7 +21,7 @@ class RegisterRequest extends FormRequest
             'branch_name' => 'required|exists:branches,name',
             'username' => 'required|string|max:255|unique:users,username',
             'fullname' => 'required|string|max:255',
-            'gender' => ['sometimes', 'nullable', Rule::in(Gender::toValues())],
+            'gender' => 'sometimes|nullable|enum:' . Gender::class,
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone_country' => 'sometimes|in:ID',
             'phone' => ['required', 'string', 'phone:ID', function ($attribute, $phone, $fail) {
