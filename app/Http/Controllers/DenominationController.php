@@ -51,7 +51,7 @@ class DenominationController extends Controller
     {
         Denomination::create($request->all());
 
-        return redirect()->route('denomination.index');
+        return redirect()->route('admin.denomination.index');
     }
 
     /**
@@ -76,7 +76,7 @@ class DenominationController extends Controller
     {
         $denomination->update($request->all());
 
-        return redirect()->route('denomination.index');
+        return redirect()->route('admin.denomination.index');
     }
 
     /**
@@ -89,6 +89,6 @@ class DenominationController extends Controller
     {
         $denomination->delete();
 
-        return redirect()->route('denomination.index');
+        return redirect()->route('admin.denomination.index');
     }
 }

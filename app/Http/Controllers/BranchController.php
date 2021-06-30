@@ -51,7 +51,7 @@ class BranchController extends Controller
     {
         Branch::create($request->all());
 
-        return redirect()->route('branch.index');
+        return redirect()->route('admin.branch.index');
     }
 
     /**
@@ -76,7 +76,7 @@ class BranchController extends Controller
     {
         $branch->update($request->all());
 
-        return redirect()->route('branch.index');
+        return redirect()->route('admin.branch.index');
     }
 
     /**
@@ -89,6 +89,6 @@ class BranchController extends Controller
     {
         $branch->delete();
 
-        return redirect()->route('branch.index');
+        return redirect()->route('admin.branch.index');
     }
 }

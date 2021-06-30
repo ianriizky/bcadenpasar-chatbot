@@ -14,7 +14,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('branch.datatable') }}',
+                    url: '{{ route('admin.branch.datatable') }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -44,20 +44,16 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.branch')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active">
-                    <a href="{{ route('dashboard') }}">
+                <div class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
                         <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('branch.index') }}">
+                    <a href="{{ route('admin.branch.index') }}">
                         <i class="fas fa-building"></i> <span>{{ __('admin-lang.branch') }}</span>
                     </a>
-                </div>
-
-                <div class="breadcrumb-item">
-                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.branch')]) }}</span>
                 </div>
             </div>
         </div>
@@ -67,7 +63,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('branch.create') }}" class="btn btn-primary">
+                            <a href="{{ route('admin.branch.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.branch')]) }}</span>
                             </a>
                         </div>

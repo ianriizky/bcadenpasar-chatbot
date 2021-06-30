@@ -7,6 +7,8 @@
         @include('components.dashboard-sidebar')
 
         <div class="main-content">
+            @includeWhen($alert = session('alert'), 'components.alert-dismissible', compact('alert'))
+
             {{ $slot }}
         </div>
 

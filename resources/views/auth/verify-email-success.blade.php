@@ -23,7 +23,7 @@
                                 </div>
                             @endif
 
-                            <a href="{{ route('dashboard') }}" class="btn btn-primary">{{ __('Go to page :page', ['page' => __('Dashboard')]) }}</a>
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">{{ __('Go to page :page', ['page' => __('Dashboard')]) }}</a>
                         </div>
                     </div>
 

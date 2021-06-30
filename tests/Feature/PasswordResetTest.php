@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Notification;
 
 class PasswordResetTest extends TestCase
 {
+    use Concerns\HandleAuthentication;
+
     public function test_reset_password_link_screen_can_be_rendered()
     {
         $response = $this->get(route('password.request'));
@@ -20,11 +22,7 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
@@ -35,11 +33,7 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 
@@ -56,11 +50,7 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $this->post(route('password.request'), ['email' => $user->email]);
 

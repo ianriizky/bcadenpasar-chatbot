@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DataTables\ConfigurationResource;
 use App\Models\Configuration;
+use App\Http\Requests\Configuration\StoreRequest;
+use App\Http\Requests\Configuration\UpdateRequest;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -44,14 +46,14 @@ class ConfigurationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Configuration\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         Configuration::create($request->all());
 
-        return redirect()->route('configuration.index');
+        return redirect()->route('admin.configuration.index');
     }
 
     /**
@@ -68,15 +70,20 @@ class ConfigurationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Configuration\UpdateRequest  $request
      * @param  \App\Models\Configuration  $configuration
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Configuration $configuration)
+    public function update(UpdateRequest $request, Configuration $configuration)
     {
         $configuration->update($request->all());
 
-        return redirect()->route('configuration.index');
+        return redirect()->route('admin.configuration.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.configuration')]),
+            ],
+        ]);
     }
 
     /**
@@ -89,6 +96,11 @@ class ConfigurationController extends Controller
     {
         $configuration->delete();
 
-        return redirect()->route('configuration.index');
+        return redirect()->route('admin.configuration.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.configuration')]),
+            ],
+        ]);
     }
 }

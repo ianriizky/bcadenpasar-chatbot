@@ -69,7 +69,7 @@ class UserController extends Controller
     {
         User::create($request->all());
 
-        return redirect()->route('user.index');
+        return redirect()->route('admin.user.index');
     }
 
     /**
@@ -94,7 +94,7 @@ class UserController extends Controller
     {
         $user->update($request->all());
 
-        return redirect()->route('user.index');
+        return redirect()->route('admin.user.index');
     }
 
     /**
@@ -107,6 +107,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('user.index');
+        return redirect()->route('admin.user.index');
     }
 }

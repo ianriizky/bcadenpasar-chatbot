@@ -31,6 +31,8 @@
                         --}}
 
                         <div class="mt-3">
+                            <a href="{{ url()->previous() }}">{{ __('Go back') }}</a>
+                            |
                             <a href="{{ app('router')->has('home') ? route('home') : url('/') }}">{{ __('Go Home') }}</a>
                         </div>
                     </div>

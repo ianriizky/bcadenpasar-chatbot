@@ -29,7 +29,7 @@ class BranchResource extends JsonResource
                 'is_new_tab' => true,
             ])->render(),
             'action' => view('components.datatables.link', [
-                'url' => route('branch.edit', $this->resource),
+                'url' => route('admin.branch.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

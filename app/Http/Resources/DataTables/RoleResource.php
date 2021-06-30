@@ -24,7 +24,7 @@ class RoleResource extends JsonResource
             'name' => $this->resource->name,
             'guard_name' => $this->resource->guard_name,
             'action' => view('components.datatables.link', [
-                'url' => route('role.edit', $this->resource),
+                'url' => route('admin.role.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

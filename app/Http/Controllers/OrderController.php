@@ -69,7 +69,7 @@ class OrderController extends Controller
     {
         Order::create($request->all());
 
-        return redirect()->route('order.index');
+        return redirect()->route('admin.order.index');
     }
 
     /**
@@ -94,7 +94,7 @@ class OrderController extends Controller
     {
         $order->update($request->all());
 
-        return redirect()->route('order.index');
+        return redirect()->route('admin.order.index');
     }
 
     /**
@@ -107,6 +107,6 @@ class OrderController extends Controller
     {
         $order->delete();
 
-        return redirect()->route('order.index');
+        return redirect()->route('admin.order.index');
     }
 }

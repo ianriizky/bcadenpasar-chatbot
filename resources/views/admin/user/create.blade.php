@@ -4,14 +4,14 @@
             <h1>{{ __('Create :name', ['name' => __('admin-lang.user')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active">
-                    <a href="{{ route('dashboard') }}">
+                <div class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
                         <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('user.index') }}">
+                    <a href="{{ route('admin.user.index') }}">
                         <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>
                     </a>
                 </div>

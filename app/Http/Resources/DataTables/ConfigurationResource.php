@@ -24,10 +24,15 @@ class ConfigurationResource extends JsonResource
             'key' => $this->resource->key,
             'value' => $this->resource->value,
             'description' => $this->resource->description,
-            'action' => view('components.datatables.link', [
-                'url' => route('configuration.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.configuration.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.configuration.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

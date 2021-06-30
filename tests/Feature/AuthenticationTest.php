@@ -7,6 +7,8 @@ use App\Models\User;
 
 class AuthenticationTest extends TestCase
 {
+    use Concerns\HandleAuthentication;
+
     public function test_login_screen_can_be_rendered()
     {
         $response = $this->get(route('login'));
@@ -16,11 +18,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen_using_email()
     {
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->email,
@@ -28,16 +26,12 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 
     public function test_users_can_authenticate_using_the_login_screen_using_phone()
     {
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->phone,
@@ -45,16 +39,12 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 
     public function test_users_can_authenticate_using_the_login_screen_using_username()
     {
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $response = $this->post(route('login'), [
             'identifier' => $user->username,
@@ -62,16 +52,12 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password()
     {
-        /** @var \App\Models\Branch $branch */
-        $branch = Branch::factory()->create();
-
-        /** @var \App\Models\User $user */
-        $user = User::factory()->for($branch)->create();
+        $user = $this->createUserFromFactory();
 
         $this->post('/login', [
             'email' => $user->email,

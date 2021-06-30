@@ -51,7 +51,7 @@ class CustomerController extends Controller
     {
         Customer::create($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('admin.customer.index');
     }
 
     /**
@@ -76,7 +76,7 @@ class CustomerController extends Controller
     {
         $customer->update($request->all());
 
-        return redirect()->route('customer.index');
+        return redirect()->route('admin.customer.index');
     }
 
     /**
@@ -89,6 +89,6 @@ class CustomerController extends Controller
     {
         $customer->delete();
 
-        return redirect()->route('customer.index');
+        return redirect()->route('admin.customer.index');
     }
 }

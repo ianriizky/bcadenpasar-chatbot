@@ -11,6 +11,15 @@ class Configuration extends Model
         Concerns\Configuration\Attribute;
 
     /**
+     * {@inheritDoc}
+     */
+    protected $fillable = [
+        'key',
+        'value',
+        'description',
+    ];
+
+    /**
      * Return configuration value of "maximum_total_order_value".
      *
      * @return float
@@ -18,5 +27,15 @@ class Configuration extends Model
     public static function getMaximumTotalOrderValue(): float
     {
         return (float) static::where('key', 'maximum_total_order_value')->first('value')->value;
+    }
+
+    /**
+     * Return configuration value of "maximum_order_per_day".
+     *
+     * @return int
+     */
+    public static function getMaximumOrderPerDay(): int
+    {
+        return (int) static::where('key', 'maximum_order_per_day')->first('value')->value;
     }
 }

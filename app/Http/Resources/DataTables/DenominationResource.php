@@ -26,7 +26,7 @@ class DenominationResource extends JsonResource
             'type' => $this->resource->type->label,
             'quantity_per_bundle' => $this->resource->quantity_per_bundle,
             'action' => view('components.datatables.link', [
-                'url' => route('denomination.edit', $this->resource),
+                'url' => route('admin.denomination.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

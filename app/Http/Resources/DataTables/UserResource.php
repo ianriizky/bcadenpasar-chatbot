@@ -22,7 +22,7 @@ class UserResource extends JsonResource
                 'id' => 'user_' . $this->resource->getKey(),
             ])->render(),
             'branch_name' => view('components.datatables.link', [
-                'url' => route('branch.edit', $this->resource->branch),
+                'url' => route('admin.branch.edit', $this->resource->branch),
                 'name' => $this->resource->branch->name,
             ])->render(),
             'username' => $this->resource->username,
@@ -30,7 +30,7 @@ class UserResource extends JsonResource
             'email' => $this->resource->email,
             'is_active' => $this->resource->is_active_badge,
             'action' => view('components.datatables.link', [
-                'url' => route('user.edit', $this->resource),
+                'url' => route('admin.user.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

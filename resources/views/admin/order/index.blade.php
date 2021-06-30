@@ -14,7 +14,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('order.datatable') }}',
+                    url: '{{ route('admin.order.datatable') }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -45,20 +45,16 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.order')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active">
-                    <a href="{{ route('dashboard') }}">
+                <div class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
                         <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('order.index') }}">
+                    <a href="{{ route('admin.order.index') }}">
                         <i class="fas fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
                     </a>
-                </div>
-
-                <div class="breadcrumb-item">
-                    <i class="fas fa-list"></i> <span>{{ __('List :name', ['name' => __('admin-lang.order')]) }}</span>
                 </div>
             </div>
         </div>
@@ -68,7 +64,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('order.create') }}" class="btn btn-primary">
+                            <a href="{{ route('admin.order.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.order')]) }}</span>
                             </a>
                         </div>

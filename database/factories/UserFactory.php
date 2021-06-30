@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enum\Gender;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -36,6 +35,7 @@ class UserFactory extends Factory
             'email_verified_at' => Carbon::now(),
             'password' => 'password',
             'remember_token' => Str::random(10),
+            'is_active' => true,
         ];
     }
 
@@ -49,6 +49,20 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's account should be unactivate.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unactivate()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_active' => false,
             ];
         });
     }

@@ -26,7 +26,7 @@ class CustomerResource extends JsonResource
             'email' => $this->resource->email,
             'phone' => $this->resource->phone,
             'action' => view('components.datatables.link', [
-                'url' => route('customer.edit', $this->resource),
+                'url' => route('admin.customer.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

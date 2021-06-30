@@ -20,6 +20,11 @@ class ConfigurationSeeder extends Seeder
                 'value' => 44000000,
                 'description' => 'Maximum total order value in one transaction/order',
             ],
+            [
+                'key' => 'maximum_order_per_day',
+                'value' => 20,
+                'description' => 'Maximum total order value in one transaction/order',
+            ],
         ]);
     }
 }

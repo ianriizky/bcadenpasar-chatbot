@@ -23,13 +23,13 @@ class OrderResource extends JsonResource
             ])->render(),
             'code' => $this->resource->code,
             'customer_fullname' => view('components.datatables.link', [
-                'url' => route('customer.edit', $this->resource->customer),
+                'url' => route('admin.customer.edit', $this->resource->customer),
                 'name' => $this->resource->customer->fullname,
             ])->render(),
             'schedule_date' => $this->resource->schedule_date,
             'status' => $this->resource->status->label,
             'action' => view('components.datatables.link', [
-                'url' => route('order.edit', $this->resource),
+                'url' => route('admin.order.edit', $this->resource),
                 'name' => __('Details'),
                 'class' => 'btn btn-primary',
             ])->render(),

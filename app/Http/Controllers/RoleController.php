@@ -51,7 +51,7 @@ class RoleController extends Controller
     {
         Role::create($request->all());
 
-        return redirect()->route('role.index');
+        return redirect()->route('admin.role.index');
     }
 
     /**
@@ -76,7 +76,7 @@ class RoleController extends Controller
     {
         $role->update($request->all());
 
-        return redirect()->route('role.index');
+        return redirect()->route('admin.role.index');
     }
 
     /**
@@ -89,6 +89,6 @@ class RoleController extends Controller
     {
         $role->delete();
 
-        return redirect()->route('role.index');
+        return redirect()->route('admin.role.index');
     }
 }
