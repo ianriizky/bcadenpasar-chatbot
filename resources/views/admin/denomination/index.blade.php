@@ -29,7 +29,7 @@
                     { data: 'value', searchable: true },
                     { data: 'type', searchable: true },
                     { data: 'quantity_per_bundle', searchable: true },
-                    { data: 'action', searchable: false, orderable: false },
+                    { data: 'action', searchable: false, orderable: false, width: '20%' },
                 ],
                 language: {
                     url: '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}',

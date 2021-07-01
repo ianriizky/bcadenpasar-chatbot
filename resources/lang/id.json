@@ -577,7 +577,7 @@
     "The :attribute must contain at least one number.": ":attribute harus mengandung setidaknya satu angka.",
     "The :attribute must contain at least one symbol.": ":attribute harus mengandung setidaknya satu simbol.",
     "The :attribute must contain at least one uppercase and one lowercase letter.": ":attribute harus mengandung setidaknya satu huruf besar dan satu huruf kecil.",
-    "The :resource was created!": ":resource tehlah dibuat!",
+    "The :resource was created!": ":resource telah dibuat!",
     "The :resource was deleted!": ":resource telah dihapus!",
     "The :resource was restored!": ":resource telah dipulihkan!",
     "The :resource was updated!": ":resource telah diperbarui!",
@@ -756,5 +756,8 @@
     "Type": "Tipe",
     "Quantity Per Bundle": "Jumlah Per Bundel",
     "Bundle": "Bundel",
-    "bundle": "bundel"
+    "bundle": "bundel",
+    "Selected": "Dipilih",
+    "Created At": "Dibuat Pada",
+    "Updated At": "Diubah Pada"
 }

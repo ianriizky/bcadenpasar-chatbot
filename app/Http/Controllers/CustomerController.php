@@ -32,29 +32,6 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function create()
-    {
-        return view('admin.customer.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        Customer::create($request->all());
-
-        return redirect()->route('admin.customer.index');
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Customer  $customer

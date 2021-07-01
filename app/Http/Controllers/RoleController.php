@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Role\StoreRequest;
+use App\Http\Requests\Role\UpdateRequest;
 use App\Http\Resources\DataTables\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -44,14 +46,19 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Role\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         Role::create($request->all());
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route('admin.role.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.role')]),
+            ],
+        ]);
     }
 
     /**
@@ -68,15 +75,20 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Role\UpdateRequest  $request
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role)
     {
         $role->update($request->all());
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route('admin.role.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.role')]),
+            ],
+        ]);
     }
 
     /**
@@ -89,6 +101,29 @@ class RoleController extends Controller
     {
         $role->delete();
 
-        return redirect()->route('admin.role.index');
+        return redirect()->route('admin.role.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.role')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyMultiple(Request $request)
+    {
+        Role::destroy($request->input('checkbox', []));
+
+        return redirect()->route('admin.role.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.role')]),
+            ],
+        ]);
     }
 }

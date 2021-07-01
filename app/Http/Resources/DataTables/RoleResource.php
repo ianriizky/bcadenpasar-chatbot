@@ -19,14 +19,19 @@ class RoleResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'role_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'name' => $this->resource->name,
             'guard_name' => $this->resource->guard_name,
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.role.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.role.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.role.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

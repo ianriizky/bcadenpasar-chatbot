@@ -9,7 +9,7 @@
 
     <script>
         $(document).ready(function () {
-            $('.select2').select2()
+            $('.select2').select2();
 
             const olds = @json(Arr::except(old(), '_token'));
 
@@ -87,7 +87,7 @@
                                             data-allow-clear="true"
                                             tabindex="3">
                                             @foreach (\App\Models\Branch::pluck('name', 'name') as $value => $label)
-                                                <option value="{{ $value }}" @if (old('branch_name') == $value) selected @endif>{{ $label }}</option>
+                                                <option value="{{ $value }}">{{ $label }}</option>
                                             @endforeach
                                         </select>
 
@@ -174,7 +174,7 @@
                                             data-allow-clear="true"
                                             tabindex="8">
                                             @foreach (\App\Enum\Gender::toArray() as $value => $label)
-                                                <option value="{{ $value }}" @if (old('gender') == $value) selected @endif>{{ $label }}</option>
+                                                <option value="{{ $value }}">{{ $label }}</option>
                                             @endforeach
                                         </select>
 

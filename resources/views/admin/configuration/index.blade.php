@@ -28,7 +28,7 @@
                     { data: 'key', searchable: true },
                     { data: 'value', searchable: true },
                     { data: 'description', searchable: true },
-                    { data: 'action', searchable: false, orderable: false },
+                    { data: 'action', searchable: false, orderable: false, width: '20%' },
                 ],
                 language: {
                     url: '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}',
@@ -58,34 +58,48 @@
             </div>
         </div>
 
-        <div class="section-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="{{ route('admin.configuration.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.configuration')]) }}</span>
-                            </a>
-                        </div>
+        <form method="post">
+            @csrf
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>@include('components.datatables.checkbox-all')</th>
-                                            <th>{{ __('Key') }}</th>
-                                            <th>{{ __('Value') }}</th>
-                                            <th>{{ __('Description') }}</th>
-                                            <th>{{ __('Action') }}</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="{{ route('admin.configuration.create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.configuration')]) }}</span>
+                                </a>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>@include('components.datatables.checkbox-all')</th>
+                                                <th>{{ __('Key') }}</th>
+                                                <th>{{ __('Value') }}</th>
+                                                <th>{{ __('Description') }}</th>
+                                                <th>{{ __('Action') }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                {{ __('Selected') }} (<span id="checkbox-selected-display">0</span>):
+
+                                <br>
+
+                                <div class="btn-group">
+                                    @include('components.datatables.checkbox-delete', ['url' => route('admin.configuration.destroy-multiple')])
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
 </x-app-layout>

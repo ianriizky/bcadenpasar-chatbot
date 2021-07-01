@@ -26,25 +26,42 @@ Route::view('/', 'welcome');
 Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::post('/order/datatable', [OrderController::class, 'datatable'])->name('order.datatable');
+    Route::prefix('/order')->name('order.')->group(function () {
+        Route::post('/datatable', [OrderController::class, 'datatable'])->name('datatable');
+    });
+
+    Route::prefix('/user')->name('user.')->group(function () {
+        Route::post('/datatable', [UserController::class, 'datatable'])->name('datatable');
+    });
+
+    Route::prefix('/branch')->name('branch.')->group(function () {
+        Route::post('/datatable', [BranchController::class, 'datatable'])->name('datatable');
+    });
+
+    Route::prefix('/customer')->name('customer.')->group(function () {
+        Route::post('/datatable', [CustomerController::class, 'datatable'])->name('datatable');
+    });
+
+    Route::prefix('/denomination')->name('denomination.')->group(function () {
+        Route::post('/datatable', [DenominationController::class, 'datatable'])->name('datatable');
+    });
+
+    Route::prefix('/role')->name('role.')->middleware('role:admin')->group(function () {
+        Route::post('/datatable', [RoleController::class, 'datatable'])->name('datatable');
+        Route::delete('/multiple', [RoleController::class, 'destroyMultiple'])->name('destroy-multiple');
+    });
+
+    Route::prefix('/configuration')->name('configuration.')->group(function () {
+        Route::post('/datatable', [ConfigurationController::class, 'datatable'])->name('datatable');
+        Route::delete('/multiple', [ConfigurationController::class, 'destroyMultiple'])->middleware('role:admin')->name('destroy-multiple');
+    });
+
     Route::resource('/order', OrderController::class)->except('show');
-
-    Route::post('/user/datatable', [UserController::class, 'datatable'])->name('user.datatable');
     Route::resource('/user', UserController::class)->except('show');
-
-    Route::post('/branch/datatable', [BranchController::class, 'datatable'])->name('branch.datatable');
     Route::resource('/branch', BranchController::class)->except('show');
-
-    Route::post('/customer/datatable', [CustomerController::class, 'datatable'])->name('customer.datatable');
-    Route::resource('/customer', CustomerController::class)->except('show');
-
-    Route::post('/denomination/datatable', [DenominationController::class, 'datatable'])->name('denomination.datatable');
+    Route::resource('/customer', CustomerController::class)->except('create', 'store', 'show');
     Route::resource('/denomination', DenominationController::class)->except('show');
-
-    Route::post('/role/datatable', [RoleController::class, 'datatable'])->name('role.datatable');
-    Route::resource('/role', RoleController::class)->except('show');
-
-    Route::post('/configuration/datatable', [ConfigurationController::class, 'datatable'])->name('configuration.datatable');
+    Route::resource('/role', RoleController::class, ['middleware' => 'role:admin'])->except('show');
     Route::resource('/configuration', ConfigurationController::class)->except('show');
 });
 

@@ -29,7 +29,7 @@
                     { data: 'customer_fullname', searchable: true },
                     { data: 'schedule_date', searchable: true },
                     { data: 'status', searchable: true },
-                    { data: 'action', searchable: false, orderable: false },
+                    { data: 'action', searchable: false, orderable: false, width: '20%' },
                 ],
                 language: {
                     url: '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}',

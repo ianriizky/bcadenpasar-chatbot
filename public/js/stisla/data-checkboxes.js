@@ -26,4 +26,16 @@ $('[data-checkboxes]').each(function () {
       }
     }
   });
+})
+
+$(document).on('change', ['input.checkbox-selected', 'input#checkbox-all'], function () {
+  const length = $('input.checkbox-selected:checked').length;
+
+  $('span#checkbox-selected-display').text(length);
+
+  if (length > 0) {
+    $('button#checkbox-delete-all').removeAttr('disabled');
+  } else {
+    $('button#checkbox-delete-all').attr('disabled', 'disabled');
+  }
 });

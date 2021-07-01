@@ -53,7 +53,12 @@ class ConfigurationController extends Controller
     {
         Configuration::create($request->all());
 
-        return redirect()->route('admin.configuration.index');
+        return redirect()->route('admin.configuration.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.configuration')]),
+            ],
+        ]);
     }
 
     /**
@@ -95,6 +100,24 @@ class ConfigurationController extends Controller
     public function destroy(Configuration $configuration)
     {
         $configuration->delete();
+
+        return redirect()->route('admin.configuration.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.configuration')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyMultiple(Request $request)
+    {
+        Configuration::destroy($request->input('checkbox', []));
 
         return redirect()->route('admin.configuration.index')->with([
             'alert' => [

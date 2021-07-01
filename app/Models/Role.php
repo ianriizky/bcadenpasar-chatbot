@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Role as BaseRole;
 
 /**
@@ -11,5 +12,13 @@ use Spatie\Permission\Models\Role as BaseRole;
  */
 class Role extends BaseRole implements Concerns\Role\Attribute
 {
-    //
+    use HasFactory;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $fillable = [
+        'name',
+        'guard_name',
+    ];
 }

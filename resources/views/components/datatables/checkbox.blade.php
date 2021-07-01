@@ -1,7 +1,7 @@
 <div class="text-center">
     <div class="custom-checkbox custom-control">
-        <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="{{ $id }}">
+        <input type="checkbox" name="{{ ($name ?? 'checkbox[]') }}" id="{{ ($id ?? 'checkbox_' . $value) }}" value="{{ $value }}" data-checkboxes="mygroup" class="custom-control-input checkbox-selected">
 
-        <label for="{{ $id }}" class="custom-control-label">&nbsp;</label>
+        <label for="{{ ($id ?? 'checkbox_' . $value) }}" class="custom-control-label">&nbsp;</label>
     </div>
 </div>

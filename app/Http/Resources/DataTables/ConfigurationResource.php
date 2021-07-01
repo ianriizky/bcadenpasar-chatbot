@@ -19,7 +19,7 @@ class ConfigurationResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'configuration_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'key' => $this->resource->key,
             'value' => $this->resource->value,

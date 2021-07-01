@@ -28,7 +28,7 @@
                     { data: 'name', searchable: true },
                     { data: 'address', searchable: true },
                     { data: 'google_map_url', searchable: true },
-                    { data: 'action', searchable: false, orderable: false },
+                    { data: 'action', searchable: false, orderable: false, width: '20%' },
                 ],
                 language: {
                     url: '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}',
