@@ -86,7 +86,7 @@
                             </div>
 
                             <div class="card-footer">
-                                {{ __('Selected') }} (<span id="checkbox-selected-display">0</span>):
+                                {{ __('Selected') }} (<span id="checkbox-selected-display">0</span>)
 
                                 <br>
 

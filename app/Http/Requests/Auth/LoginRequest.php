@@ -25,6 +25,7 @@ class LoginRequest extends FormRequest
         return [
             'identifier' => $this->getIdentifierRule($this->input('identifier')),
             'password' => 'required|string',
+            'remember' => 'nullable|boolean',
         ];
     }
 

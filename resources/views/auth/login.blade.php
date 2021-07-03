@@ -55,6 +55,7 @@
                                     name="remember"
                                     id="remember"
                                     class="custom-control-input"
+                                    value="1"
                                     @if (old('checked', false)) checked @endif
                                     tabindex="3">
 
