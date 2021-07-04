@@ -54,44 +54,44 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        {{-- name --}}
-                        <div class="form-group">
-                            <label for="name">{{ __('Name') }}</label>
+                        <div class="row">
+                            {{-- name --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="name">{{ __('Name') }}</label>
 
-                            <input type="text"
-                                name="name"
-                                id="name"
-                                class="form-control col-12 col-lg-6 @error('name') is-invalid @enderror"
-                                value="{{ old('name', $role->name) }}"
-                                required
-                                autofocus>
+                                <input type="text"
+                                    name="name"
+                                    id="name"
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    value="{{ old('name', $role->name) }}"
+                                    required
+                                    autofocus>
 
-                            <x-invalid-feedback :name="'name'"/>
-                        </div>
-                        {{-- /.name --}}
-
-                        {{-- guard_name --}}
-                        <div class="form-group">
-                            <label for="guard_name">{{ __('Guard Name') }}</label>
-
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <select name="guard_name"
-                                        id="guard_name"
-                                        class="form-control col-12 col-lg-6 select2 @error('guard_name') is-invalid @enderror"
-                                        data-placeholder="--{{ __('Choose :field', ['field' => __('Guard Name') ]) }}--"
-                                        data-allow-clear="true"
-                                        required>
-                                        @foreach (array_keys(config('auth.guards')) as $name)
-                                            <option value="{{ $name }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                <x-invalid-feedback :name="'name'"/>
                             </div>
+                            {{-- /.name --}}
 
-                            <x-invalid-feedback :name="'guard_name'"/>
+                            <div class="col-12 col-lg-6"></div>
+
+                            {{-- guard_name --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="guard_name">{{ __('Guard Name') }}</label>
+
+                                <select name="guard_name"
+                                    id="guard_name"
+                                    class="form-control select2 @error('guard_name') is-invalid @enderror"
+                                    data-placeholder="--{{ __('Choose :field', ['field' => __('Guard Name') ]) }}--"
+                                    data-allow-clear="true"
+                                    required>
+                                    @foreach (array_keys(config('auth.guards')) as $name)
+                                        <option value="{{ $name }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-invalid-feedback :name="'guard_name'"/>
+                            </div>
+                            {{-- /.guard_name --}}
                         </div>
-                        {{-- /.guard_name --}}
 
                         @include('components.form-timestamps', ['model' => $role])
                     </div>

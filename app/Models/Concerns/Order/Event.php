@@ -22,5 +22,9 @@ trait Event
         static::creating(function (Order $model) {
             $model->code = $model->generateCode();
         });
+
+        static::deleting(function (Order $model) {
+            $model->items->delete();
+        });
     }
 }

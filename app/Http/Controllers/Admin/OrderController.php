@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DataTables\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;

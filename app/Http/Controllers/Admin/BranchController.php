@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\DataTables\DenominationResource;
-use App\Models\Denomination;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\DataTables\BranchResource;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class DenominationController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +17,7 @@ class DenominationController extends Controller
      */
     public function index()
     {
-        return view('admin.denomination.index');
+        return view('admin.branch.index');
     }
 
     /**
@@ -26,8 +27,8 @@ class DenominationController extends Controller
      */
     public function datatable()
     {
-        return DataTables::eloquent(Denomination::query())
-            ->setTransformer(fn ($model) => DenominationResource::make($model)->resolve())
+        return DataTables::eloquent(Branch::query())
+            ->setTransformer(fn ($model) => BranchResource::make($model)->resolve())
             ->toJson();
     }
 
@@ -38,7 +39,7 @@ class DenominationController extends Controller
      */
     public function create()
     {
-        return view('admin.denomination.create');
+        return view('admin.branch.create');
     }
 
     /**
@@ -49,46 +50,46 @@ class DenominationController extends Controller
      */
     public function store(Request $request)
     {
-        Denomination::create($request->all());
+        Branch::create($request->all());
 
-        return redirect()->route('admin.denomination.index');
+        return redirect()->route('admin.branch.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Denomination  $denomination
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit(Denomination $denomination)
+    public function edit(Branch $branch)
     {
-        return view('admin.denomination.edit', compact('denomination'));
+        return view('admin.branch.edit', compact('branch'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Denomination  $denomination
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Denomination $denomination)
+    public function update(Request $request, Branch $branch)
     {
-        $denomination->update($request->all());
+        $branch->update($request->all());
 
-        return redirect()->route('admin.denomination.index');
+        return redirect()->route('admin.branch.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Denomination  $denomination
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Denomination $denomination)
+    public function destroy(Branch $branch)
     {
-        $denomination->delete();
+        $branch->delete();
 
-        return redirect()->route('admin.denomination.index');
+        return redirect()->route('admin.branch.index');
     }
 }

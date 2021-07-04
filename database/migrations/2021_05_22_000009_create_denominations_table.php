@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->decimal('value');
+            $table->unsignedDecimal('value')->unique();
             $table->string('type')->comment('Enum of ' . DenominationType::class);
             $table->unsignedInteger('quantity_per_bundle');
             $table->unsignedInteger('minimum_order_bundle');

@@ -17,18 +17,33 @@ class DenominationResource extends JsonResource
      */
     public function toArray($request)
     {
+        $typeBadge = sprintf(<<<'html'
+            <span class="badge badge-%s">
+                <i class="fa fa-%s"></i> %s
+            </span>
+        html,
+            $this->resource->type->isCoin() ? 'danger' : 'success',
+            $this->resource->type->isCoin() ? 'coins' : 'money-bill',
+            $this->resource->type->label
+        );
+
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'denomination_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'name' => $this->resource->name,
             'value' => $this->resource->value,
-            'type' => $this->resource->type->label,
+            'type' => $typeBadge,
             'quantity_per_bundle' => $this->resource->quantity_per_bundle,
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.denomination.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.denomination.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.denomination.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

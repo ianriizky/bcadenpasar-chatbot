@@ -755,9 +755,12 @@
     "Description": "Keterangan",
     "Type": "Tipe",
     "Quantity Per Bundle": "Jumlah Per Bundel",
+    "Minimum Order Bundle": "Minimal Pemesanan Bundel",
+    "Maximum Order Bundle": "Maksimal Pemesanan Bundel",
     "Bundle": "Bundel",
     "bundle": "bundel",
     "Selected": "Dipilih",
     "Created At": "Dibuat Pada",
-    "Updated At": "Diubah Pada"
+    "Updated At": "Diubah Pada",
+    "Image": "Gambar"
 }

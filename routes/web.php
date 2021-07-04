@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\ConfigurationController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DenominationController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\ConfigurationController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DenominationController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +44,8 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
 
     Route::prefix('/denomination')->name('denomination.')->group(function () {
         Route::post('/datatable', [DenominationController::class, 'datatable'])->name('datatable');
+        Route::delete('/multiple', [DenominationController::class, 'destroyMultiple'])->name('destroy-multiple');
+        Route::delete('/{denomination}/image', [DenominationController::class, 'destroyImage'])->name('destroy-image');
     });
 
     Route::prefix('/role')->name('role.')->middleware('role:admin')->group(function () {

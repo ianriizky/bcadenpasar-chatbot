@@ -59,35 +59,49 @@
             </div>
         </div>
 
-        <div class="section-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="{{ route('admin.denomination.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.denomination')]) }}</span>
-                            </a>
-                        </div>
+        <form method="post">
+            @csrf
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>@include('components.datatables.checkbox-all')</th>
-                                            <th>{{ __('Name') }}</th>
-                                            <th>{{ __('Value') }}</th>
-                                            <th>{{ __('Type') }}</th>
-                                            <th>{{ __('Quantity Per Bundle') }}</th>
-                                            <th>{{ __('Action') }}</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="{{ route('admin.denomination.create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.denomination')]) }}</span>
+                                </a>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>@include('components.datatables.checkbox-all')</th>
+                                                <th>{{ __('Name') }}</th>
+                                                <th>{{ __('Value') }}</th>
+                                                <th>{{ __('Type') }}</th>
+                                                <th>{{ __('Quantity Per Bundle') }}</th>
+                                                <th>{{ __('Action') }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                {{ __('Selected') }} (<span id="checkbox-selected-display">0</span>)
+
+                                <br>
+
+                                <div class="btn-group">
+                                    @include('components.datatables.checkbox-delete', ['url' => route('admin.denomination.destroy-multiple')])
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
 </x-app-layout>

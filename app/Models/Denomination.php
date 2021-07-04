@@ -10,6 +10,7 @@ class Denomination extends Model
 {
     use HasFactory,
         Concerns\Denomination\Attribute,
+        Concerns\Denomination\Event,
         Concerns\Denomination\Relation;
 
     /**

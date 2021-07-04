@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $quantity_per_bundle
  * @property int $minimum_order_bundle
  * @property int $maximum_order_bundle
- * @property string|null $image
+ * @property string $image
  * @property-read float $value_per_bundle
  * @property-read float $minimum_order_value
  * @property-read float $maximum_order_value
@@ -30,7 +30,7 @@ trait Attribute
     public function getImageAttribute($value): ?string
     {
         if (is_null($value)) {
-            return null;
+            return asset('img/dummy.png');
         }
 
         return Storage::url(static::IMAGE_PATH . '/' . $value);

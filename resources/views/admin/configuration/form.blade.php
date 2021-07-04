@@ -31,55 +31,55 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        {{-- key --}}
-                        <div class="form-group">
-                            <label for="key">{{ __('Key') }}</label>
+                        <div class="row">
+                            {{-- key --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="key">{{ __('Key') }}</label>
 
-                            <input type="text"
-                                name="key"
-                                id="key"
-                                class="form-control col-12 col-lg-6 @error('key') is-invalid @enderror"
-                                value="{{ old('key', $configuration->key) }}"
-                                required
-                                autofocus>
+                                <input type="text"
+                                    name="key"
+                                    id="key"
+                                    class="form-control @error('key') is-invalid @enderror"
+                                    value="{{ old('key', $configuration->key) }}"
+                                    required
+                                    autofocus>
 
-                            <x-invalid-feedback :name="'key'"/>
+                                <x-invalid-feedback :name="'key'"/>
+                            </div>
+                            {{-- /.key --}}
+
+                            <div class="col-12 col-lg-6"></div>
+
+                            {{-- value --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="value">{{ __('Value') }}</label>
+
+                                <input type="text"
+                                    name="value"
+                                    id="value"
+                                    class="form-control @error('value') is-invalid @enderror"
+                                    value="{{ old('value', $configuration->value) }}"
+                                    required>
+
+                                <x-invalid-feedback :name="'value'"/>
+                            </div>
+                            {{-- /.value --}}
+
+                            <div class="col-12 col-lg-6"></div>
+
+                            {{-- description --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="description">{{ __('Description') }}</label>
+
+                                <textarea name="description"
+                                    id="description"
+                                    class="form-control @error('description') is-invalid @enderror"
+                                    style="resize: vertical;">{{ old('description', $configuration->description) }}</textarea>
+
+                                <x-invalid-feedback :name="'description'"/>
+                            </div>
+                            {{-- /.description --}}
                         </div>
-                        {{-- /.key --}}
-
-                        <div class="col-lg-6"></div>
-
-                        {{-- value --}}
-                        <div class="form-group">
-                            <label for="value">{{ __('Value') }}</label>
-
-                            <input type="text"
-                                name="value"
-                                id="value"
-                                class="form-control col-12 col-lg-6 @error('value') is-invalid @enderror"
-                                value="{{ old('value', $configuration->value) }}"
-                                required>
-
-                            <x-invalid-feedback :name="'value'"/>
-                        </div>
-                        {{-- /.value --}}
-
-                        <div class="col-lg-6"></div>
-
-                        {{-- description --}}
-                        <div class="form-group">
-                            <label for="description">{{ __('Description') }}</label>
-
-                            <textarea name="description"
-                                id="description"
-                                class="form-control col-12 col-lg-6 @error('description') is-invalid @enderror"
-                                style="resize: vertical;">{{ old('description', $configuration->description) }}</textarea>
-
-                            <x-invalid-feedback :name="'description'"/>
-                        </div>
-                        {{-- /.description --}}
-
-                        <div class="col-lg-6"></div>
 
                         @include('components.form-timestamps', ['model' => $configuration])
                     </div>

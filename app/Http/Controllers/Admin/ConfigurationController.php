@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DataTables\ConfigurationResource;
 use App\Models\Configuration;
 use App\Http\Requests\Configuration\StoreRequest;
@@ -110,7 +111,7 @@ class ConfigurationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified list of resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse

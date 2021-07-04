@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\TestingDatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase as BaseTestCase;
 
@@ -17,6 +17,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(TestingDatabaseSeeder::class);
     }
 }
