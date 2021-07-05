@@ -74,7 +74,7 @@ class DenominationTest extends TestCase
         $denomination = $this->createFromFactory();
 
         $this->actingAs($user, 'web')
-            ->patch(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
+            ->put(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
             ->assertRedirect(route('admin.denomination.index'));
 
         $this->assertDatabaseHas(Denomination::class, Arr::except($data, 'image'));
@@ -146,6 +146,14 @@ class DenominationTest extends TestCase
         Storage::fake();
 
         $factory = Denomination::factory()->raw();
+
+        /**
+         * If the denomination factory data already exists in storage,
+         * then retry the create factory process.
+         */
+        if (Denomination::where('value', $factory['value'])->count() > 0) {
+            return $this->createFromFactory();
+        }
 
         /** @var \App\Models\Denomination $denomination */
         $denomination = Denomination::make(Arr::except($factory, 'image'));

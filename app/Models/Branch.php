@@ -9,6 +9,7 @@ class Branch extends Model
 {
     use HasFactory,
         Concerns\Branch\Attribute,
+        Concerns\Branch\QueryScope,
         Concerns\Branch\Relation;
 
     /**

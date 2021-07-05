@@ -69,7 +69,7 @@ class ConfigurationTest extends TestCase
         $configuration = Configuration::factory()->create();
 
         $this->actingAs($user, 'web')
-            ->patch(route('admin.configuration.update', $configuration), $data = Configuration::factory()->raw())
+            ->put(route('admin.configuration.update', $configuration), $data = Configuration::factory()->raw())
             ->assertRedirect(route('admin.configuration.index'));
 
         $this->assertDatabaseHas(Configuration::class, $data);

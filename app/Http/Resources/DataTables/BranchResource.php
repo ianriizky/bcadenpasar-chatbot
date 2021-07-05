@@ -19,7 +19,7 @@ class BranchResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'branch_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'name' => $this->resource->name,
             'address' => $this->resource->address,
@@ -28,10 +28,15 @@ class BranchResource extends JsonResource
                 'name' => $this->resource->address_latitude . ' | ' . $this->resource->address_longitude,
                 'is_new_tab' => true,
             ])->render(),
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.branch.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.branch.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.branch.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

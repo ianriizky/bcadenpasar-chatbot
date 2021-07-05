@@ -23,7 +23,7 @@
                                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
                                 <div class="form-group">
-                                    <label for="email">{{ __('Email') }}</label>
+                                    <label for="email">{{ __('Email') }}<span class="text-danger">*</span></label>
 
                                     <input type="email"
                                         name="email"
@@ -38,7 +38,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">{{ __('New Password') }}</label>
+                                    <label for="email">{{ __('New Password') }}<span class="text-danger">*</span></label>
 
                                     <input type="password"
                                         name="password"
@@ -52,7 +52,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="email">{{ __('Confirm Password') }}</label>
+                                    <label for="email">{{ __('Confirm Password') }}<span class="text-danger">*</span></label>
 
                                     <input type="password"
                                         name="password_confirmation"

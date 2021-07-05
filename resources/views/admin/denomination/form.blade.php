@@ -57,7 +57,7 @@
                         <div class="row">
                             {{-- name --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="name">{{ __('Name') }}</label>
+                                <label for="name">{{ __('Name') }}<span class="text-danger">*</span></label>
 
                                 <input type="text"
                                     name="name"
@@ -75,7 +75,7 @@
 
                             {{-- value --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="value">{{ __('Value') }}</label>
+                                <label for="value">{{ __('Value') }}<span class="text-danger">*</span></label>
 
                                 <input type="number"
                                     name="value"
@@ -92,7 +92,7 @@
 
                             {{-- type --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="type">{{ __('Type') }}</label>
+                                <label for="type">{{ __('Type') }}<span class="text-danger">*</span></label>
 
                                 <select name="type"
                                     id="type"
@@ -111,7 +111,7 @@
 
                             {{-- quantity_per_bundle --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="quantity_per_bundle">{{ __('Quantity Per Bundle') }}</label>
+                                <label for="quantity_per_bundle">{{ __('Quantity Per Bundle') }}<span class="text-danger">*</span></label>
 
                                 <input type="number"
                                     name="quantity_per_bundle"
@@ -128,7 +128,7 @@
 
                             {{-- minimum_order_bundle --}}
                             <div class="form-group col-12 col-lg-3">
-                                <label for="minimum_order_bundle">{{ __('Minimum Order Bundle') }}</label>
+                                <label for="minimum_order_bundle">{{ __('Minimum Order Bundle') }}<span class="text-danger">*</span></label>
 
                                 <input type="number"
                                     name="minimum_order_bundle"
@@ -145,7 +145,7 @@
 
                             {{-- maximum_order_bundle --}}
                             <div class="form-group col-12 col-lg-3">
-                                <label for="maximum_order_bundle">{{ __('Maximum Order Bundle') }}</label>
+                                <label for="maximum_order_bundle">{{ __('Maximum Order Bundle') }}<span class="text-danger">*</span></label>
 
                                 <input type="number"
                                     name="maximum_order_bundle"
@@ -162,7 +162,11 @@
 
                             {{-- image --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="image">{{ __('Image') }}</label>
+                                @if ($denomination->exists)
+                                    <label for="image">{{ __('Update :name', ['name' => __('Image')]) }}</label>
+                                @else
+                                    <label for="image">{{ __('Image') }}</label>
+                                @endif
 
                                 <div class="custom-file">
                                     <label class="custom-file-label" for="image">{{ __('Choose file') }}</label>
@@ -181,7 +185,7 @@
 
                             {{-- image_preview --}}
                             <div class="col-12 col-lg-6">
-                                @if ($denomination->getRawOriginal('image'))
+                                @if ($denomination->exists && $denomination->getRawOriginal('image'))
                                     <button type="submit"
                                         class="btn btn-danger mb-3"
                                         formaction="{{ route('admin.denomination.destroy-image', $denomination) }}"
@@ -197,7 +201,7 @@
                             {{-- /.image_preview --}}
                         </div>
 
-                        @include('components.form-timestamps', ['model' => $denomination])
+                        @includeWhen($denomination->exists, 'components.form-timestamps', ['model' => $denomination])
                     </div>
 
                     <div class="card-footer">

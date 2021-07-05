@@ -68,7 +68,7 @@ class RoleTest extends TestCase
         $role = Role::factory()->create();
 
         $this->actingAs($user, 'web')
-            ->patch(route('admin.role.update', $role), $data = Role::factory()->raw())
+            ->put(route('admin.role.update', $role), $data = Role::factory()->raw())
             ->assertRedirect(route('admin.role.index'));
 
         $this->assertDatabaseHas(Role::class, $data);

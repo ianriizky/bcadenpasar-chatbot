@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Branch\StoreRequest;
+use App\Http\Requests\Branch\UpdateRequest;
 use App\Http\Resources\DataTables\BranchResource;
 use App\Models\Branch;
 use Illuminate\Http\Request;
@@ -45,14 +47,19 @@ class BranchController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Branch\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         Branch::create($request->all());
 
-        return redirect()->route('admin.branch.index');
+        return redirect()->route('admin.branch.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.branch')]),
+            ],
+        ]);
     }
 
     /**
@@ -69,15 +76,20 @@ class BranchController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Branch\UpdateRequest  $request
      * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Branch $branch)
+    public function update(UpdateRequest $request, Branch $branch)
     {
         $branch->update($request->all());
 
-        return redirect()->route('admin.branch.index');
+        return redirect()->route('admin.branch.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.branch')]),
+            ],
+        ]);
     }
 
     /**
@@ -90,6 +102,29 @@ class BranchController extends Controller
     {
         $branch->delete();
 
-        return redirect()->route('admin.branch.index');
+        return redirect()->route('admin.branch.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.branch')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Remove the specified list of resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyMultiple(Request $request)
+    {
+        Branch::destroy($request->input('checkbox', []));
+
+        return redirect()->route('admin.branch.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.branch')]),
+            ],
+        ]);
     }
 }

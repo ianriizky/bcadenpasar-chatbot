@@ -45,7 +45,7 @@
 
                                 <div class="row">
                                     <div class="form-group col-lg-4 col-12">
-                                        <label for="username">{{ __('Username') }}</label>
+                                        <label for="username">{{ __('Username') }}<span class="text-danger">*</span></label>
 
                                         <input type="text"
                                             name="username"
@@ -61,7 +61,7 @@
                                     </div>
 
                                     <div class="form-group col-lg-8 col-12">
-                                        <label for="fullname">{{ __('Full name') }}</label>
+                                        <label for="fullname">{{ __('Full name') }}<span class="text-danger">*</span></label>
 
                                         <input type="text"
                                             name="fullname"
@@ -95,7 +95,7 @@
                                     </div>
 
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="email">{{ __('Email') }}</label>
+                                        <label for="email">{{ __('Email') }}<span class="text-danger">*</span></label>
 
                                         <input type="email"
                                             name="email"
@@ -113,7 +113,7 @@
 
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="password">{{ __('Password') }}</label>
+                                        <label for="password">{{ __('Password') }}<span class="text-danger">*</span></label>
 
                                         <input type="password"
                                             name="password"
@@ -126,7 +126,7 @@
                                     </div>
 
                                     <div class="form-group col-lg-6 col-12">
-                                        <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+                                        <label for="password_confirmation">{{ __('Confirm Password') }}<span class="text-danger">*</span></label>
 
                                         <input type="password"
                                             name="password_confirmation"
@@ -154,7 +154,7 @@
                                             {!! __('I agree to the :terms_of_service and :privacy_policy', [
                                                 'terms_of_service' => '<a href="#">' . __('Terms of Service') . '</a>',
                                                 'privacy_policy' => '<a href="#">' . __('Privacy Policy') . '</a>',
-                                            ]) !!}
+                                            ]) !!}<span class="text-danger">*</span>
                                         </label>
 
                                         <x-invalid-feedback :name="'agree_with_terms'"/>
@@ -182,7 +182,7 @@
                                     </div>
 
                                     <div class="form-group col-lg-8 col-12">
-                                        <label for="phone">{{ __('Phone Number') }}</label>
+                                        <label for="phone">{{ __('Phone Number') }}<span class="text-danger">*</span></label>
 
                                         <input type="tel"
                                             name="phone"

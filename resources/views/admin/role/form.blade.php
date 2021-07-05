@@ -57,7 +57,7 @@
                         <div class="row">
                             {{-- name --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="name">{{ __('Name') }}</label>
+                                <label for="name">{{ __('Name') }}<span class="text-danger">*</span></label>
 
                                 <input type="text"
                                     name="name"
@@ -75,7 +75,7 @@
 
                             {{-- guard_name --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="guard_name">{{ __('Guard Name') }}</label>
+                                <label for="guard_name">{{ __('Guard Name') }}<span class="text-danger">*</span></label>
 
                                 <select name="guard_name"
                                     id="guard_name"
@@ -93,7 +93,7 @@
                             {{-- /.guard_name --}}
                         </div>
 
-                        @include('components.form-timestamps', ['model' => $role])
+                        @includeWhen($role->exists, 'components.form-timestamps', ['model' => $role])
                     </div>
 
                     <div class="card-footer">

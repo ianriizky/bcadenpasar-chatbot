@@ -22,7 +22,7 @@
                         @csrf
 
                         <div class="form-group">
-                            <label for="identifier">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}</label>
+                            <label for="identifier">{{ __('Email') . ' / ' . __('Phone Number') . ' / Username' }}<span class="text-danger">*</span></label>
 
                             <input type="text"
                                 name="identifier"
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password">{{ __('Password') }}</label>
+                            <label for="password">{{ __('Password') }}<span class="text-danger">*</span></label>
 
                             <input type="password"
                                 name="password"

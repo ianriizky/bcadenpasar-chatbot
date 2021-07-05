@@ -22,8 +22,8 @@
     "Add Team Member": "Tambah Anggota Tim",
     "Add VAT Number": "Add VAT Number",
     "Added.": "Ditambahkan.",
-    "Address": "Address",
-    "Address Line 2": "Address Line 2",
+    "Address": "Alamat",
+    "Address Line 2": "Alamat Opsi 2",
     "Administrator": "Administrator",
     "Administrator users can perform any action.": "Administrator dapat menjalankan aksi apapun.",
     "Afghanistan": "Afganistan",
@@ -119,6 +119,7 @@
     "China": "Cina",
     "Choose": "Pilih",
     "Choose :field": "Pilih :field",
+    "Type :field": "Ketikkan :field",
     "Choose :resource": "Pilih :resource",
     "Choose an option": "Pilih opsi",
     "Choose date": "Pilih tanggal",
@@ -762,5 +763,7 @@
     "Selected": "Dipilih",
     "Created At": "Dibuat Pada",
     "Updated At": "Diubah Pada",
-    "Image": "Gambar"
+    "Image": "Gambar",
+    "Unable to retrieve your location": "Tidak dapat menemukan lokasi anda",
+    "If this column is left empty, then the Google Map URL will be generated automatically following the latitude and longitude values": "Jika kolom ini dibiarkan kosong, maka Google Map URL akan dibuat secara otomatis mengikuti nilai lintang dan bujur"
 }

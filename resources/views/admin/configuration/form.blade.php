@@ -34,7 +34,7 @@
                         <div class="row">
                             {{-- key --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="key">{{ __('Key') }}</label>
+                                <label for="key">{{ __('Key') }}<span class="text-danger">*</span></label>
 
                                 <input type="text"
                                     name="key"
@@ -52,7 +52,7 @@
 
                             {{-- value --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="value">{{ __('Value') }}</label>
+                                <label for="value">{{ __('Value') }}<span class="text-danger">*</span></label>
 
                                 <input type="text"
                                     name="value"
@@ -74,14 +74,14 @@
                                 <textarea name="description"
                                     id="description"
                                     class="form-control @error('description') is-invalid @enderror"
-                                    style="resize: vertical;">{{ old('description', $configuration->description) }}</textarea>
+                                    style="resize: vertical; height: auto;">{{ old('description', $configuration->description) }}</textarea>
 
                                 <x-invalid-feedback :name="'description'"/>
                             </div>
                             {{-- /.description --}}
                         </div>
 
-                        @include('components.form-timestamps', ['model' => $configuration])
+                        @includeWhen($configuration->exists, 'components.form-timestamps', ['model' => $configuration])
                     </div>
 
                     <div class="card-footer">

@@ -26,7 +26,7 @@
                                 @csrf
 
                                 <div class="form-group">
-                                    <label for="email">{{ __('Email') }}</label>
+                                    <label for="email">{{ __('Email') }}<span class="text-danger">*</span></label>
 
                                     <input type="email"
                                         name="email"
