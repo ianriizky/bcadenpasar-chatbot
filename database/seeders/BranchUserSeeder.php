@@ -26,8 +26,8 @@ class BranchUserSeeder extends Seeder
             'google_map_url' => 'https://www.google.com/maps/place/BCA+KCU+Denpasar/@-8.6581162,115.2127812,20z/data=!4m5!3m4!1s0x2dd240987c02083b:0x45b03e6b3ab46412!8m2!3d-8.6583514!4d115.2127877',
         ]);
 
-        /** @var \App\Models\User $user */
-        $user = User::make([
+        /** @var \App\Models\User $admin */
+        $admin = User::make([
             'username' => env('ADMIN_USERNAME', 'admin'),
             'fullname' => env('ADMIN_FULLNAME', 'Administrator'),
             'gender' => env('ADMIN_GENDER', Gender::undefined()),
@@ -37,12 +37,10 @@ class BranchUserSeeder extends Seeder
             'email_verified_at' => Carbon::now(),
             'password' => env('ADMIN_PASSWORD', 'admin12345'),
             'is_active' => true,
-        ]);
+        ])->setBranchRelationValue($branch);
 
-        $user->setBranchRelationValue($branch);
+        $admin->save();
 
-        $user->save();
-
-        $user->syncRoles(Role::ROLE_ADMIN);
+        $admin->syncRoles(Role::ROLE_ADMIN);
     }
 }

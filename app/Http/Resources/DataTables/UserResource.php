@@ -19,7 +19,7 @@ class UserResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'user_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'branch_name' => view('components.datatables.link', [
                 'url' => route('admin.branch.edit', $this->resource->branch),
@@ -29,10 +29,15 @@ class UserResource extends JsonResource
             'fullname' => $this->resource->fullname,
             'email' => $this->resource->email,
             'is_active' => $this->resource->is_active_badge,
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.user.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.user.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.user.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

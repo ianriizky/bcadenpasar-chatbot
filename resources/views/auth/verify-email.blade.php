@@ -25,12 +25,16 @@
                                 {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
                             </p>
 
-                            <form action="{{ route('verification.send') }}" method="post">
+                            <form method="post">
                                 @csrf
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                    <button type="submit" formaction="{{ route('verification.send') }}" class="btn btn-primary btn-lg btn-block">
                                         {{ __('Resend Verification Email') }}
+                                    </button>
+
+                                    <button type="submit" formaction="{{ route('logout') }}" class="btn btn-danger btn-lg btn-block">
+                                        {{ __('Logout') }}
                                     </button>
                                 </div>
                             </form>

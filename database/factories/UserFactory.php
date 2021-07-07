@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\Gender;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -23,7 +24,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $gender = $this->faker->randomElement(['male', 'female']);
+        $gender = $this->faker->randomElement(Gender::toValues());
 
         return [
             'username' => $this->faker->userName,
@@ -63,6 +64,20 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'is_active' => false,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's account should be activate.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function activate()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_active' => true,
             ];
         });
     }

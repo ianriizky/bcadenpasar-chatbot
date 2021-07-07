@@ -1,24 +1,30 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\User;
 
 use App\Enum\Gender;
 use App\Infrastructure\Foundation\Http\FormRequest;
-use App\Models\Branch;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Validation\Rules;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
-class RegisterRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * {@inheritDoc}
      */
-    public static function getRules()
+    public function authorize()
+    {
+        return !is_null($this->user());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function rules()
     {
         return [
-            'branch_name' => 'required|exists:branches,name',
+            'branch_id' => 'required|exists:branches,id',
             'username' => 'required|string|max:255|unique:users',
             'fullname' => 'required|string|max:255',
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
@@ -32,55 +38,26 @@ class RegisterRequest extends FormRequest
                 }
             }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'agree_with_terms' => 'required|boolean|in:1',
+            'role' => 'required|exists:roles,name',
+            'is_active' => 'required|boolean',
         ];
     }
 
     /**
      * {@inheritDoc}
      */
-    public static function getAttributes()
+    public function attributes()
     {
         return [
-            'branch_name' => trans('admin-lang.branch'),
+            'branch_id' => trans('admin-lang.branch'),
             'username' => trans('Username'),
             'fullname' => trans('Full name'),
             'gender' => trans('Gender'),
             'email' => trans('Email'),
             'phone_country' => trans('Phone Country'),
             'phone' => trans('Phone Number'),
-            'password' => trans('Password'),
-            'agree_with_terms' => trans('Terms of Service'),
+            'role' => trans('Role'),
+            'is_active' => trans('Active'),
         ];
-    }
-
-    /**
-     * Register user based on the given request.
-     *
-     * @return \App\Models\User
-     */
-    public function register(): User
-    {
-        $attributes = $this->only([
-            'name',
-            'email',
-            'password',
-            'username',
-            'fullname',
-            'gender',
-            'email',
-            'phone_country',
-            'phone',
-            'password',
-        ]);
-
-        /** @var \App\Models\User $user */
-        $user = User::make($attributes);
-
-        $user->setBranchRelationValue(Branch::where('name', $this->input('branch_name'))->first())->save();
-
-        $user->syncRoles(Role::ROLE_STAFF);
-
-        return $user;
     }
 }

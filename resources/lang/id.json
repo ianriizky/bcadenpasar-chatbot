@@ -765,5 +765,6 @@
     "Updated At": "Diubah Pada",
     "Image": "Gambar",
     "Unable to retrieve your location": "Tidak dapat menemukan lokasi anda",
-    "If this column is left empty, then the Google Map URL will be generated automatically following the latitude and longitude values": "Jika kolom ini dibiarkan kosong, maka Google Map URL akan dibuat secara otomatis mengikuti nilai lintang dan bujur"
+    "If this column is left empty, then the Google Map URL will be generated automatically following the latitude and longitude values": "Jika kolom ini dibiarkan kosong, maka Google Map URL akan dibuat secara otomatis mengikuti nilai lintang dan bujur",
+    "Unverified": "Tidak terverifikasi"
 }

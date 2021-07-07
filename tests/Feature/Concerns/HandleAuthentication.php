@@ -4,6 +4,7 @@ namespace Tests\Feature\Concerns;
 
 use App\Models\Branch;
 use App\Models\User;
+use Illuminate\Support\Facades\Notification;
 
 trait HandleAuthentication
 {
@@ -14,6 +15,8 @@ trait HandleAuthentication
      */
     protected function createUserFromFactory(): User
     {
+        Notification::fake();
+
         /** @var \App\Models\Branch $branch */
         $branch = Branch::factory()->create();
 

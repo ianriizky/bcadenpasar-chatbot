@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
 use App\Http\Resources\DataTables\UserResource;
+use App\Models\Branch;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -32,6 +37,7 @@ class UserController extends Controller
             ->setTransformer(fn ($model) => UserResource::make($model)->resolve())
             ->orderColumn('branch_name', function ($query, $direction) {
                 $query->join('branches', 'users.branch_id', '=', 'branches.id')
+                    ->select('users.*', 'branches.id as branch_id', 'branches.name as branch_name')
                     ->orderBy('branches.name', $direction);
             })
             ->filterColumn('branch_name', function ($query, $keyword) {
@@ -63,14 +69,26 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\User\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        User::create($request->all());
+        /** @var \App\Models\User $user */
+        $user = User::make($request->all())->setBranchRelationValue(Branch::find($request->input('branch_id')));
 
-        return redirect()->route('admin.user.index');
+        $user->save();
+
+        $user->syncRoles($request->input('role'));
+
+        Event::dispatch(new Registered($user));
+
+        return redirect()->route('admin.user.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ]);
     }
 
     /**
@@ -87,15 +105,25 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\User\UpdateRequest  $request
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
-        $user->update($request->all());
+        /** @var \App\Models\User $user */
+        $user = $user->fill($request->all())->setBranchRelationValue(Branch::find($request->input('branch_id')));
 
-        return redirect()->route('admin.user.index');
+        $user->save();
+
+        $user->syncRoles($request->input('role'));
+
+        return redirect()->route('admin.user.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ]);
     }
 
     /**
@@ -108,6 +136,29 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('admin.user.index');
+        return redirect()->route('admin.user.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Remove the specified list of resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyMultiple(Request $request)
+    {
+        User::destroy($request->input('checkbox', []));
+
+        return redirect()->route('admin.user.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ]);
     }
 }

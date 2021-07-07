@@ -20,9 +20,6 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                 },
-                order: [
-                    [1, 'asc'],
-                ],
                 columns: [
                     { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
                     { data: 'name', searchable: true },

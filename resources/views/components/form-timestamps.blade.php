@@ -3,12 +3,7 @@
     <div class="form-group col-12 col-lg-6">
         <label for="created_at">{{ __('Created At') }}</label>
 
-        <input type="text"
-            name="created_at"
-            id="created_at"
-            class="form-control-plaintext"
-            value="{{ $model->created_at->translatedFormat('d F Y H:i:s') }}"
-            readonly>
+        <p class="form-control-plaintext">{{ $model->created_at->translatedFormat('d F Y H:i:s') }}</p>
     </div>
     {{-- /.created_at --}}
 
@@ -16,12 +11,7 @@
     <div class="form-group col-12 col-lg-6">
         <label for="updated_at">{{ __('Updated At') }}</label>
 
-        <input type="text"
-            name="updated_at"
-            id="updated_at"
-            class="form-control-plaintext"
-            value="{{ $model->updated_at->translatedFormat('d F Y H:i:s') }}"
-            readonly>
+        <p class="form-control-plaintext">{{ $model->updated_at->translatedFormat('d F Y H:i:s') }}</p>
     </div>
     {{-- /.updated_at --}}
 </div>

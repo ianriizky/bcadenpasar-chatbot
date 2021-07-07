@@ -32,6 +32,7 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
 
     Route::prefix('/user')->name('user.')->group(function () {
         Route::post('/datatable', [UserController::class, 'datatable'])->name('datatable');
+        Route::delete('/multiple', [UserController::class, 'destroyMultiple'])->name('destroy-multiple');
     });
 
     Route::prefix('/branch')->name('branch.')->group(function () {

@@ -17,6 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail, Issuerable
 {
     use HasFactory, Notifiable, HasIssuerable,
         Concerns\User\Attribute,
+        Concerns\User\Event,
         Concerns\User\Relation;
 
     /**

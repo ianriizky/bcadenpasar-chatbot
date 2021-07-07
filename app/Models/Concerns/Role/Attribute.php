@@ -11,6 +11,16 @@ namespace App\Models\Concerns\Role;
 interface Attribute
 {
     /**
+     * List of role name.
+     *
+     * @var array
+     */
+    const ROLES = [
+        self::ROLE_ADMIN,
+        self::ROLE_STAFF,
+    ];
+
+    /**
      * Role name for "admin".
      *
      * @var string

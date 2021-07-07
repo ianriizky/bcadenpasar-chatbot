@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $remember_token
  * @property boolean $is_active
  * @property string $is_active_badge
+ * @property-read string $role
  *
  * @see \App\Models\User
  */
@@ -49,5 +50,17 @@ trait Attribute
         return sprintf(<<<'html'
         <div class="badge badge-danger">%s</div>
         html, trans('Not Active'));
+    }
+
+    /**
+     * Return "role" attribute value.
+     *
+     * @return string
+     */
+    public function getRoleAttribute(): string
+    {
+        $this->load('roles:id,name');
+
+        return $this->roles->first()->name;
     }
 }

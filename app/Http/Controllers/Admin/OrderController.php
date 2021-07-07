@@ -31,6 +31,7 @@ class OrderController extends Controller
             ->setTransformer(fn ($model) => OrderResource::make($model)->resolve())
             ->orderColumn('customer_fullname', function ($query, $direction) {
                 $query->join('customers', 'orders.customer_id', '=', 'customers.id')
+                    ->select('orders.*', 'customers.id as customer_id', 'customers.fullname as customer_fullname')
                     ->orderBy('customers.fullname', $direction);
             })
             ->filterColumn('customer_fullname', function ($query, $keyword) {
@@ -40,6 +41,7 @@ class OrderController extends Controller
             })
             ->orderColumn('status', function ($query, $direction) {
                 $query->join('order_statuses', 'order_statuses.order_id', '=', 'orders.id')
+                    ->select('orders.*', 'order_statuses.id as order_status_id', 'order_statuses.status as order_status')
                     ->orderBy('order_statuses.status', $direction);
             })
             ->filterColumn('status', function ($query, $keyword) {

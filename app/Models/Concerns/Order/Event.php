@@ -24,7 +24,7 @@ trait Event
         });
 
         static::deleting(function (Order $model) {
-            $model->items->delete();
+            $model->items->map->delete();
         });
     }
 }
