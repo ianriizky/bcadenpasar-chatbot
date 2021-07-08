@@ -5,7 +5,6 @@
 @section('script')
     <script src="{{ asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/custom-file-input.js') }}"></script>
-
     <script>
         $(document).ready(function () {
             $('.select2').select2();
@@ -41,7 +40,7 @@
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.denomination.create') }}">
+                    <a href="{{ $url }}">
                         <i class="fas {{ $icon }}"></i> <span>{{ $title }}</span>
                     </a>
                 </div>

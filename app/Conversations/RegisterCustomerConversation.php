@@ -334,9 +334,23 @@ class RegisterCustomerConversation extends Conversation
         $this->displayValidationErrorMessage($validationErrorMessage);
 
         return $this->askRenderable('conversations.register-customer.ask-location', function () {
+            $latitude = $this->getMessagePayload('location.latitude');
+            $longitude = $this->getMessagePayload('location.longitude');
+
+            $validatorLatitude = CustomerStoreRequest::createValidator($latitude, 'location_latitude');
+            $validatorLongitude = CustomerStoreRequest::createValidator($longitude, 'location_longitude');
+
+            if ($validatorLatitude->fails()) {
+                return $this->askLocation($validatorLatitude->errors()->first('location_latitude'));
+            }
+
+            if ($validatorLongitude->fails()) {
+                return $this->askLocation($validatorLongitude->errors()->first('location_latitude'));
+            }
+
             $this->setUserStorage([
-                'location_latitude' => $this->getMessagePayload('location.latitude'),
-                'location_longitude' => $this->getMessagePayload('location.longitude'),
+                'location_latitude' => $latitude,
+                'location_longitude' => $longitude,
             ]);
 
             return $this->askDataConfirmation();
@@ -382,6 +396,8 @@ class RegisterCustomerConversation extends Conversation
                 return $this->askDataConfirmation($this->fallbackMessage($answer->getText()));
             }
 
+            $this->deleteTelegramMessageFromResponse($response);
+
             if ($value === 'no') {
                 $this->destroyUserStorage();
 
@@ -389,9 +405,8 @@ class RegisterCustomerConversation extends Conversation
             }
 
             Customer::updateOrCreateByBotManUser($user, $userStorage);
-            $this->destroyUserStorage();
 
-            $this->deleteTelegramMessageFromResponse($response);
+            $this->destroyUserStorage();
 
             return $this->startPreviousConversation();
         }, question: $question, additionalParameters: $additionalParameters);

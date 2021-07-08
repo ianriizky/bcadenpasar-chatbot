@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Configuration;
 
 use App\Infrastructure\Foundation\Http\FormRequest;
+use App\Models\Configuration;
 use App\Models\Role;
 
 class StoreRequest extends FormRequest
@@ -21,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'key' => 'required|string|max:255|unique:configurations',
+            'key' => 'required|string|max:255|unique:' . Configuration::class,
             'value' => 'required|string|max:255',
             'description' => 'sometimes|nullable|string',
         ];

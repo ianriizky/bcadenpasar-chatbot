@@ -14,18 +14,18 @@ class ConfigurationTest extends TestCase
 
     public function test_assert_index()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->get(route('admin.configuration.index'))
             ->assertOk();
     }
 
     public function test_assert_datatable()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->post(route('admin.configuration.datatable'))
             ->assertOk()
             ->assertJsonStructure($this->getDataTablesFormat());
@@ -33,18 +33,18 @@ class ConfigurationTest extends TestCase
 
     public function test_assert_create()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->get(route('admin.configuration.create'))
             ->assertOk();
     }
 
     public function test_assert_store()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->post(route('admin.configuration.store'), $data = Configuration::factory()->raw())
             ->assertRedirect(route('admin.configuration.index'));
 
@@ -53,22 +53,22 @@ class ConfigurationTest extends TestCase
 
     public function test_assert_edit()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $configuration = Configuration::factory()->create();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->get(route('admin.configuration.edit', $configuration))
             ->assertOk();
     }
 
     public function test_assert_update()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $configuration = Configuration::factory()->create();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->put(route('admin.configuration.update', $configuration), $data = Configuration::factory()->raw())
             ->assertRedirect(route('admin.configuration.index'));
 
@@ -77,11 +77,11 @@ class ConfigurationTest extends TestCase
 
     public function test_assert_destroy()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $configuration = Configuration::factory()->create();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->delete(route('admin.configuration.destroy', $configuration))
             ->assertRedirect(route('admin.configuration.index'));
 
@@ -90,11 +90,11 @@ class ConfigurationTest extends TestCase
 
     public function test_assert_destroy_multiple()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $configurations = Configuration::factory()->count(3)->create();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($admin, 'web')
             ->delete(route('admin.configuration.destroy-multiple', [
                 'checkbox' => $configurations->pluck('id')->toArray(),
             ]))

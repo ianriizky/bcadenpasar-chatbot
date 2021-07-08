@@ -19,16 +19,21 @@ class CustomerResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'customer_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
             ])->render(),
             'username' => $this->resource->username,
             'fullname' => $this->resource->fullname,
             'email' => $this->resource->email,
             'phone' => $this->resource->phone,
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.customer.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.customer.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.customer.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }

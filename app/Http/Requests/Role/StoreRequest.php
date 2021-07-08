@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:roles',
+            'name' => 'required|string|max:255|unique:' . Role::class,
             'guard_name' => ['required', 'string', Rule::in(array_keys(config('auth.guards')))],
         ];
     }

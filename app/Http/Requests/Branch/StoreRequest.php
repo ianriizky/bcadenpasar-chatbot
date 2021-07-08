@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Branch;
 
 use App\Infrastructure\Foundation\Http\FormRequest;
+use App\Models\Branch;
 
 class StoreRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:branches',
+            'name' => 'required|string|max:255|unique:' . Branch::class,
             'address' => 'required|string',
             'address_latitude' => 'required|numeric',
             'address_longitude' => 'required|numeric',

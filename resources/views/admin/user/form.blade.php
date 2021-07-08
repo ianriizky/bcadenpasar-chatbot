@@ -4,7 +4,6 @@
 
 @section('script')
     <script src="{{ asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
-
     <script>
         $(document).ready(function () {
             $('.select2').select2();
@@ -145,7 +144,7 @@
 
                             {{-- phone_country --}}
                             <input type="hidden" name="phone_country" value="{{ env('PHONE_COUNTRY', 'ID') }}">
-                            {{-- /,phone_country --}}
+                            {{-- /.phone_country --}}
 
                             {{-- phone --}}
                             <div class="form-group col-12 col-lg-6">
@@ -162,9 +161,9 @@
                                         class="form-control @error('phone') is-invalid @enderror"
                                         value="{{ old('phone', $user->phone) }}"
                                         required>
-                                </div>
 
-                                <x-invalid-feedback :name="'phone'"/>
+                                    <x-invalid-feedback :name="'phone'"/>
+                                </div>
                             </div>
                             {{-- /.phone --}}
 

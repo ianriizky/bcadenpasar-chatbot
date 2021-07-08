@@ -18,11 +18,11 @@ class RegisterRequest extends FormRequest
     public static function getRules()
     {
         return [
-            'branch_name' => 'required|exists:branches,name',
-            'username' => 'required|string|max:255|unique:users',
+            'branch_name' => 'required|exists:' . Branch::class . ',name',
+            'username' => 'required|string|max:255|unique:' . User::class,
             'fullname' => 'required|string|max:255',
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'phone_country' => 'sometimes|in:ID',
             'phone' => ['required', 'string', 'phone:ID', function ($attribute, $phone, $fail) {
                 $user = User::where('phone', PhoneNumber::make($phone, request()->input('phone_country', env('PHONE_COUNTRY', 'ID')))->formatE164())->count();

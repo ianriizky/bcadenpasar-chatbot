@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'value' => 'required|numeric|min:0',
+            'value' => 'required|numeric|min:0|unique:' . Denomination::class,
             'type' => 'required|enum:' . DenominationType::class,
             'quantity_per_bundle' => 'required|numeric|min:0',
             'minimum_order_bundle' => 'required|numeric|min:0',

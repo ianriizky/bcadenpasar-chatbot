@@ -2,6 +2,7 @@
 
 namespace App\Support\Auth;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -37,7 +38,7 @@ trait MultipleIdentifier
     {
         $field = $this->getIdentifierField($value);
 
-        $rules = ['required', 'string', 'exists:users,' . $field];
+        $rules = ['required', 'string', 'exists:' . User::class . ',' . $field];
 
         switch ($field) {
             case 'email':

@@ -20,10 +20,8 @@ trait Event
      */
     protected static function bootEvent()
     {
-        static::saving(function (Customer $model) {
-            if (is_null($model->identitycard_image)) {
-                Storage::delete(Customer::IDENTITYCARD_IMAGE_PATH . '/' . $model->getRawOriginal('identitycard_image'));
-            }
+        static::deleting(function (Customer $model) {
+            Storage::delete(Customer::IDENTITYCARD_IMAGE_PATH . '/' . $model->getRawOriginal('identitycard_image'));
         });
     }
 }

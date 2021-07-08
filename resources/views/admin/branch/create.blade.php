@@ -1,6 +1,7 @@
 @include('admin.branch.form', [
     'branch' => new \App\Models\Role,
-    'title' => __('Create :name', ['name' => __('admin-lang.branch')]),
+    'url' => route('admin.branch.create'),
     'icon' => 'fa-plus-square',
+    'title' => __('Create :name', ['name' => __('admin-lang.branch')]),
     'action' => route('admin.branch.store'),
 ])

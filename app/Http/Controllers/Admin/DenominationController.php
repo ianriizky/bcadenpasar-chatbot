@@ -8,6 +8,7 @@ use App\Http\Requests\Denomination\UpdateRequest;
 use App\Http\Resources\DataTables\DenominationResource;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -53,7 +54,8 @@ class DenominationController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $denomination = Denomination::make($request->all());
+        /** @var \App\Models\Denomination $denomination */
+        $denomination = Denomination::make(Arr::except($request->all(), 'image'));
 
         if ($filename = $request->storeImage()) {
             $denomination->image = $filename;
@@ -89,7 +91,7 @@ class DenominationController extends Controller
      */
     public function update(UpdateRequest $request, Denomination $denomination)
     {
-        $denomination->fill($request->all());
+        $denomination->fill(Arr::except($request->all(), 'image'));
 
         if ($filename = $request->updateImage()) {
             $denomination->image = $filename;

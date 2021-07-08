@@ -6,7 +6,7 @@
                 const previousHtml = $(this).html();
 
                 $(this).attr('disabled', 'disabled')
-                $(this).html('<i class="fa fa-spinner fa-spin"></i> <span>{{ __('Please wait') }}</span>');
+                $(this).html('<i class="fa fa-spinner fa-spin"></i> <span class="d-none d-xl-inline">{{ __('Please wait') }}</span>');
 
                 try {
                     const position = await geoFindMe();
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.branch.create') }}">
+                    <a href="{{ $url }}">
                         <i class="fas {{ $icon }}"></i> <span>{{ $title }}</span>
                     </a>
                 </div>
@@ -100,7 +100,7 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <button type="button" class="btn btn-primary" id="find-location">
-                                            <i class="fa fa-location-arrow"></i> <span>{{ __('Send My Location') }}</span>
+                                            <i class="fa fa-location-arrow"></i> <span class="d-none d-xl-inline">{{ __('Send My Location') }}</span>
                                         </button>
                                     </div>
 
@@ -109,7 +109,7 @@
                                         id="address_latitude"
                                         class="form-control @error('address_latitude') is-invalid @enderror"
                                         value="{{ old('address_latitude', $branch->address_latitude) }}"
-                                        placeholder="{{ __('Type :field', ['field' => __('Latitude')]) }}"
+                                        placeholder="{{ __('Latitude') }}"
                                         required>
 
                                     <input type="text"
@@ -117,12 +117,12 @@
                                         id="address_longitude"
                                         class="form-control @error('address_longitude') is-invalid @enderror"
                                         value="{{ old('address_longitude', $branch->address_longitude) }}"
-                                        placeholder="{{ __('Type :field', ['field' => __('Longitude')]) }}"
+                                        placeholder="{{ __('Longitude') }}"
                                         required>
-                                </div>
 
-                                <x-invalid-feedback :name="'address_latitude'"/>
-                                <x-invalid-feedback :name="'address_longitude'"/>
+                                    <x-invalid-feedback :name="'address_latitude'"/>
+                                    <x-invalid-feedback :name="'address_longitude'"/>
+                                </div>
                             </div>
                             {{-- /.address_latitude | address_longitude --}}
 

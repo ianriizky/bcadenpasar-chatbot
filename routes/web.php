@@ -42,6 +42,8 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
 
     Route::prefix('/customer')->name('customer.')->group(function () {
         Route::post('/datatable', [CustomerController::class, 'datatable'])->name('datatable');
+        Route::delete('/multiple', [CustomerController::class, 'destroyMultiple'])->name('destroy-multiple');
+        Route::delete('/{customer}/identitycard_image', [CustomerController::class, 'destroyIdentitycardImage'])->name('destroy-identitycard_image');
     });
 
     Route::prefix('/denomination')->name('denomination.')->group(function () {
@@ -63,7 +65,7 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
     Route::resource('/order', OrderController::class)->except('show');
     Route::resource('/user', UserController::class)->except('show');
     Route::resource('/branch', BranchController::class)->except('show');
-    Route::resource('/customer', CustomerController::class)->except('create', 'store', 'show');
+    Route::resource('/customer', CustomerController::class)->except('show');
     Route::resource('/denomination', DenominationController::class)->except('show');
     Route::resource('/role', RoleController::class, ['middleware' => 'role:admin'])->except('show');
     Route::resource('/configuration', ConfigurationController::class)->except('show');

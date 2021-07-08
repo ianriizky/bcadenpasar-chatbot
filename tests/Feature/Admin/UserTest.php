@@ -57,7 +57,7 @@ class UserTest extends TestCase
             ->post(route('admin.user.store'), $data)
             ->assertRedirect(route('admin.user.index'));
 
-        $this->assertDatabaseHas(User::class, Arr::only($data, 'id'));
+        $this->assertDatabaseHas(User::class, Arr::only($data, 'username'));
     }
 
     public function test_assert_edit()
@@ -88,7 +88,7 @@ class UserTest extends TestCase
             ->put(route('admin.user.update', $user), $data)
             ->assertRedirect(route('admin.user.index'));
 
-        $this->assertDatabaseHas(User::class, Arr::only($data, 'id'));
+        $this->assertDatabaseHas(User::class, Arr::only($data, 'username'));
     }
 
     public function test_assert_destroy()

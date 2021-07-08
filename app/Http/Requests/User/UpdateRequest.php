@@ -4,6 +4,8 @@ namespace App\Http\Requests\User;
 
 use App\Enum\Gender;
 use App\Infrastructure\Foundation\Http\FormRequest;
+use App\Models\Branch;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
@@ -25,14 +27,14 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|exists:branches,id',
+            'branch_id' => 'required|exists:' . Branch::class . ',id',
             'username' => ['required', 'string', 'max:255', Rule::unique(User::class)->ignoreModel($this->route('user'))],
             'fullname' => 'required|string|max:255',
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)->ignoreModel($this->route('user'))],
             'phone_country' => 'sometimes|in:ID',
             'phone' => ['required', 'string', 'phone:ID', function ($attribute, $phone, $fail) {
-                $user = User::where('phone', PhoneNumber::make($phone, request()->input('phone_country', env('PHONE_COUNTRY', 'ID')))->formatE164())
+                $user = User::where($attribute, PhoneNumber::make($phone, request()->input('phone_country', env('PHONE_COUNTRY', 'ID')))->formatE164())
                     ->where($this->route('user')->getKeyName(), '!=', $this->route('user')->getKey())
                     ->count();
 
@@ -41,7 +43,7 @@ class UpdateRequest extends FormRequest
                 }
             }],
             'password' => ['sometimes', 'nullable', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|exists:roles,name',
+            'role' => 'required|exists:' . Role::class . ',name',
             'is_active' => 'required|boolean',
         ];
     }

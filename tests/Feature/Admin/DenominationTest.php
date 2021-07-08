@@ -17,18 +17,18 @@ class DenominationTest extends TestCase
 
     public function test_assert_index()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.index'))
             ->assertOk();
     }
 
     public function test_assert_datatable()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->post(route('admin.denomination.datatable'))
             ->assertOk()
             ->assertJsonStructure($this->getDataTablesFormat());
@@ -36,18 +36,20 @@ class DenominationTest extends TestCase
 
     public function test_assert_create()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.create'))
             ->assertOk();
     }
 
     public function test_assert_store()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
 
-        $this->actingAs($user, 'web')
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+
+        $this->actingAs($staff, 'web')
             ->post(route('admin.denomination.store'), $data = Denomination::factory()->raw())
             ->assertRedirect(route('admin.denomination.index'));
 
@@ -58,22 +60,26 @@ class DenominationTest extends TestCase
 
     public function test_assert_edit()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
+
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         $denomination = $this->createFromFactory();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.edit', $denomination))
             ->assertOk();
     }
 
     public function test_assert_update()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
+
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         $denomination = $this->createFromFactory();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->put(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
             ->assertRedirect(route('admin.denomination.index'));
 
@@ -85,11 +91,13 @@ class DenominationTest extends TestCase
 
     public function test_assert_destroy()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
+
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         $denomination = $this->createFromFactory();
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->delete(route('admin.denomination.destroy', $denomination))
             ->assertRedirect(route('admin.denomination.index'));
 
@@ -100,12 +108,14 @@ class DenominationTest extends TestCase
 
     public function test_assert_destroy_multiple()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
+
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
         $denominations = Collection::times(3, fn () => $this->createFromFactory());
 
-        $this->actingAs($user, 'web')
+        $this->actingAs($staff, 'web')
             ->delete(route('admin.denomination.destroy-multiple', [
                 'checkbox' => $denominations->pluck('id')->toArray(),
             ]))
@@ -120,13 +130,15 @@ class DenominationTest extends TestCase
 
     public function test_assert_destroy_image()
     {
-        $user = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        Storage::fake();
+
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
         $denominations = Collection::times(3, fn () => $this->createFromFactory());
 
         foreach ($denominations as $denomination) {
-            $this->actingAs($user, 'web')
+            $this->actingAs($staff, 'web')
                 ->delete(route('admin.denomination.destroy-image', $denomination))
                 ->assertRedirect(route('admin.denomination.edit', $denomination));
 
@@ -143,8 +155,6 @@ class DenominationTest extends TestCase
      */
     protected function createFromFactory(): Denomination
     {
-        Storage::fake();
-
         $factory = Denomination::factory()->raw();
 
         /**

@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.configuration.create') }}">
+                    <a href="{{ $url }}">
                         <i class="fas {{ $icon }}"></i> <span>{{ $title }}</span>
                     </a>
                 </div>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Denomination;
 
+use App\Enum\DenominationType;
 use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Denomination;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -22,7 +24,13 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'value' => ['required', 'numeric', 'min:0', Rule::unique(Denomination::class)->ignoreModel($this->route('denomination'))],
+            'type' => 'required|enum:' . DenominationType::class,
+            'quantity_per_bundle' => 'required|numeric|min:0',
+            'minimum_order_bundle' => 'required|numeric|min:0',
+            'maximum_order_bundle' => 'required|numeric|gte:minimum_order_bundle',
+            'image' => 'sometimes|nullable|image',
         ];
     }
 
