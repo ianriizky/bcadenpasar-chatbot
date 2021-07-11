@@ -9,31 +9,19 @@
     <script src="{{ asset('node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/stisla/data-checkboxes.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $('.datatable').dataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('admin.order.datatable') }}',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                },
-                columns: [
-                    { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-                    { data: 'code', searchable: true },
-                    { data: 'customer_fullname', searchable: true },
-                    { data: 'schedule_date', searchable: true },
-                    { data: 'status', searchable: true },
-                    { data: 'action', searchable: false, orderable: false, width: '20%' },
-                ],
-                language: {
-                    url: '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}',
-                },
-            });
-        });
+        const datatable_url = '{{ route('admin.order.datatable') }}';
+        const datatable_columns = [
+            { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
+            { data: 'detail', searchable: false, orderable: false, width: '5%', class: 'details-control' },
+            { data: 'code', searchable: true },
+            { data: 'customer_fullname', searchable: true },
+            { data: 'schedule_date', searchable: true },
+            { data: 'status', searchable: true },
+            { data: 'action', searchable: false, orderable: false, width: '20%' },
+        ];
+        const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
     </script>
+    <script src="{{ asset('js/datatable-row-child.js') }}"></script>
 @endsection
 
 <x-app-layout>
@@ -72,6 +60,7 @@
                                     <thead>
                                         <tr>
                                             <th>@include('components.datatables.checkbox-all')</th>
+                                            <th></th>
                                             <th>{{ __('Code') }}</th>
                                             <th>{{ __('Full Name') }} {{ __('admin-lang.customer') }}</th>
                                             <th>{{ __('Schedule Date') }}</th>

@@ -53,6 +53,17 @@ class OrderController extends Controller
     }
 
     /**
+     * Return datatable row child data.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function datatableRowChild(Order $order)
+    {
+        return view('admin.order.datatable-row-child', compact('order'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Contracts\Support\Renderable

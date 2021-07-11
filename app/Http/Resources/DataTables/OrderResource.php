@@ -19,7 +19,10 @@ class OrderResource extends JsonResource
     {
         return [
             'checkbox' => view('components.datatables.checkbox', [
-                'id' => 'order_' . $this->resource->getKey(),
+                'value' => $this->resource->getKey(),
+            ])->render(),
+            'detail' => view('components.datatables.button-row-child', [
+                'url' => route('admin.configuration.datatable-row-child', $this->resource),
             ])->render(),
             'code' => $this->resource->code,
             'customer_fullname' => view('components.datatables.link', [
@@ -28,10 +31,15 @@ class OrderResource extends JsonResource
             ])->render(),
             'schedule_date' => $this->resource->schedule_date,
             'status' => $this->resource->status->label,
-            'action' => view('components.datatables.link', [
-                'url' => route('admin.order.edit', $this->resource),
-                'name' => __('Details'),
-                'class' => 'btn btn-primary',
+            'action' => view('components.datatables.button-group', [
+                'elements' => [
+                    view('components.datatables.link-show', [
+                        'url' => route('admin.order.edit', $this->resource),
+                    ])->render(),
+                    view('components.datatables.link-destroy', [
+                        'url' => route('admin.order.destroy', $this->resource),
+                    ])->render(),
+                ],
             ])->render(),
         ];
     }
