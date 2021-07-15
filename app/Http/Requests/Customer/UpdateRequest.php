@@ -3,14 +3,13 @@
 namespace App\Http\Requests\Customer;
 
 use App\Enum\Gender;
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
-class UpdateRequest extends FormRequest
+class UpdateRequest extends AbstractRequest
 {
     /**
      * {@inheritDoc}
@@ -34,6 +33,15 @@ class UpdateRequest extends FormRequest
         };
 
         return [
+            'telegram_chat_id' => ['required', 'string', 'max:255', function ($attribute, $telegram_chat_id, $fail) {
+                $validator = Validator::make(compact('telegram_chat_id'), [
+                    $attribute => Rule::unique(Customer::class)->ignore($telegram_chat_id, $attribute),
+                ]);
+
+                if ($validator->fails()) {
+                    $fail(trans('validation.unique', compact('attribute')));
+                }
+            }],
             'username' => 'required|string|max:255',
             'fullname' => 'required|string|max:255',
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
@@ -55,28 +63,6 @@ class UpdateRequest extends FormRequest
             'identitycard_image' => 'sometimes|nullable|image',
             'location_latitude' => 'required|numeric',
             'location_longitude' => 'required|numeric',
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function getAttributes()
-    {
-        return [
-            'username' => trans('Username'),
-            'fullname' => trans('Full name'),
-            'gender' => trans('Gender'),
-            'email' => trans('Email'),
-            'phone_country' => trans('Phone Country'),
-            'phone' => trans('Phone Number'),
-            'whatsapp_phone_country' => trans('Whatsapp Phone Country'),
-            'whatsapp_phone' => trans('Whatsapp Phone Number'),
-            'account_number' => trans('Account Number'),
-            'identitycard_number' => trans('Identity Card Number'),
-            'identitycard_image' => trans('Identity Card Image'),
-            'location_latitude' => trans('Latitude'),
-            'location_longitude' => trans('Longitude'),
         ];
     }
 

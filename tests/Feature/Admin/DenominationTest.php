@@ -64,7 +64,7 @@ class DenominationTest extends TestCase
 
         $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $denomination = $this->createFromFactory();
+        $denomination = static::createFromFactory();
 
         $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.edit', $denomination))
@@ -77,7 +77,7 @@ class DenominationTest extends TestCase
 
         $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $denomination = $this->createFromFactory();
+        $denomination = static::createFromFactory();
 
         $this->actingAs($staff, 'web')
             ->put(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
@@ -95,7 +95,7 @@ class DenominationTest extends TestCase
 
         $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
-        $denomination = $this->createFromFactory();
+        $denomination = static::createFromFactory();
 
         $this->actingAs($staff, 'web')
             ->delete(route('admin.denomination.destroy', $denomination))
@@ -113,7 +113,7 @@ class DenominationTest extends TestCase
         $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
-        $denominations = Collection::times(3, fn () => $this->createFromFactory());
+        $denominations = Collection::times(3, fn () => static::createFromFactory());
 
         $this->actingAs($staff, 'web')
             ->delete(route('admin.denomination.destroy-multiple', [
@@ -135,7 +135,7 @@ class DenominationTest extends TestCase
         $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
-        $denominations = Collection::times(3, fn () => $this->createFromFactory());
+        $denominations = Collection::times(3, fn () => static::createFromFactory());
 
         foreach ($denominations as $denomination) {
             $this->actingAs($staff, 'web')
@@ -153,7 +153,7 @@ class DenominationTest extends TestCase
      *
      * @return \App\Models\Denomination
      */
-    protected function createFromFactory(): Denomination
+    public static function createFromFactory(): Denomination
     {
         $factory = Denomination::factory()->raw();
 
@@ -162,7 +162,7 @@ class DenominationTest extends TestCase
          * then retry the create factory process.
          */
         if (Denomination::where('value', $factory['value'])->count() > 0) {
-            return $this->createFromFactory();
+            return static::createFromFactory();
         }
 
         /** @var \App\Models\Denomination $denomination */

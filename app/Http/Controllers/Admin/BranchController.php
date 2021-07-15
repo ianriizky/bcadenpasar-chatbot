@@ -52,7 +52,7 @@ class BranchController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        Branch::create($request->all());
+        Branch::create($request->validated());
 
         return redirect()->route('admin.branch.index')->with([
             'alert' => [
@@ -82,7 +82,7 @@ class BranchController extends Controller
      */
     public function update(UpdateRequest $request, Branch $branch)
     {
-        $branch->update($request->all());
+        $branch->update($request->validated());
 
         return redirect()->route('admin.branch.index')->with([
             'alert' => [

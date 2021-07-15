@@ -2,10 +2,8 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;

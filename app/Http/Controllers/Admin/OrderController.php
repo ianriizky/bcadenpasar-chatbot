@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\StoreRequest;
+use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Resources\DataTables\OrderResource;
+use App\Models\Branch;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -76,14 +81,43 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Order\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        Order::create($request->all());
+        $alert = [
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ];
 
-        return redirect()->route('admin.order.index');
+        try {
+            DB::transaction(function () use ($request) {
+                $order = $request->getOrder();
+
+                $order->setCustomerRelationValue($request->getCustomer());
+                transform($request->getUser(), fn (User $user) => $order->setUserRelationValue($user));
+                transform($request->getBranch(), fn (Branch $branch) => $order->setBranchRelationValue($branch));
+
+                $order->save();
+
+                $order->statuses()->save($request->getOrderStatus());
+                $order->items()->saveMany($request->getItems());
+            });
+        } catch (\Throwable $th) {
+            throw $th;
+
+            $alert = [
+                'alert' => [
+                    'type' => 'alert-danger',
+                    'message' => $th->getMessage(),
+                ],
+            ];
+        }
+
+        return redirect()->route('admin.order.index')->with($alert);
     }
 
     /**
@@ -100,15 +134,20 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Order\UpdateRequest  $request
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Order $order)
+    public function update(UpdateRequest $request, Order $order)
     {
-        $order->update($request->all());
+        $order->update($request->validated());
 
-        return redirect()->route('admin.order.index');
+        return redirect()->route('admin.order.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.order')]),
+            ],
+        ]);
     }
 
     /**
@@ -121,6 +160,29 @@ class OrderController extends Controller
     {
         $order->delete();
 
-        return redirect()->route('admin.order.index');
+        return redirect()->route('admin.order.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.order')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Remove the specified list of resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyMultiple(Request $request)
+    {
+        Order::destroy($request->input('checkbox', []));
+
+        return redirect()->route('admin.order.index')->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was deleted!', ['resource' => trans('admin-lang.order')]),
+            ],
+        ]);
     }
 }

@@ -3,12 +3,11 @@
 namespace App\Http\Requests\Customer;
 
 use App\Enum\Gender;
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Customer;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends AbstractRequest
 {
     /**
      * {@inheritDoc}
@@ -31,6 +30,7 @@ class StoreRequest extends FormRequest
         };
 
         return [
+            'telegram_chat_id' => 'required|string|max:255|unique:' . Customer::class,
             'username' => 'required|string|max:255',
             'fullname' => 'required|string|max:255',
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
@@ -44,28 +44,6 @@ class StoreRequest extends FormRequest
             'identitycard_image' => 'sometimes|nullable|image',
             'location_latitude' => 'required|numeric',
             'location_longitude' => 'required|numeric',
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public static function getAttributes()
-    {
-        return [
-            'username' => trans('Username'),
-            'fullname' => trans('Full name'),
-            'gender' => trans('Gender'),
-            'email' => trans('Email'),
-            'phone_country' => trans('Phone Country'),
-            'phone' => trans('Phone Number'),
-            'whatsapp_phone_country' => trans('Whatsapp Phone Country'),
-            'whatsapp_phone' => trans('Whatsapp Phone Number'),
-            'account_number' => trans('Account Number'),
-            'identitycard_number' => trans('Identity Card Number'),
-            'identitycard_image' => trans('Identity Card Image'),
-            'location_latitude' => trans('Latitude'),
-            'location_longitude' => trans('Longitude'),
         ];
     }
 

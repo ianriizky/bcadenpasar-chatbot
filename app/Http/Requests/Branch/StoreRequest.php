@@ -2,19 +2,10 @@
 
 namespace App\Http\Requests\Branch;
 
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Branch;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return !is_null($this->user());
-    }
-
     /**
      * {@inheritDoc}
      */

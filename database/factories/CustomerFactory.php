@@ -6,7 +6,6 @@ use App\Enum\Gender;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class CustomerFactory extends Factory

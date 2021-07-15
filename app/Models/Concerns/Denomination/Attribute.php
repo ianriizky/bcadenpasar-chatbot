@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $minimum_order_bundle
  * @property int $maximum_order_bundle
  * @property string $image
+ * @property-read array $range_order_bundle
  * @property-read float $value_per_bundle
  * @property-read float $minimum_order_value
  * @property-read float $maximum_order_value
@@ -34,6 +35,16 @@ trait Attribute
         }
 
         return Storage::url(static::IMAGE_PATH . '/' . $value);
+    }
+
+    /**
+     * Return "range_order_bundle" attribute value.
+     *
+     * @return array
+     */
+    public function getRangeOrderBundleAttribute(): array
+    {
+        return range($this->minimum_order_bundle, $this->maximum_order_bundle);
     }
 
     /**

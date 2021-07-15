@@ -3,7 +3,6 @@
 namespace App\Http\Requests\User;
 
 use App\Enum\Gender;
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\User;
@@ -11,16 +10,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
-class UpdateRequest extends FormRequest
+class UpdateRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return !is_null($this->user());
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -45,24 +36,6 @@ class UpdateRequest extends FormRequest
             'password' => ['sometimes', 'nullable', 'confirmed', Rules\Password::defaults()],
             'role' => 'required|exists:' . Role::class . ',name',
             'is_active' => 'required|boolean',
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function attributes()
-    {
-        return [
-            'branch_id' => trans('admin-lang.branch'),
-            'username' => trans('Username'),
-            'fullname' => trans('Full name'),
-            'gender' => trans('Gender'),
-            'email' => trans('Email'),
-            'phone_country' => trans('Phone Country'),
-            'phone' => trans('Phone Number'),
-            'role' => trans('Role'),
-            'is_active' => trans('Active'),
         ];
     }
 }

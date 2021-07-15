@@ -28,7 +28,8 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
 
     Route::prefix('/order')->name('order.')->group(function () {
         Route::post('/datatable', [OrderController::class, 'datatable'])->name('datatable');
-        Route::post('/{configuration}/datatable-row-child', [OrderController::class, 'datatableRowChild'])->name('datatable-row-child');
+        Route::post('/{order}/datatable-row-child', [OrderController::class, 'datatableRowChild'])->name('datatable-row-child');
+        Route::delete('/multiple', [OrderController::class, 'destroyMultiple'])->name('destroy-multiple');
     });
 
     Route::prefix('/user')->name('user.')->group(function () {

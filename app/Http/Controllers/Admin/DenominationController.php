@@ -55,7 +55,7 @@ class DenominationController extends Controller
     public function store(StoreRequest $request)
     {
         /** @var \App\Models\Denomination $denomination */
-        $denomination = Denomination::make(Arr::except($request->all(), 'image'));
+        $denomination = Denomination::make(Arr::except($request->validated(), 'image'));
 
         if ($filename = $request->storeImage()) {
             $denomination->image = $filename;
@@ -91,7 +91,7 @@ class DenominationController extends Controller
      */
     public function update(UpdateRequest $request, Denomination $denomination)
     {
-        $denomination->fill(Arr::except($request->all(), 'image'));
+        $denomination->fill(Arr::except($request->validated(), 'image'));
 
         if ($filename = $request->updateImage()) {
             $denomination->image = $filename;

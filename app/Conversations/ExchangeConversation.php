@@ -2,17 +2,17 @@
 
 namespace App\Conversations;
 
-use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Models\Customer;
 use App\Models\Denomination;
 use App\Models\Item;
 use App\Models\Order;
-use App\Models\OrderStatus as ModelOrderStatus;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class ExchangeConversation extends Conversation
 {
@@ -104,6 +104,8 @@ class ExchangeConversation extends Conversation
      */
     protected function recordOrder(Customer $customer, string $validationErrorMessage = null)
     {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
         $denominations = Denomination::all('id', 'name', 'value');
         $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
 
@@ -125,40 +127,81 @@ class ExchangeConversation extends Conversation
                 return;
             }
 
+            /** @var \App\Models\Denomination|null $denomination */
             if (!$denominations->contains($answer->getValue()) ||
                 !$denomination = Denomination::find($answer->getValue())) {
                 return $this->recordOrder($customer, $this->fallbackMessage($answer->getText()));
             }
 
             /** @var \App\Models\Order $order */
-            $order = Order::where('code', $this->getUserStorage('order_code'))->firstOr(function () use ($customer) {
-                $order = new Order;
-
-                $order->setCustomerRelationValue($customer)->save();
-
-                $orderStatus = new ModelOrderStatus(['status' => EnumOrderStatus::draft()]);
-
-                $order->statuses()->save(
-                    $orderStatus->setIssuerableRelationValue($customer)
-                );
-
+            $order = Order::findOrCreateFromCode($this->getUserStorage('order_code'), $customer, function (Order $order) {
                 $this->setUserStorage(['order_code' => $order->code]);
-
-                return $order;
             });
+
+            $this->recordItem($customer, $order, $denomination);
+
+            $this->deleteTelegramMessageFromResponse($response);
+        }, question: $question, additionalParameters: $additionalParameters);
+    }
+
+    /**
+     * Record customer item data.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Denomination  $denomination
+     * @param  string|null  $validationErrorMessage
+     * @return $this
+     */
+    protected function recordItem(Customer $customer, Order $order, Denomination $denomination, string $validationErrorMessage = null)
+    {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
+        $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
+        $unit = Str::lower($denomination->type->label);
+
+        collect($denomination->range_order_bundle)->chunk(3)->map(function (Collection $quantities) use ($keyboard, $unit) {
+            $keyboard->addRow(...$quantities->map(fn ($quantity) => KeyboardButton::create(
+                view('conversations.exchange.reply-bundle_quantity-quantity', compact('quantity'))->render()
+            )->callbackData($quantity))->toArray());
+        });
+
+        $keyboard->addRow(
+            KeyboardButton::create(
+                view('components.conversations.back', ['text' => 'opsi pilih nominal uang'])->render()
+            )->callbackData('back_to_denomination_option')
+        );
+
+        $response = $this->reply(
+            $question = view('conversations.exchange.ask-bundle_quantity', compact('denomination'))->render(),
+            $additionalParameters = $keyboard->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $customer, $order, $denomination) {
+            $this->deleteTelegramMessageFromResponse($response);
+
+            if ($answer->getValue() === 'back_to_denomination_option') {
+                return $this->recordOrder($customer);
+            }
+
+            if (!in_array($answer->getValue(), $denomination->range_order_bundle)) {
+                return $this->recordItem($customer, $order, $denomination, trans('validation.between.numeric', [
+                    'attribute' => trans('Quantity Per Bundle'),
+                    'min' => $denomination->minimum_order_bundle,
+                    'max' => $denomination->maximum_order_bundle,
+                ]));
+            }
 
             $item = new Item([
                 'quantity_per_bundle' => $denomination->quantity_per_bundle,
-                'bundle_quantity' => 1,
+                'bundle_quantity' => $answer->getValue(),
             ]);
 
             $item->setDenominationRelationValue($denomination);
 
             $order->items()->save($item);
 
-            $this->deleteTelegramMessageFromResponse($response);
-
-            return $this->say('thanks :)');
+            $this->reply('thanks');
         }, question: $question, additionalParameters: $additionalParameters);
     }
 }

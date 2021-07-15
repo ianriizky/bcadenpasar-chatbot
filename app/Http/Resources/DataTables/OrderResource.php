@@ -22,7 +22,7 @@ class OrderResource extends JsonResource
                 'value' => $this->resource->getKey(),
             ])->render(),
             'detail' => view('components.datatables.button-row-child', [
-                'url' => route('admin.configuration.datatable-row-child', $this->resource),
+                'url' => route('admin.order.datatable-row-child', $this->resource),
             ])->render(),
             'code' => $this->resource->code,
             'customer_fullname' => view('components.datatables.link', [

@@ -52,7 +52,7 @@ class ConfigurationController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        Configuration::create($request->all());
+        Configuration::create($request->validated());
 
         return redirect()->route('admin.configuration.index')->with([
             'alert' => [
@@ -82,7 +82,7 @@ class ConfigurationController extends Controller
      */
     public function update(UpdateRequest $request, Configuration $configuration)
     {
-        $configuration->update($request->all());
+        $configuration->update($request->validated());
 
         return redirect()->route('admin.configuration.index')->with([
             'alert' => [

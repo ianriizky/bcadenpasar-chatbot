@@ -3,19 +3,10 @@
 namespace App\Http\Requests\Branch;
 
 use App\Models\Branch;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateRequest extends FormRequest
+class UpdateRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return !is_null($this->user());
-    }
-
     /**
      * {@inheritDoc}
      */

@@ -2,20 +2,11 @@
 
 namespace App\Http\Requests\Role;
 
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Role;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return $this->user()->hasRole(Role::ROLE_ADMIN);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -24,17 +15,6 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:' . Role::class,
             'guard_name' => ['required', 'string', Rule::in(array_keys(config('auth.guards')))],
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function attributes()
-    {
-        return [
-            'name' => trans('Name'),
-            'guard_name' => trans('Guard Name'),
         ];
     }
 }

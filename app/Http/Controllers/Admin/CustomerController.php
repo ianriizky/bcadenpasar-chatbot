@@ -55,7 +55,7 @@ class CustomerController extends Controller
     public function store(StoreRequest $request)
     {
         /** @var \App\Models\Customer $customer */
-        $customer = Customer::make(Arr::except($request->all(), 'identitycard_image'));
+        $customer = Customer::make(Arr::except($request->validated(), 'identitycard_image'));
 
         if ($filename = $request->storeImage()) {
             $customer->identitycard_image = $filename;
@@ -91,7 +91,7 @@ class CustomerController extends Controller
      */
     public function update(UpdateRequest $request, Customer $customer)
     {
-        $customer->fill(Arr::except($request->all(), 'identitycard_image'));
+        $customer->fill(Arr::except($request->validated(), 'identitycard_image'));
 
         if ($filename = $request->updateImage()) {
             $customer->identitycard_image = $filename;

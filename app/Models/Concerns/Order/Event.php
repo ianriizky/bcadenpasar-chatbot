@@ -20,7 +20,9 @@ trait Event
     protected static function bootEvent()
     {
         static::creating(function (Order $model) {
-            $model->code = $model->generateCode();
+            if (is_null($model->code)) {
+                $model->code = $model->generateCode();
+            }
         });
 
         static::deleting(function (Order $model) {

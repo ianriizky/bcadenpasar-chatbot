@@ -52,7 +52,7 @@ class RoleController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        Role::create($request->all());
+        Role::create($request->validated());
 
         return redirect()->route('admin.role.index')->with([
             'alert' => [
@@ -82,7 +82,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRequest $request, Role $role)
     {
-        $role->update($request->all());
+        $role->update($request->validated());
 
         return redirect()->route('admin.role.index')->with([
             'alert' => [

@@ -2,20 +2,10 @@
 
 namespace App\Http\Requests\Configuration;
 
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Configuration;
-use App\Models\Role;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return $this->user()->hasRole(Role::ROLE_ADMIN);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -25,18 +15,6 @@ class StoreRequest extends FormRequest
             'key' => 'required|string|max:255|unique:' . Configuration::class,
             'value' => 'required|string|max:255',
             'description' => 'sometimes|nullable|string',
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function attributes()
-    {
-        return [
-            'key' => trans('Key'),
-            'value' => trans('Value'),
-            'description' => trans('Description'),
         ];
     }
 }

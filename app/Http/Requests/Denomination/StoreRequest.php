@@ -3,19 +3,10 @@
 namespace App\Http\Requests\Denomination;
 
 use App\Enum\DenominationType;
-use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Denomination;
 
-class StoreRequest extends FormRequest
+class StoreRequest extends AbstractRequest
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function authorize()
-    {
-        return !is_null($this->user());
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -29,22 +20,6 @@ class StoreRequest extends FormRequest
             'minimum_order_bundle' => 'required|numeric|min:0',
             'maximum_order_bundle' => 'required|numeric|gte:minimum_order_bundle',
             'image' => 'sometimes|nullable|image',
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function attributes()
-    {
-        return [
-            'name' => trans('Name'),
-            'value' => trans('Value'),
-            'type' => trans('Type'),
-            'quantity_per_bundle' => trans('Quantity Per Bundle'),
-            'minimum_order_bundle' => trans('Minimum Order Bundle'),
-            'maximum_order_bundle' => trans('Maximum Order Bundle'),
-            'image' => trans('Image'),
         ];
     }
 

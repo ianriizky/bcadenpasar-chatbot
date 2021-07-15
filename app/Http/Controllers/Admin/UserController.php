@@ -75,7 +75,9 @@ class UserController extends Controller
     public function store(StoreRequest $request)
     {
         /** @var \App\Models\User $user */
-        $user = User::make($request->all())->setBranchRelationValue(Branch::find($request->input('branch_id')));
+        $user = User::make($request->validated())->setBranchRelationValue(
+            $request->getBranch()
+        );
 
         $user->save();
 
@@ -112,7 +114,9 @@ class UserController extends Controller
     public function update(UpdateRequest $request, User $user)
     {
         /** @var \App\Models\User $user */
-        $user = $user->fill($request->all())->setBranchRelationValue(Branch::find($request->input('branch_id')));
+        $user = $user->fill($request->validated())->setBranchRelationValue(
+            $request->getBranch()
+        );
 
         $user->save();
 
