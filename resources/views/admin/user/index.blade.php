@@ -12,11 +12,11 @@
         const datatable_url = '{{ route('admin.user.datatable') }}';
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-            { data: 'branch_name', searchable: true },
-            { data: 'username', searchable: true },
-            { data: 'fullname', searchable: true },
-            { data: 'email', searchable: true },
-            { data: 'is_active', searchable: true },
+            { data: 'branch_name' },
+            { data: 'username' },
+            { data: 'fullname' },
+            { data: 'email' },
+            { data: 'is_active' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';

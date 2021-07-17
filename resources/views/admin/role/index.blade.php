@@ -12,8 +12,8 @@
         const datatable_url = '{{ route('admin.role.datatable') }}';
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-            { data: 'name', searchable: true },
-            { data: 'guard_name', searchable: true },
+            { data: 'name' },
+            { data: 'guard_name' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';

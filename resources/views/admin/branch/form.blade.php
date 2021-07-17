@@ -128,7 +128,13 @@
 
                             {{-- google_map_url --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="google_map_url">Google Map URL</label>
+                                <label for="google_map_url">
+                                    {{ __('Google Map Address') }}
+
+                                    @if ($branch->exists && $branch->google_map_url)
+                                        <a href="{{ $branch->google_map_url }}" target="_blank">({{ __('Preview') }})</a>
+                                    @endif
+                                </label>
 
                                 <textarea name="google_map_url"
                                     id="google_map_url"

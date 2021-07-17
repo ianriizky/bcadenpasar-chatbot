@@ -13,10 +13,11 @@
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
             { data: 'detail', searchable: false, orderable: false, width: '5%', class: 'details-control' },
-            { data: 'code', searchable: true },
-            { data: 'customer_fullname', searchable: true },
-            { data: 'schedule_date', searchable: true },
-            { data: 'status', searchable: true },
+            { data: 'code' },
+            { data: 'customer_fullname' },
+            { data: 'item_total', searchable: false, orderable: false },
+            { data: 'schedule_date' },
+            { data: 'status' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
@@ -62,7 +63,8 @@
                                             <th>@include('components.datatables.checkbox-all')</th>
                                             <th></th>
                                             <th>{{ __('Code') }}</th>
-                                            <th>{{ __('Full Name') }} {{ __('admin-lang.customer') }}</th>
+                                            <th>{{ __('admin-lang.customer') }}</th>
+                                            <th>{{ __(':amount Total', ['amount' => __('admin-lang.order')]) }}</th>
                                             <th>{{ __('Schedule Date') }}</th>
                                             <th>Status</th>
                                             <th>{{ __('Action') }}</th>

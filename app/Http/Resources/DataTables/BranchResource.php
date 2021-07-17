@@ -3,6 +3,7 @@
 namespace App\Http\Resources\DataTables;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 /**
  * @property \App\Models\Branch $resource
@@ -25,7 +26,7 @@ class BranchResource extends JsonResource
             'address' => $this->resource->address,
             'google_map_url' => view('components.datatables.link', [
                 'url' => $this->resource->google_map_url,
-                'name' => $this->resource->address_latitude . ' | ' . $this->resource->address_longitude,
+                'name' => Str::limit($this->resource->google_map_url, 50),
                 'is_new_tab' => true,
             ])->render(),
             'action' => view('components.datatables.button-group', [

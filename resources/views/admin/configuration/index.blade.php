@@ -12,9 +12,9 @@
         const datatable_url = '{{ route('admin.configuration.datatable') }}';
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-            { data: 'key', searchable: true },
-            { data: 'value', searchable: true },
-            { data: 'description', searchable: true },
+            { data: 'key' },
+            { data: 'value' },
+            { data: 'description' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';

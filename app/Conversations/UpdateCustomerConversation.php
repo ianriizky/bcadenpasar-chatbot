@@ -20,7 +20,7 @@ class UpdateCustomerConversation extends RegisterCustomerConversation
     /**
      * Ask the customer gender.
      *
-     * @return $this
+     * @return void
      */
     protected function askGender()
     {

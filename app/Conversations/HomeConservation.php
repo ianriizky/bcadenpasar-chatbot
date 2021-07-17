@@ -4,8 +4,6 @@ namespace App\Conversations;
 
 use App\Enum\Gender;
 use BotMan\BotMan\Messages\Incoming\Answer;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
 use Illuminate\Support\Str;
@@ -15,7 +13,7 @@ class HomeConservation extends Conversation
     /**
      * Start the conversation.
      *
-     * @return $this
+     * @return void
      */
     public function run()
     {

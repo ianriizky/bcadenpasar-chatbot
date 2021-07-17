@@ -29,7 +29,11 @@ class OrderResource extends JsonResource
                 'url' => route('admin.customer.edit', $this->resource->customer),
                 'name' => $this->resource->customer->fullname,
             ])->render(),
-            'schedule_date' => $this->resource->schedule_date,
+            'item_total' =>
+                $this->resource->item_total_bundle_quantity . ' ' . trans('bundle') .
+                '<br>' .
+                format_rupiah($this->resource->item_total),
+            'schedule_date' => $this->resource->schedule_date ?? trans('Unscheduled'),
             'status' => $this->resource->status->label,
             'action' => view('components.datatables.button-group', [
                 'elements' => [

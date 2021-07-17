@@ -12,10 +12,10 @@
         const datatable_url = '{{ route('admin.denomination.datatable') }}';
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-            { data: 'name', searchable: true },
-            { data: 'value', searchable: true },
-            { data: 'type', searchable: true },
-            { data: 'quantity_per_bundle', searchable: true },
+            { data: 'name' },
+            { data: 'value' },
+            { data: 'type' },
+            { data: 'quantity_per_bundle' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';

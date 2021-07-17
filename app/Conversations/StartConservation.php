@@ -14,7 +14,7 @@ class StartConservation extends Conversation
     /**
      * Start the conversation.
      *
-     * @return $this
+     * @return void
      */
     public function run()
     {

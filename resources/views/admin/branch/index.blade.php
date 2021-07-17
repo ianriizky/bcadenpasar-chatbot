@@ -12,9 +12,9 @@
         const datatable_url = '{{ route('admin.branch.datatable') }}';
         const datatable_columns = [
             { data: 'checkbox', searchable: false, orderable: false, width: '5%' },
-            { data: 'name', searchable: true },
-            { data: 'address', searchable: true },
-            { data: 'google_map_url', searchable: true },
+            { data: 'name' },
+            { data: 'address' },
+            { data: 'google_map_url' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
         const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
@@ -60,7 +60,7 @@
                                             <th>@include('components.datatables.checkbox-all')</th>
                                             <th>{{ __('Name') }}</th>
                                             <th>{{ __('Address') }}</th>
-                                            <th>Google Map URL</th>
+                                            <th>{{ __('Google Map Address') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>

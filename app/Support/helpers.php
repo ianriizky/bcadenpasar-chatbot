@@ -163,10 +163,10 @@ if (! function_exists('format_rupiah')) {
      * Return number in rupiah format.
      *
      * @param  float  $value
-     * @param  string|null  $prefix
+     * @param  string  $prefix
      * @return string
      */
-    function format_rupiah(float $value, string $prefix = null): string
+    function format_rupiah(float $value, string $prefix = 'Rp'): string
     {
         return $prefix . number_format($value, 0, ',', '.');
     }

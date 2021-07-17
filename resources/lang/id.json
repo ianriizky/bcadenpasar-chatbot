@@ -24,6 +24,7 @@
     "Added.": "Ditambahkan.",
     "Address": "Alamat",
     "Address Line 2": "Alamat Opsi 2",
+    "Google Map Address": "Alamat Google Map",
     "Administrator": "Administrator",
     "Administrator users can perform any action.": "Administrator dapat menjalankan aksi apapun.",
     "Afghanistan": "Afganistan",
@@ -757,6 +758,7 @@
     "Type": "Tipe",
     "Quantity Per Bundle": "Jumlah Per Bundel",
     "Bundle Quantity": "Jumlah Bundel",
+    "Quantity": "Jumlah",
     "Minimum Order Bundle": "Minimal Pemesanan Bundel",
     "Maximum Order Bundle": "Maksimal Pemesanan Bundel",
     "Bundle": "Bundel",
@@ -770,5 +772,7 @@
     "Unverified": "Tidak terverifikasi",
     "If account number field is empty, then identity card field must be filled": "Jika kolom nomor rekening kosong, maka kolom nomor KTP harus diisi",
     "Order Status": "Status Pesanan",
-    "Note": "Catatan"
+    "Note": "Catatan",
+    "Unscheduled": "Belum Terjadwal",
+    "Order Code": "Kode Pesanan"
 }

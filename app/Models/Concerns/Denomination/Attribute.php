@@ -84,6 +84,6 @@ trait Attribute
      */
     public function getValueRupiahAttribute(): string
     {
-        return format_rupiah($this->value, 'Rp');
+        return format_rupiah($this->value);
     }
 }

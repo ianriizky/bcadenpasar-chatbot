@@ -9,4 +9,4 @@ Username: {{ $customer->username }}
 {{ __('Account Number') }}: {{ $customer->account_number ?? '-' }}
 {{ __('Identity Card Number') }}: {{ $customer->identitycard_number ?? '-' }}
 {{ __('Identity Card Image') }}: {{ $customer->identitycard_image ?? '-' }}
-Google Map URL: {{ $customer->google_map_url }}
+{{ __('Google Map Address') }}: {{ $customer->google_map_url }}

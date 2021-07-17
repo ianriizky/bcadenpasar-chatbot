@@ -140,7 +140,7 @@ class RegisterCustomerConversation extends Conversation
      * Ask customer account number.
      *
      * @param  string|null  $validationErrorMessage
-     * @return $this
+     * @return void
      */
     protected function askAccountNumber(string $validationErrorMessage = null)
     {
@@ -175,7 +175,7 @@ class RegisterCustomerConversation extends Conversation
      * Ask customer identity card number and image.
      *
      * @param  string|null  $validationErrorMessage
-     * @return $this
+     * @return void
      */
     protected function askIdentityCard(string $validationErrorMessage = null)
     {
@@ -365,7 +365,7 @@ class RegisterCustomerConversation extends Conversation
      * Ask if the inputed data from customer is correct or not.
      *
      * @param  string|null  $validationErrorMessage
-     * @return $this
+     * @return void
      */
     protected function askDataConfirmation(string $validationErrorMessage = null)
     {

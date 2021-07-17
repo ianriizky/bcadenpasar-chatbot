@@ -2,15 +2,19 @@
 
 namespace App\Conversations;
 
+use App\Enum\OrderStatus as EnumOrderStatus;
+use App\Models\Configuration;
 use App\Models\Customer;
 use App\Models\Denomination;
 use App\Models\Item;
 use App\Models\Order;
+use App\Models\OrderStatus as ModelOrderStatus;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -23,6 +27,10 @@ class ExchangeConversation extends Conversation
      */
     public function run()
     {
+        if (Order::whereDate('created_at', Carbon::today())->count() >= Configuration::getMaximumOrderPerDay()) {
+            return $this->sayRenderable('conversations.exchange.alert-exceeded-maximum-order-per-day');
+        }
+
         return $this
             ->sayRenderable('conversations.exchange.index')
             ->verifyCustomer();
@@ -127,6 +135,8 @@ class ExchangeConversation extends Conversation
                 return;
             }
 
+            $this->deleteTelegramMessageFromResponse($response);
+
             /** @var \App\Models\Denomination|null $denomination */
             if (!$denominations->contains($answer->getValue()) ||
                 !$denomination = Denomination::find($answer->getValue())) {
@@ -138,22 +148,33 @@ class ExchangeConversation extends Conversation
                 $this->setUserStorage(['order_code' => $order->code]);
             });
 
-            $this->recordItem($customer, $order, $denomination);
+            if ($order->item_total > Configuration::getMaximumTotalOrderValue()) {
+                return $this->confirmOrder($order, 'Maaf, total pesanan anda sudah mencapai batas maksimum');
+            }
 
-            $this->deleteTelegramMessageFromResponse($response);
+            /**
+             * If there is an order's item that has same denomination with the selected one,
+             * then it will be deleted first before customer continue to record item.
+             */
+            if ($item = $order->items()->whereHas('denomination', function ($query) use ($denomination) {
+                $query->whereKey($denomination->getKey());
+            })->first('id')) {
+                $item->delete();
+            }
+
+            return $this->recordItem($order, $denomination);
         }, question: $question, additionalParameters: $additionalParameters);
     }
 
     /**
      * Record customer item data.
      *
-     * @param  \App\Models\Customer  $customer
      * @param  \App\Models\Order  $order
      * @param  \App\Models\Denomination  $denomination
      * @param  string|null  $validationErrorMessage
      * @return $this
      */
-    protected function recordItem(Customer $customer, Order $order, Denomination $denomination, string $validationErrorMessage = null)
+    protected function recordItem(Order $order, Denomination $denomination, string $validationErrorMessage = null)
     {
         $this->displayValidationErrorMessage($validationErrorMessage);
 
@@ -177,15 +198,15 @@ class ExchangeConversation extends Conversation
             $additionalParameters = $keyboard->toArray()
         );
 
-        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $customer, $order, $denomination) {
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $order, $denomination) {
             $this->deleteTelegramMessageFromResponse($response);
 
             if ($answer->getValue() === 'back_to_denomination_option') {
-                return $this->recordOrder($customer);
+                return $this->recordOrder($order->getCustomerRelationValue());
             }
 
             if (!in_array($answer->getValue(), $denomination->range_order_bundle)) {
-                return $this->recordItem($customer, $order, $denomination, trans('validation.between.numeric', [
+                return $this->recordItem($order, $denomination, trans('validation.between.numeric', [
                     'attribute' => trans('Quantity Per Bundle'),
                     'min' => $denomination->minimum_order_bundle,
                     'max' => $denomination->maximum_order_bundle,
@@ -201,7 +222,63 @@ class ExchangeConversation extends Conversation
 
             $order->items()->save($item);
 
-            $this->reply('thanks');
+            $this->confirmOrder($order);
+        }, question: $question, additionalParameters: $additionalParameters);
+    }
+
+    /**
+     * Confirm customer order data.
+     *
+     * @param  \App\Models\Order  $order
+     * @param  string|null  $validationErrorMessage
+     * @return $this
+     */
+    protected function confirmOrder(Order $order, string $validationErrorMessage = null)
+    {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
+        $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()
+            ->addRow(KeyboardButton::create(view('conversations.exchange.reply-order-yes')->render())
+                ->callbackData('update_order_status')
+            )->addRow(KeyboardButton::create(view('conversations.exchange.reply-order-no-update-item')->render())
+                ->callbackData('update_item')
+            )->addRow(KeyboardButton::create(view('conversations.exchange.reply-order-no-recreate-item')->render())
+                ->callbackData('recreate_item')
+            );
+
+        $order->load('customer:id,fullname', 'items.denomination');
+
+        $responseConfirmOrder = $this->reply(view('conversations.exchange.confirm-order', compact('order'))->render());
+
+        $response = $this->reply(
+            $question = view('conversations.exchange.ask-order')->render(),
+            $additionalParameters = $keyboard->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $responseConfirmOrder, $order) {
+            $this->deleteTelegramMessageFromResponse($response);
+
+            switch ($answer->getValue()) {
+                case 'update_order_status':
+                    $order->statuses()->save(ModelOrderStatus::make([
+                        'status' => EnumOrderStatus::on_progress(),
+                    ])->setIssuerableRelationValue($order->getCustomerRelationValue()));
+
+                    return $this->sayRenderable('conversations.exchange.alert-update_order_status', compact('order'));
+
+                case 'update_item':
+                case 'recreate_item':
+                    $this->deleteTelegramMessageFromResponse($responseConfirmOrder);
+
+                    if ($answer->getValue() === 'recreate_item') {
+                        $order->items->map->delete();
+                    }
+
+                    return $this->recordOrder($order->getCustomerRelationValue());
+
+                default:
+                    return $this->confirmOrder($order, $this->fallbackMessage($answer->getText()));
+            }
         }, question: $question, additionalParameters: $additionalParameters);
     }
 }

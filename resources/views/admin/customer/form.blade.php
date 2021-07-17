@@ -58,7 +58,7 @@
 
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.customer.index') }}">
-                        <i class="fas fa-user-tag"></i> <span>{{ __('admin-lang.role') }}</span>
+                        <i class="fas fa-user-tie"></i> <span>{{ __('admin-lang.customer') }}</span>
                     </a>
                 </div>
 
@@ -243,7 +243,17 @@
                             </div>
                             {{-- /.location_latitude | location_longitude --}}
 
-                            <div class="col-12 col-lg-6"></div>
+                            {{-- google_map_url --}}
+                            <div class="form-group col-12 col-lg-6">
+                                @if ($customer->exists && $customer->google_map_url)
+                                    <label for="google_map_url">{{ __('Google Map Address') }}</label>
+
+                                    <p class="form-control-plaintext">
+                                        <a href="{{ $customer->google_map_url }}" target="_blank">{{ $customer->google_map_url }}</a>
+                                    </p>
+                                @endif
+                            </div>
+                            {{-- /.google_map_url --}}
 
                             {{-- account_number --}}
                             <div class="form-group col-12 col-lg-6">
