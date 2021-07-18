@@ -21,3 +21,12 @@ const mix = require('laravel-mix');
 
 mix.sass('resources/sass/stisla/style.scss', 'public/css/stisla');
 mix.sass('resources/sass/stisla/components.scss', 'public/css/stisla');
+
+mix.combine('~select2/dist/css/select2.min.css', 'public/node_modules/select2/dist/css/select2.min.css');
+mix.combine('~datatables.net-bs4/css/dataTables.bootstrap4.min.css', 'public/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css')
+mix.combine('~datatables.net-select-bs4/css/select.bootstrap4.min.css', 'public/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css')
+
+mix.combine('~select2/dist/js/select2.full.min.js', 'public/node_modules/select2/dist/js/select2.full.min.js');
+mix.combine('~datatables/media/js/jquery.dataTables.min.js', 'public/node_modules/datatables/media/js/jquery.dataTables.min.js');
+mix.combine('~datatables.net-bs4/js/dataTables.bootstrap4.min.js', 'public/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js');
+mix.combine('~datatables.net-select-bs4/js/select.bootstrap4.min.js', 'public/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js');

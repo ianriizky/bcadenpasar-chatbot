@@ -1,9 +1,9 @@
 @section('pre-style')
-    <link rel="stylesheet" href="{{ asset('node_modules/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ mix('node_modules/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('script')
-    <script src="{{ asset('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ mix('node_modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('js/geolocation.js') }}"></script>
     <script src="{{ asset('js/custom-file-input.js') }}"></script>
     <script>
