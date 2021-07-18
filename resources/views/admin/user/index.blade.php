@@ -24,7 +24,7 @@
     <script src="{{ asset('js/datatable.js') }}"></script>
 @endsection
 
-<x-app-layout>
+<x-admin-layout>
     <section class="section">
         <div class="section-header">
             <h1>{{ __('List :name', ['name' => __('admin-lang.user')]) }}</h1>
@@ -90,4 +90,4 @@
             </div>
         </form>
     </section>
-</x-app-layout>
+</x-admin-layout>

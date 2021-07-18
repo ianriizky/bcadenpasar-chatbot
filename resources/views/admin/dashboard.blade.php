@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <section class="section">
         <div class="section-header">
             <h1>{{ __('Dashboard') }}</h1>
@@ -13,4 +13,4 @@
         <div class="section-body">
         </div>
     </section>
-</x-app-layout>
+</x-admin-layout>

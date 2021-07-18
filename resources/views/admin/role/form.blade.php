@@ -20,7 +20,7 @@
     </script>
 @endsection
 
-<x-app-layout>
+<x-admin-layout>
     <section class="section">
         <div class="section-header">
             <h1>{{ $title }}</h1>
@@ -108,4 +108,4 @@
             </div>
         </form>
     </section>
-</x-app-layout>
+</x-admin-layout>
