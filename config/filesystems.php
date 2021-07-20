@@ -24,7 +24,7 @@ return [
     | may even configure multiple disks of the same driver. Defaults have
     | been setup for each driver as an example of the required options.
     |
-    | Supported Drivers: "local", "ftp", "sftp", "s3"
+    | Supported Drivers: "local", "ftp", "sftp", "s3", "google"
     |
     */
 
@@ -52,6 +52,14 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+            // 'teamDriveId' => env('GOOGLE_DRIVE_TEAM_DRIVE_ID'),
+        ],
     ],
 
     /*
