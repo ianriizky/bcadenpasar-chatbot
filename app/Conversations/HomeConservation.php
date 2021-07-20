@@ -6,6 +6,8 @@ use App\Enum\Gender;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class HomeConservation extends Conversation
@@ -20,11 +22,19 @@ class HomeConservation extends Conversation
         $title = Str::ucfirst(Gender::title($this->getUserStorage('gender')));
         $name = Str::ucfirst($this->getUser()->getFirstName());
 
+        $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
+
+        foreach (static::conversations(withoutStartCommand: true) as $conversation) {
+            $commands = Arr::wrap($conversation['command']);
+
+            $keyboard->addRow(KeyboardButton::create(Arr::last($commands))
+                ->callbackData(Arr::first($commands))
+            );
+        }
+
         $response = $this->reply(
             $question = view('conversations.home.confirm-menu', compact('title', 'name'))->render(),
-            $additionalParameters = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard()->addRow(
-                KeyboardButton::create(view('conversations.home.reply-menu-exchange')->render())->callbackData('exchange')
-            )->toArray()
+            $additionalParameters = $keyboard->toArray()
         );
 
         return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
@@ -50,12 +60,81 @@ class HomeConservation extends Conversation
      */
     protected function getConversation(string $name): ?Conversation
     {
-        switch ($name) {
-            case 'exchange':
-                return new ExchangeConversation;
-
-            default:
-                return null;
+        if (!$conversation = static::conversations(withoutStartCommand: true)->first(fn ($conversation) =>
+            in_array($name, Arr::wrap($conversation['command']))
+        )) {
+            return null;
         }
+
+        return value($conversation['handler']);
+    }
+
+    /**
+     * Return list of command and its conversation handler class.
+     *
+     * @param  bool  $withoutStartCommand
+     * @return \Illuminate\Support\Collection<array>
+     */
+    public static function conversations(bool $withoutStartCommand = false): Collection
+    {
+        return collect([
+            [
+                'command' => 'start',
+                'handler' => fn () => new StartConservation,
+                'description' => 'Memulai percakapan',
+            ],
+            [
+                'command' => [
+                    'exchange',
+                    view('conversations.home.reply-menu-exchange')->render(),
+                ],
+                'handler' => fn () => new ExchangeConversation,
+                'description' => 'Melakukan transaksi penukaran uang',
+            ],
+            [
+                'command' => [
+                    'help',
+                    view('conversations.home.reply-menu-help')->render(),
+                ],
+                'handler' => fn () => new HelpConversation,
+                'description' => 'Panduan cara menggunakan chatbot ini',
+            ],
+            [
+                'command' => [
+                    'login',
+                    view('conversations.home.reply-menu-login')->render(),
+                ],
+                'handler' => fn () => new LoginConversation,
+                'description' => 'Mendaftarkan Chat ID Telegram pada akun (khusus admin dan staf)',
+            ],
+            [
+                'command' => [
+                    'logout',
+                    view('conversations.home.reply-menu-logout')->render(),
+                ],
+                'handler' => fn () => new LogoutConversation,
+                'description' => 'Menghapus Chat ID Telegram pada akun (khusus admin dan staf)',
+            ],
+            [
+                'command' => [
+                    'ask_telegram_chat_id',
+                    view('conversations.home.reply-menu-ask_telegram_chat_id')->render(),
+                ],
+                'handler' => fn () => new AskTelegramChatIdConversation,
+                'description' => 'Mengetahui Chat ID Telegram anda',
+            ],
+            [
+                'command' => [
+                    'check_order_status',
+                    view('conversations.home.reply-menu-check_order_status')->render(),
+                ],
+                'handler' => fn () => new CheckOrderStatusConversation,
+                'description' => 'Mengetahui status transaksi penukaran uang anda',
+            ],
+        ])->when($withoutStartCommand, fn (Collection $conversations) =>
+            $conversations->reject(fn ($conversation) =>
+                in_array('start', Arr::wrap($conversation['command']))
+            )
+        );
     }
 }

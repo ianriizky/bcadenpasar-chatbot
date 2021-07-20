@@ -16,14 +16,12 @@ class LoginRequest extends FormRequest
     use MultipleIdentifier;
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * {@inheritDoc}
      */
-    public function rules()
+    public static function getRules()
     {
         return [
-            'identifier' => $this->getIdentifierRule($this->input('identifier')),
+            'identifier' => static::getIdentifierRule(request()->input('identifier')),
             'password' => 'required|string',
             'remember' => 'nullable|boolean',
         ];
@@ -45,7 +43,7 @@ class LoginRequest extends FormRequest
     public function validationData()
     {
         return [
-            'identifier' => $this->getIdentifierValue($this->input('identifier')),
+            'identifier' => static::getIdentifierValue($this->input('identifier')),
             'password' => $this->input('password'),
         ];
     }
@@ -61,7 +59,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->getCredentials($this), $this->boolean('remember'))) {
+        if (! Auth::attempt(static::getCredentials($this), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

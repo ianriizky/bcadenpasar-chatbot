@@ -1,5 +1,6 @@
 <strong>Daftar perintah yang bisa anda lakukan di bot ini:</strong>
-‣ /start — Memulai percakapan
-‣ /help — Panduan cara menggunakan chatbot ini
+@foreach ($conversations as $command => $description)
+‣ /{{ $command }} — {{ $description }}
+@endforeach
 
 <em>Jika anda memiliki pertanyaan, jangan sungkan untuk menghubungi kami 👉 @ianriizky</em>

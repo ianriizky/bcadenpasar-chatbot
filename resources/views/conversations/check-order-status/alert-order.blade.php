@@ -1,6 +1,16 @@
 <strong>⚠️ Berikut ini adalah data detail penukaran uang anda. </strong>
 
+{{ __('Order Code') }}: {{ $order->code }}
 {{ __('admin-lang.customer') }}: {{ $order->customer->fullname }}
+{{ __('admin-lang.user') }}: @if ($order->user) {{ $order->user->fullname }} @else {{ __('Unscheduled') }} @endif
+{{ __('admin-lang.branch') }}:
+@unless ($order->branch)
+    <em>{{ __('Unscheduled') }}</em>
+@else
+    ‣ {{ __('Name') }}: {{ $order->branch->name }}
+    ‣ {{ __('Address') }}: {{ $order->branch->address }}
+    ‣ {{ __('Google Map Address') }}: {{ $order->branch->google_map_url }}
+@endunless
 {{ __(':resource Details', ['resource' => __('admin-lang.order')]) }}:
 @foreach ($order->items as $index => $item)
     ‣ ({{ $index + 1 }}) {{ $item->denomination->value_rupiah }} ({{ $item->denomination_name }})

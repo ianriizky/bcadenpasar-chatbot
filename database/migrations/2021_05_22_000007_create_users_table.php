@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->foreignIdFor(Branch::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
 
+            $table->string('telegram_chat_id')->nullable()->unique();
             $table->string('username');
             $table->string('fullname');
             $table->string('gender')->default(Gender::undefined())->comment('Enum of ' . Gender::class);

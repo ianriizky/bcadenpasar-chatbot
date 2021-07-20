@@ -9,6 +9,7 @@ use App\Models\Denomination;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderStatus as ModelOrderStatus;
+use App\Models\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -27,6 +28,10 @@ class ExchangeConversation extends Conversation
      */
     public function run()
     {
+        if (User::where('telegram_chat_id', $this->getUser()->getId())->count()) {
+            return $this->say('conversations.exchange.alert-user');
+        }
+
         if (Order::whereDate('created_at', Carbon::today())->count() >= Configuration::getMaximumOrderPerDay()) {
             return $this->sayRenderable('conversations.exchange.alert-exceeded-maximum-order-per-day');
         }

@@ -4,7 +4,6 @@ namespace App\Support\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
 trait MultipleIdentifier
@@ -15,7 +14,7 @@ trait MultipleIdentifier
      * @param  mixed  $value
      * @return string
      */
-    protected function getIdentifierField($value): string
+    protected static function getIdentifierField($value): string
     {
         if (filter_var($value, FILTER_VALIDATE_EMAIL) !== false) {
             return 'email';
@@ -34,9 +33,9 @@ trait MultipleIdentifier
      * @param  mixed  $value
      * @return array
      */
-    protected function getIdentifierRule($value): array
+    protected static function getIdentifierRule($value): array
     {
-        $field = $this->getIdentifierField($value);
+        $field = static::getIdentifierField($value);
 
         $rules = ['required', 'string', 'exists:' . User::class . ',' . $field];
 
@@ -60,9 +59,9 @@ trait MultipleIdentifier
      * @param  string  $country
      * @return mixed
      */
-    protected function getIdentifierValue($value, string $country = 'ID')
+    protected static function getIdentifierValue($value, string $country = 'ID')
     {
-        $field = $this->getIdentifierField($value);
+        $field = static::getIdentifierField($value);
 
         if ($field === 'phone') {
             return (string) PhoneNumber::make($value, $country);
@@ -78,12 +77,12 @@ trait MultipleIdentifier
      * @param  string  $identifierField
      * @return array
      */
-    protected function getCredentials($request, string $identifiedField = 'identifier'): array
+    protected static function getCredentials($request, string $identifiedField = 'identifier'): array
     {
-        $value = $this->getIdentifierValue($request->input($identifiedField));
+        $value = static::getIdentifierValue($request->input($identifiedField));
 
         return [
-            $this->getIdentifierField($value) => $value,
+            static::getIdentifierField($value) => $value,
             'password' => $request->input('password'),
         ];
     }

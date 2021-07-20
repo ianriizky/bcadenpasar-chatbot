@@ -2,6 +2,8 @@
 
 namespace App\Conversations;
 
+use Illuminate\Support\Arr;
+
 class HelpConversation extends Conversation
 {
     /**
@@ -11,8 +13,12 @@ class HelpConversation extends Conversation
      */
     public function run()
     {
+        $conversations = HomeConservation::conversations()->mapWithKeys(fn ($conversation) =>
+            [Arr::first(Arr::wrap($conversation['command'])) => $conversation['description']]
+        );
+
         return $this
             ->sayRenderable('conversations.help.index')
-            ->sayRenderable('conversations.help.command-list');
+            ->sayRenderable('conversations.help.command-list', viewData: compact('conversations'));
     }
 }

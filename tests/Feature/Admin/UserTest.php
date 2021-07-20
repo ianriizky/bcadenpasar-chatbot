@@ -5,7 +5,9 @@ namespace Tests\Feature\Admin;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\VerifyEmailQueued;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Notification;
 use Tests\Feature\Concerns\HandleAuthentication;
 use Tests\Feature\Concerns\HandleDataTables;
 use Tests\Feature\TestCase;
@@ -43,6 +45,32 @@ class UserTest extends TestCase
     }
 
     public function test_assert_store()
+    {
+        Notification::fake();
+        Notification::assertNothingSent();
+
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
+
+        $data = User::factory()->unverified()->raw();
+        $data = array_merge($data, [
+            'branch_id' => Branch::value('id'),
+            'password_confirmation' => $data['password'],
+            'role' => Role::ROLE_STAFF,
+        ]);
+
+        $this->actingAs($admin, 'web')
+            ->post(route('admin.user.store'), $data)
+            ->assertRedirect(route('admin.user.index'));
+
+        $this->assertDatabaseHas(User::class, Arr::only($data, 'username'));
+
+        /** @var \App\Models\User $createdUser */
+        $createdUser = User::firstWhere('username', $data['username']);
+
+        Notification::assertSentTo($createdUser, VerifyEmailQueued::class);
+    }
+
+    public function test_assert_store_activated()
     {
         $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 

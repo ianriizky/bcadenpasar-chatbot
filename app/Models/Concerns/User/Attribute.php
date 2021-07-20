@@ -5,6 +5,7 @@ namespace App\Models\Concerns\User;
 use Illuminate\Support\Facades\Hash;
 
 /**
+ * @property string|null $telegram_chat_id
  * @property string $username
  * @property string $fullname
  * @property string $email

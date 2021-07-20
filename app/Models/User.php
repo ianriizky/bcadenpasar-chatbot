@@ -24,6 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail, Issuerable
      * {@inheritDoc}
      */
     protected $fillable = [
+        'telegram_chat_id',
         'username',
         'fullname',
         'gender',
