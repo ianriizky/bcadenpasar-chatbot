@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\CustomerRegistered;
+use App\Events\OrderCreated;
 use App\Listeners\SendTelegramNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +23,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         CustomerRegistered::class => [
+            SendTelegramNotification::class,
+        ],
+
+        OrderCreated::class => [
             SendTelegramNotification::class,
         ],
     ];

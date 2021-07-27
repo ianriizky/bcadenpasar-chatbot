@@ -43,4 +43,24 @@ class Denomination extends Model
         'minimum_order_bundle' => 'integer',
         'maximum_order_bundle' => 'integer',
     ];
+
+    /**
+     * Determine whether the given value is between the minimum and maximum order bundle.
+     *
+     * @param  int  $value
+     * @param  bool  $equal
+     * @return bool
+     */
+    public function isBetweenOrderBundle(int $value, bool $equal = true): bool
+    {
+        if ($equal) {
+            return
+                $value >= $this->minimum_order_bundle &&
+                $value <= $this->maximum_order_bundle;
+        }
+
+        return
+            $value > $this->minimum_order_bundle &&
+            $value < $this->maximum_order_bundle;
+    }
 }

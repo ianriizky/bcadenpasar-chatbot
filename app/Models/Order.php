@@ -82,4 +82,24 @@ class Order extends Model
             return $order;
         });
     }
+
+    /**
+     * Determine whether the "item_total" attribute value is exceeding the maximum total order value.
+     *
+     * @return bool
+     */
+    public function isMaximumTotalOrderExceeded(): bool
+    {
+        return $this->item_total > Configuration::getMaximumTotalOrderValue();
+    }
+
+    /**
+     * Determine whether the order number of the day is exceeding the maximum order per day.
+     *
+     * @return bool
+     */
+    public static function isMaximumOrderPerDayExceeded(): bool
+    {
+        return static::whereDate('created_at', Carbon::today())->count() >= Configuration::getMaximumOrderPerDay();
+    }
 }

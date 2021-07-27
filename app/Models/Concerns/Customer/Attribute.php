@@ -3,6 +3,7 @@
 namespace App\Models\Concerns\Customer;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @property string $telegram_chat_id
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
  * @property float|null $location_latitude
  * @property float|null $location_longitude
  * @property-read string|null $google_map_url
+ * @property-read string $whatsapp_phone_url
  *
  * @see \App\Models\Customer
  */
@@ -52,5 +54,15 @@ trait Attribute
         }
 
         return null;
+    }
+
+    /**
+     * Return "whatsapp_phone_url" attribute value.
+     *
+     * @return string
+     */
+    public function getWhatsappPhoneUrlAttribute(): string
+    {
+        return 'https://wa.me/' . Str::replaceFirst('+', '', $this->whatsapp_phone->formatE164());
     }
 }

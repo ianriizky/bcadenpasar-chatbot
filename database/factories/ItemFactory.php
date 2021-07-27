@@ -26,7 +26,7 @@ class ItemFactory extends Factory
 
         return [
             'denomination_id' => $denomination,
-            'bundle_quantity' => $denomination->range_order_bundle[array_rand($denomination->range_order_bundle)],
+            'bundle_quantity' => $this->faker->randomElement($denomination->range_order_bundle),
         ];
     }
 }

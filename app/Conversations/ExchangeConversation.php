@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\Enum\OrderStatus as EnumOrderStatus;
+use App\Events\OrderCreated;
 use App\Models\Configuration;
 use App\Models\Customer;
 use App\Models\Denomination;
@@ -17,6 +18,7 @@ use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 
 class ExchangeConversation extends Conversation
@@ -32,7 +34,7 @@ class ExchangeConversation extends Conversation
             return $this->say('conversations.exchange.alert-user');
         }
 
-        if (Order::whereDate('created_at', Carbon::today())->count() >= Configuration::getMaximumOrderPerDay()) {
+        if (Order::isMaximumOrderPerDayExceeded()) {
             return $this->sayRenderable('conversations.exchange.alert-exceeded-maximum-order-per-day');
         }
 
@@ -153,7 +155,7 @@ class ExchangeConversation extends Conversation
                 $this->setUserStorage(['order_code' => $order->code]);
             });
 
-            if ($order->item_total > Configuration::getMaximumTotalOrderValue()) {
+            if ($order->isMaximumTotalOrderExceeded()) {
                 return $this->confirmOrder($order, 'Maaf, total pesanan anda sudah mencapai batas maksimum');
             }
 
@@ -210,7 +212,7 @@ class ExchangeConversation extends Conversation
                 return $this->recordOrder($order->getCustomerRelationValue());
             }
 
-            if (!in_array($answer->getValue(), $denomination->range_order_bundle)) {
+            if (!$denomination->isBetweenOrderBundle($answer->getValue())) {
                 return $this->recordItem($order, $denomination, trans('validation.between.numeric', [
                     'attribute' => trans('Quantity Per Bundle'),
                     'min' => $denomination->minimum_order_bundle,
@@ -268,6 +270,8 @@ class ExchangeConversation extends Conversation
                     $order->statuses()->save(ModelOrderStatus::make([
                         'status' => EnumOrderStatus::on_progress(),
                     ])->setIssuerableRelationValue($order->getCustomerRelationValue()));
+
+                    Event::dispatch(new OrderCreated($order));
 
                     return $this->sayRenderable('conversations.exchange.alert-update_order_status', compact('order'));
 

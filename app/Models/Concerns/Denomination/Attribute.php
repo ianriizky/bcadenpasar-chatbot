@@ -26,9 +26,9 @@ trait Attribute
      * Return "image" attribute value.
      *
      * @param  mixed  $value
-     * @return string|null
+     * @return string
      */
-    public function getImageAttribute($value): ?string
+    public function getImageAttribute($value): string
     {
         if (is_null($value)) {
             return asset('img/dummy.png');

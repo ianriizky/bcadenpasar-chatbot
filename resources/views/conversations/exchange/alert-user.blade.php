@@ -1,1 +1,1 @@
-<strong>Maaf, anda tidak bisa melakukan transaksi penukaran uang karena anda adalah admin/staf. Silakan /logout untuk melanjutkan transaksi.</strong>
+<strong>Maaf, anda tidak bisa melakukan transaksi penukaran uang karena akun anda terdaftar sebagai admin/staf. Silakan klik /logout untuk melanjutkan transaksi.</strong>

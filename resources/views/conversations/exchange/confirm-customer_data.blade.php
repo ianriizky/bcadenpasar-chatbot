@@ -5,7 +5,7 @@ Username: {{ $customer->username }}
 {{ __('Gender') }}: {{ $customer->gender->label }}
 {{ __('Email Address') }}: {{ $customer->email }}
 {{ __('Phone Number') }}: {{ $customer->phone }}
-{{ __('Whatsapp Phone Number') }}: {{ $customer->whatsapp_phone }}
+{{ __('Whatsapp Phone Number') }}: <a href="{{ $customer->whatsapp_phone_url }}">{{ $customer->whatsapp_phone }}</a>
 {{ __('Account Number') }}: {{ $customer->account_number ?? '-' }}
 {{ __('Identity Card Number') }}: {{ $customer->identitycard_number ?? '-' }}
 {{ __('Identity Card Image') }}: {{ $customer->identitycard_image ?? '-' }}

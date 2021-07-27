@@ -4,7 +4,7 @@ namespace App\Events;
 
 use App\Contracts\Event\CanSendTelegramNotification;
 use App\Models\Contracts\HasTelegramChatId;
-use App\Models\Customer;
+use App\Models\Order;
 use App\Support\Events\HandleRecipient;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,17 +12,17 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class CustomerRegistered implements CanSendTelegramNotification, ShouldQueue
+class OrderCreated implements CanSendTelegramNotification, ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels, InteractsWithQueue,
         HandleRecipient;
 
     /**
-     * The customer instance data.
+     * The order instance data.
      *
-     * @var \App\Models\Customer
+     * @var \App\Models\Order
      */
-    protected Customer $customer;
+    protected Order $order;
 
     /**
      * The recipient data that will receive the notification.
@@ -34,13 +34,13 @@ class CustomerRegistered implements CanSendTelegramNotification, ShouldQueue
     /**
      * Create a new event instance.
      *
-     * @param  \App\Models\Customer  $customer
+     * @param  \App\Models\Order  $order
      * @param  \App\Models\Contracts\HasTelegramChatId|null  $recipient
      * @return void
      */
-    public function __construct(Customer $customer, HasTelegramChatId $recipient = null)
+    public function __construct(Order $order, HasTelegramChatId $recipient = null)
     {
-        $this->customer = $customer;
+        $this->order = $order;
         $this->recipient = $this->findRecipientFromUser($recipient);
     }
 
@@ -61,8 +61,8 @@ class CustomerRegistered implements CanSendTelegramNotification, ShouldQueue
      */
     public function getTelegramMessage(): string
     {
-        return view('notifications.customer-registered', [
-            'customer' => $this->customer,
+        return view('notifications.order-created', [
+            'order' => $this->order,
         ])->render();
     }
 }
