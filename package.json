@@ -19,6 +19,7 @@
         "datatables.net-responsive-bs4": "^2.2.3",
         "datatables.net-plugins": "^1.10.24",
         "datatables.net-select-bs4": "^1.2.7",
+        "jquery": "^3.3.1",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.2.1",
