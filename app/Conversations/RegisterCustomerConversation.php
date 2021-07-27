@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\Events\CustomerRegistered;
 use App\Http\Requests\Customer\StoreRequest as CustomerStoreRequest;
 use App\Models\Customer;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -9,6 +10,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
+use Illuminate\Support\Facades\Event;
 
 class RegisterCustomerConversation extends Conversation
 {
@@ -399,12 +401,14 @@ class RegisterCustomerConversation extends Conversation
             $this->deleteTelegramMessageFromResponse($response);
 
             if ($value === 'no') {
-                $this->destroyUserStorage();
+                $this->destroyUserStorage(null, ['gender']);
 
                 return $this->run();
             }
 
-            Customer::updateOrCreateByBotManUser($user, $userStorage);
+            Event::dispatch(new CustomerRegistered(
+                Customer::updateOrCreateByBotManUser($user, $userStorage)
+            ));
 
             $this->destroyUserStorage();
 

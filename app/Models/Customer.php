@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enum\Gender;
 use App\Infrastructure\Database\Eloquent\Model;
+use App\Models\Contracts\HasTelegramChatId;
 use App\Models\Contracts\Issuerable;
 use App\Models\Support\HasIssuerable;
 use BotMan\BotMan\Interfaces\UserInterface;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
-class Customer extends Model implements Issuerable
+class Customer extends Model implements Issuerable, HasTelegramChatId
 {
     use HasFactory, HasIssuerable,
         Concerns\Customer\Attribute,
@@ -55,6 +56,14 @@ class Customer extends Model implements Issuerable
         'location_latitude' => 'float',
         'location_longitude' => 'float',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTelegramChatId(): string
+    {
+        return $this->telegram_chat_id;
+    }
 
     /**
      * Retrieve model data by the given BotMan user data.

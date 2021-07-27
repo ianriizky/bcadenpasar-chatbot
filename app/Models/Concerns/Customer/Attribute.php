@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Storage;
  * @property \Propaganistas\LaravelPhone\PhoneNumber $phone
  * @property string $whatsapp_phone_country
  * @property \Propaganistas\LaravelPhone\PhoneNumber $whatsapp_phone
- * @property string $account_number
- * @property string $identitycard_number
- * @property string $identitycard_image
+ * @property string|null $account_number
+ * @property string|null $identitycard_number
+ * @property string|null $identitycard_image
  * @property float|null $location_latitude
  * @property float|null $location_longitude
  * @property-read string|null $google_map_url
@@ -29,12 +29,12 @@ trait Attribute
      * Return "identitycard_image" attribute value.
      *
      * @param  mixed  $value
-     * @return string
+     * @return string|null
      */
-    public function getIdentitycardImageAttribute($value): string
+    public function getIdentitycardImageAttribute($value): ?string
     {
         if (is_null($value)) {
-            return asset('img/stisla/avatar/avatar-1.png');
+            return null;
         }
 
         return Storage::url(static::IDENTITYCARD_IMAGE_PATH . '/' . $value);
