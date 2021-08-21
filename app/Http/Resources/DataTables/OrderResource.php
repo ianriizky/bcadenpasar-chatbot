@@ -47,7 +47,7 @@ class OrderResource extends JsonResource
                 $this->resource->item_total_bundle_quantity . ' ' . trans('bundle') .
                 '<br>' .
                 format_rupiah($this->resource->item_total),
-            'schedule_date' => $this->resource->schedule_date->translatedFormat('d F Y H:i:s') ?? trans('Unscheduled'),
+            'schedule_date' => $this->resource->schedule_date ? $this->resource->schedule_date->translatedFormat('d F Y H:i:s') : trans('Unscheduled'),
             'status' => $this->resource->status->label,
             'action' => view('components.datatables.button-group', compact('elements'))->render(),
         ];

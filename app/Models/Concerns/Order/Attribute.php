@@ -8,7 +8,7 @@ use App\Models\OrderStatus as ModelsOrderStatus;
 /**
  * @property string $code
  * @property \App\Enum\OrderStatus $status
- * @property \Illuminate\Support\Carbon $schedule_date
+ * @property \Illuminate\Support\Carbon|null $schedule_date
  * @property-read int $item_total_bundle_quantity
  * @property-read float $item_total
  *
