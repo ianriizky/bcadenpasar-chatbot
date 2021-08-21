@@ -8,10 +8,21 @@ use App\Http\Requests\Branch\UpdateRequest;
 use App\Http\Resources\DataTables\BranchResource;
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class BranchController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Branch::class, 'branch');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +40,8 @@ class BranchController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Branch::class);
+
         return DataTables::eloquent(Branch::query())
             ->setTransformer(fn ($model) => BranchResource::make($model)->resolve())
             ->toJson();
@@ -63,6 +76,17 @@ class BranchController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Branch  $branch
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function show(Branch $branch)
+    {
+        return view('admin.branch.show', compact('branch'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Branch  $branch
@@ -84,7 +108,7 @@ class BranchController extends Controller
     {
         $branch->update($request->validated());
 
-        return redirect()->route('admin.branch.index')->with([
+        return redirect()->route('admin.branch.edit', $branch)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.branch')]),
@@ -118,7 +142,15 @@ class BranchController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Branch::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $branch = Branch::find($id, 'id');
+
+                $this->authorize('delete', $branch);
+
+                $branch->delete();
+            }
+        });
 
         return redirect()->route('admin.branch.index')->with([
             'alert' => [

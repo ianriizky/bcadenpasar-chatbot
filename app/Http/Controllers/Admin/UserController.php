@@ -9,12 +9,23 @@ use App\Http\Resources\DataTables\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +43,8 @@ class UserController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', User::class);
+
         return DataTables::eloquent(User::query()->with('branch:id,name'))
             ->setTransformer(fn ($model) => UserResource::make($model)->resolve())
             ->orderColumn('branch_name', function ($query, $direction) {
@@ -93,6 +106,17 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function show(User $user)
+    {
+        return view('admin.user.show', compact('user'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\User  $user
@@ -100,6 +124,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $user->append('role');
+
         return view('admin.user.edit', compact('user'));
     }
 
@@ -112,7 +138,6 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, User $user)
     {
-        /** @var \App\Models\User $user */
         $user = $user->fill($request->validated())->setBranchRelationValue(
             $request->getBranch()
         );
@@ -121,10 +146,30 @@ class UserController extends Controller
 
         $user->syncRoles($request->input('role'));
 
-        return redirect()->route('admin.user.index')->with([
+        return redirect()->route('admin.user.edit', $user)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.user')]),
+            ],
+        ]);
+    }
+
+    /**
+     * Manually verifiy user's email address.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyEmailAddress(User $user)
+    {
+        $this->authorize('update', $user);
+
+        $user->markEmailAsVerified();
+
+        return redirect()->route('admin.user.edit', $user)->with([
+            'alert' => [
+                'type' => 'alert-success',
+                'message' => trans('The :resource was updated!', ['resource' => trans('Verify Email Address')]),
             ],
         ]);
     }
@@ -155,7 +200,15 @@ class UserController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        User::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $user = User::find($id, 'id');
+
+                $this->authorize('delete', $user);
+
+                $user->delete();
+            }
+        });
 
         return redirect()->route('admin.user.index')->with([
             'alert' => [

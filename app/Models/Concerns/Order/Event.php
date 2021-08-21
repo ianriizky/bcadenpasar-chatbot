@@ -26,6 +26,7 @@ trait Event
         });
 
         static::deleting(function (Order $model) {
+            $model->statuses->map->delete();
             $model->items->map->delete();
         });
     }

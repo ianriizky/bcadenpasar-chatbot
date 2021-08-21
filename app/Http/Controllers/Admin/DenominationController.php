@@ -9,11 +9,22 @@ use App\Http\Resources\DataTables\DenominationResource;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class DenominationController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Denomination::class, 'denomination');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +42,8 @@ class DenominationController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Denomination::class);
+
         return DataTables::eloquent(Denomination::query())
             ->setTransformer(fn ($model) => DenominationResource::make($model)->resolve())
             ->toJson();
@@ -72,6 +85,17 @@ class DenominationController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Denomination  $denomination
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function show(Denomination $denomination)
+    {
+        return view('admin.denomination.show', compact('denomination'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Denomination  $denomination
@@ -99,7 +123,7 @@ class DenominationController extends Controller
 
         $denomination->save();
 
-        return redirect()->route('admin.denomination.index')->with([
+        return redirect()->route('admin.denomination.edit', $denomination)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.denomination')]),
@@ -133,7 +157,15 @@ class DenominationController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Denomination::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $denomination = Denomination::find($id, ['id', 'image']);
+
+                $this->authorize('delete', $denomination);
+
+                $denomination->delete();
+            }
+        });
 
         return redirect()->route('admin.denomination.index')->with([
             'alert' => [

@@ -2,14 +2,35 @@
 
 namespace App\Models\Contracts;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Collection;
 
 interface Issuerable
 {
     /**
-     * Define a polymorphic one-to-many relationship with \App\Models\OrderStatus.
+     * Return collection of \App\Models\Order model relation value.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Contracts\Issuerable>
      */
-    public function issuers(): MorphMany;
+    public function getIssuersRelationValue(): Collection;
+
+    /**
+     * Return fullname value of the issuer.
+     *
+     * @return string
+     */
+    public function getIssuerFullname(): string;
+
+    /**
+     * Return role name of the issuer.
+     *
+     * @return string
+     */
+    public function getIssuerRole(): string;
+
+    /**
+     * Return url to the issuer detail page.
+     *
+     * @return string
+     */
+    public function getIssuerUrl(): string;
 }

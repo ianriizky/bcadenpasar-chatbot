@@ -8,14 +8,7 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            const olds = @json(Arr::except(old() ?: $user, '_token'));
-
-            $('select.select2').each(function (index) {
-                name = $(this).attr('name')
-                old = name in olds ? olds[name] : null;
-
-                $(this).val(old).trigger('change');
-            });
+            @include('components.select2-change', ['olds' => Arr::except(old() ?: $user, '_token')])
         });
     </script>
 @endsection
@@ -27,28 +20,21 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
-                <div class="breadcrumb-item">
                     <a href="{{ route('admin.user.index') }}">
                         <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>
                     </a>
                 </div>
 
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.user.create') }}">
+                    <a href="{{ $url }}">
                         <i class="fas {{ $icon }}"></i> <span>{{ $title }}</span>
                     </a>
                 </div>
             </div>
         </div>
 
-        <form action="{{ $action }}" method="post">
+        <form method="post">
             @csrf
-            @isset($method) @method($method) @endisset
 
             <div class="section-body">
                 <div class="card">
@@ -209,15 +195,7 @@
                                     data-placeholder="--{{ __('Choose :field', ['field' => __('Role') ]) }}--"
                                     data-allow-clear="true"
                                     required>
-                                    @php
-                                        $roles = \App\Models\Role::ROLES;
-
-                                        if (Auth::user()->hasRole(\App\Models\Role::ROLE_STAFF)) {
-                                            $roles = Arr::except($roles, \App\Models\Role::ROLE_ADMIN);
-                                        }
-                                    @endphp
-
-                                    @foreach ($roles as $role)
+                                    @foreach (\App\Models\Role::getRoles() as $role)
                                         <option value="{{ $role }}">{{ $role }}</option>
                                     @endforeach
                                 </select>
@@ -268,6 +246,14 @@
                                             {{ $user->email_verified_at->translatedFormat('d F Y H:i:s') }}
                                         @else
                                             <span class="badge badge-warning">{{ __('Unverified') }}</span>
+
+                                            @isset($verify_url)
+                                                <a href="{{ $verify_url }}"
+                                                    onclick="return (confirm('{{ __('Are you sure you want to run this action?') }}'))"
+                                                    class="btn btn-info btn-round btn-sm">
+                                                    <i class="fa fa-user-check"></i> <span>{{ __('Manually Verify Email Address') }}</span>
+                                                </a>
+                                            @endisset
                                         @endif
                                     </p>
                                 </div>
@@ -279,11 +265,26 @@
                     </div>
 
                     <div class="card-footer">
-                        <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">
-                            <i class="fa fa-chevron-left"></i> <span>{{ __('Go back') }}</span>
-                        </a>
+                        @can('viewAny', \App\Models\User::class)
+                            <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">
+                                @include('components.datatables.button-back')
+                            </a>
+                        @endcan
 
-                        <button type="submit" class="btn btn-primary">
+                        @isset($destroy_action)
+                            <button type="submit"
+                                formaction="{{ $destroy_action }}"
+                                @isset($method) name="_method" value="DELETE" @endisset
+                                onclick="return (confirm('{{ __('Are you sure you want to delete this data?') }}'))"
+                                class="btn btn-danger">
+                                <i class="fa fa-trash"></i> <span>{{ __('Delete') }}</span>
+                            </button>
+                        @endisset
+
+                        <button type="submit"
+                            formaction="{{ $submit_action }}"
+                            @isset($method) name="_method" value="{{ $method }}" @endisset
+                            class="btn btn-primary">
                             <i class="fa fa-save"></i> <span>{{ __('Save') }}</span>
                         </button>
                     </div>

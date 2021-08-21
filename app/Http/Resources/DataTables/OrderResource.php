@@ -17,6 +17,20 @@ class OrderResource extends JsonResource
      */
     public function toArray($request)
     {
+        $elements = [];
+
+        if ($request->user()->can('view', $this->resource)) {
+            $elements[] = view('components.datatables.link-show', [
+                'url' => route('admin.order.show', $this->resource),
+            ])->render();
+        }
+
+        if ($request->user()->can('delete', $this->resource)) {
+            $elements[] = view('components.datatables.link-destroy', [
+                'url' => route('admin.order.destroy', $this->resource),
+            ])->render();
+        }
+
         return [
             'checkbox' => view('components.datatables.checkbox', [
                 'value' => $this->resource->getKey(),
@@ -33,18 +47,9 @@ class OrderResource extends JsonResource
                 $this->resource->item_total_bundle_quantity . ' ' . trans('bundle') .
                 '<br>' .
                 format_rupiah($this->resource->item_total),
-            'schedule_date' => $this->resource->schedule_date ?? trans('Unscheduled'),
+            'schedule_date' => $this->resource->schedule_date->translatedFormat('d F Y H:i:s') ?? trans('Unscheduled'),
             'status' => $this->resource->status->label,
-            'action' => view('components.datatables.button-group', [
-                'elements' => [
-                    view('components.datatables.link-show', [
-                        'url' => route('admin.order.edit', $this->resource),
-                    ])->render(),
-                    view('components.datatables.link-destroy', [
-                        'url' => route('admin.order.destroy', $this->resource),
-                    ])->render(),
-                ],
-            ])->render(),
+            'action' => view('components.datatables.button-group', compact('elements'))->render(),
         ];
     }
 }

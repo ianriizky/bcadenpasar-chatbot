@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int|null $branch_id Foreign key of \App\Models\Branch.
  * @property-read \App\Models\Branch|null $branch
  * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\OrderStatus> $statuses
- * @property-read \App\Models\OrderStatus $latestStatus
+ * @property-read \App\Models\OrderStatus|null $latestStatus
  * @property-read \Illuminate\Database\Eloquent\Collection<\App\Models\Item> $items
  *
  * @see \App\Models\Order
@@ -174,7 +174,7 @@ trait Relation
     /**
      * Return \App\Models\OrderStatus model relation value.
      *
-     * @return \App\Models\OrderStatus
+     * @return \App\Models\OrderStatus|null
      */
     public function getLatestStatusRelationValue(): ?OrderStatus
     {

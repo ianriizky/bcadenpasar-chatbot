@@ -20,7 +20,7 @@
         @if (Route::has('login'))
             <div class="fixed top-0 right-0 px-6 py-4">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="text-sm text-gray-700 underline">{{ __('Dashboard') }}</a>
+                    <a href="{{ route('admin.dashboard') }}" class="text-sm text-gray-700 underline">{{ __('Dashboard') }}</a>
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">{{ __('Log in') }}</a>
 

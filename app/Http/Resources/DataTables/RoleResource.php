@@ -17,22 +17,27 @@ class RoleResource extends JsonResource
      */
     public function toArray($request)
     {
+        $elements = [];
+
+        if ($request->user()->can('update', $this->resource)) {
+            $elements[] = view('components.datatables.link-edit', [
+                'url' => route('admin.role.edit', $this->resource),
+            ])->render();
+        }
+
+        if ($request->user()->can('delete', $this->resource)) {
+            $elements[] = view('components.datatables.link-destroy', [
+                'url' => route('admin.role.destroy', $this->resource),
+            ])->render();
+        }
+
         return [
             'checkbox' => view('components.datatables.checkbox', [
                 'value' => $this->resource->getKey(),
             ])->render(),
             'name' => $this->resource->name,
             'guard_name' => $this->resource->guard_name,
-            'action' => view('components.datatables.button-group', [
-                'elements' => [
-                    view('components.datatables.link-show', [
-                        'url' => route('admin.role.edit', $this->resource),
-                    ])->render(),
-                    view('components.datatables.link-destroy', [
-                        'url' => route('admin.role.destroy', $this->resource),
-                    ])->render(),
-                ],
-            ])->render(),
+            'action' => view('components.datatables.button-group', compact('elements'))->render(),
         ];
     }
 }

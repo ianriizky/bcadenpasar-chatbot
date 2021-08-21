@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\OrderCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\StoreRequest;
-use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Resources\DataTables\OrderResource;
 use App\Models\Branch;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Order::class, 'order');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +44,8 @@ class OrderController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Order::class);
+
         return DataTables::eloquent(Order::query()->with('user:id,fullname'))
             ->setTransformer(fn ($model) => OrderResource::make($model)->resolve())
             ->orderColumn('customer_fullname', function ($query, $direction) {
@@ -65,21 +79,15 @@ class OrderController extends Controller
      */
     public function datatableRowChild(Order $order)
     {
+        $this->authorize('view', $order);
+
         return view('admin.order.datatable-row-child', compact('order'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function create()
-    {
-        return view('admin.order.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
+     *
+     * Note: This method now accessed from customer page.
      *
      * @param  \App\Http\Requests\Order\StoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -89,12 +97,12 @@ class OrderController extends Controller
         $alert = [
             'alert' => [
                 'type' => 'alert-success',
-                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.user')]),
+                'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.order')]),
             ],
         ];
 
         try {
-            DB::transaction(function () use ($request) {
+            $order = DB::transaction(function () use ($request) {
                 $order = $request->getOrder();
 
                 $order->setCustomerRelationValue($request->getCustomer());
@@ -104,7 +112,8 @@ class OrderController extends Controller
                 $order->save();
 
                 $order->statuses()->save($request->getOrderStatus());
-                $order->items()->saveMany($request->getItems());
+
+                return $order;
             });
         } catch (\Throwable $th) {
             throw $th;
@@ -117,37 +126,25 @@ class OrderController extends Controller
             ];
         }
 
-        return redirect()->route('admin.order.index')->with($alert);
+        Event::dispatch(new OrderCreated($order));
+
+        return redirect()->route('admin.order.show', $order)->with($alert);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit(Order $order)
+    public function show(Order $order)
     {
-        return view('admin.order.edit', compact('order'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\Order\UpdateRequest  $request
-     * @param  \App\Models\Order  $order
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(UpdateRequest $request, Order $order)
-    {
-        $order->update($request->validated());
-
-        return redirect()->route('admin.order.index')->with([
-            'alert' => [
-                'type' => 'alert-success',
-                'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.order')]),
-            ],
+        $order->load([
+            'statuses',
+            'items' => fn (Relation $query) => $query->with('denomination'),
         ]);
+
+        return view('admin.order.show', compact('order'));
     }
 
     /**
@@ -158,7 +155,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        $order->delete();
+        DB::transaction(fn () => $order->delete());
 
         return redirect()->route('admin.order.index')->with([
             'alert' => [
@@ -176,7 +173,15 @@ class OrderController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Order::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $order = Order::find($id, 'id');
+
+                $this->authorize('delete', $order);
+
+                $order->delete();
+            }
+        });
 
         return redirect()->route('admin.order.index')->with([
             'alert' => [

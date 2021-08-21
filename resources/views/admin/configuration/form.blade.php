@@ -5,12 +5,6 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
-                <div class="breadcrumb-item">
                     <a href="{{ route('admin.configuration.index') }}">
                         <i class="fas fa-cog"></i> <span>{{ __('admin-lang.configuration') }}</span>
                     </a>
@@ -85,9 +79,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <a href="{{ route('admin.configuration.index') }}" class="btn btn-secondary">
-                            <i class="fa fa-chevron-left"></i> <span>{{ __('Go back') }}</span>
-                        </a>
+                        @can('viewAny', \App\Models\Configuration::class)
+                            <a href="{{ route('admin.configuration.index') }}" class="btn btn-secondary">
+                                @include('components.datatables.button-back')
+                            </a>
+                        @endcan
 
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-save"></i> <span>{{ __('Save') }}</span>

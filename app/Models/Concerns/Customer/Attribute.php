@@ -22,6 +22,8 @@ use Illuminate\Support\Str;
  * @property float|null $location_longitude
  * @property-read string|null $google_map_url
  * @property-read string $whatsapp_phone_url
+ * @property-read string $gravatar_image
+ * @property-read string $telegram_chat_id_censored
  *
  * @see \App\Models\Customer
  */
@@ -64,5 +66,25 @@ trait Attribute
     public function getWhatsappPhoneUrlAttribute(): string
     {
         return 'https://wa.me/' . Str::replaceFirst('+', '', $this->whatsapp_phone->formatE164());
+    }
+
+    /**
+     * Return "gravatar_image" attribute value.
+     *
+     * @return string
+     */
+    public function getGravatarImageAttribute(): string
+    {
+        return gravatar_image($this->email);
+    }
+
+    /**
+     * Return "telegram_chat_id_censored" attribute value.
+     *
+     * @return string
+     */
+    public function getTelegramChatIdCensoredAttribute(): string
+    {
+        return substr_replace($this->telegram_chat_id, '****', -4);
     }
 }

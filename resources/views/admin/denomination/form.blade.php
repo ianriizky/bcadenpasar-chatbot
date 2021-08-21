@@ -9,14 +9,7 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            const olds = @json(Arr::except(old() ?: $denomination, '_token'));
-
-            $('select.select2').each(function (index) {
-                name = $(this).attr('name')
-                old = name in olds ? olds[name] : null;
-
-                $(this).val(old).trigger('change');
-            });
+            @include('components.select2-change', ['olds' => Arr::except(old() ?: $denomination, '_token')])
         });
     </script>
 @endsection
@@ -27,12 +20,6 @@
             <h1>{{ $title }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.denomination.index') }}">
                         <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
@@ -112,16 +99,22 @@
                             <div class="form-group col-12 col-lg-6">
                                 <label for="quantity_per_bundle">{{ __('Quantity Per Bundle') }}<span class="text-danger">*</span></label>
 
-                                <input type="number"
-                                    name="quantity_per_bundle"
-                                    id="quantity_per_bundle"
-                                    class="form-control @error('quantity_per_bundle') is-invalid @enderror"
-                                    value="{{ old('quantity_per_bundle', $denomination->quantity_per_bundle) }}"
-                                    min="0"
-                                    required
-                                    autofocus>
+                                <div class="input-group">
+                                    <input type="number"
+                                        name="quantity_per_bundle"
+                                        id="quantity_per_bundle"
+                                        class="form-control @error('quantity_per_bundle') is-invalid @enderror"
+                                        value="{{ old('quantity_per_bundle', $denomination->quantity_per_bundle) }}"
+                                        min="0"
+                                        required
+                                        autofocus>
 
-                                <x-invalid-feedback :name="'quantity_per_bundle'"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">{{ __('bundle') }}</div>
+                                    </div>
+
+                                    <x-invalid-feedback :name="'quantity_per_bundle'"/>
+                                </div>
                             </div>
                             {{-- /.quantity_per_bundle --}}
 
@@ -129,16 +122,22 @@
                             <div class="form-group col-12 col-lg-3">
                                 <label for="minimum_order_bundle">{{ __('Minimum Order Bundle') }}<span class="text-danger">*</span></label>
 
-                                <input type="number"
-                                    name="minimum_order_bundle"
-                                    id="minimum_order_bundle"
-                                    class="form-control @error('minimum_order_bundle') is-invalid @enderror"
-                                    value="{{ old('minimum_order_bundle', $denomination->minimum_order_bundle) }}"
-                                    min="0"
-                                    required
-                                    autofocus>
+                                <div class="input-group">
+                                    <input type="number"
+                                        name="minimum_order_bundle"
+                                        id="minimum_order_bundle"
+                                        class="form-control @error('minimum_order_bundle') is-invalid @enderror"
+                                        value="{{ old('minimum_order_bundle', $denomination->minimum_order_bundle) }}"
+                                        min="0"
+                                        required
+                                        autofocus>
 
-                                <x-invalid-feedback :name="'minimum_order_bundle'"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">{{ __('bundle') }}</div>
+                                    </div>
+
+                                    <x-invalid-feedback :name="'minimum_order_bundle'"/>
+                                </div>
                             </div>
                             {{-- /.minimum_order_bundle --}}
 
@@ -146,16 +145,22 @@
                             <div class="form-group col-12 col-lg-3">
                                 <label for="maximum_order_bundle">{{ __('Maximum Order Bundle') }}<span class="text-danger">*</span></label>
 
-                                <input type="number"
-                                    name="maximum_order_bundle"
-                                    id="maximum_order_bundle"
-                                    class="form-control @error('maximum_order_bundle') is-invalid @enderror"
-                                    value="{{ old('maximum_order_bundle', $denomination->maximum_order_bundle) }}"
-                                    min="0"
-                                    required
-                                    autofocus>
+                                <div class="input-group">
+                                    <input type="number"
+                                        name="maximum_order_bundle"
+                                        id="maximum_order_bundle"
+                                        class="form-control @error('maximum_order_bundle') is-invalid @enderror"
+                                        value="{{ old('maximum_order_bundle', $denomination->maximum_order_bundle) }}"
+                                        min="0"
+                                        required
+                                        autofocus>
 
-                                <x-invalid-feedback :name="'maximum_order_bundle'"/>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">{{ __('bundle') }}</div>
+                                    </div>
+
+                                    <x-invalid-feedback :name="'maximum_order_bundle'"/>
+                                </div>
                             </div>
                             {{-- /.maximum_order_bundle --}}
 
@@ -204,9 +209,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <a href="{{ route('admin.denomination.index') }}" class="btn btn-secondary">
-                            <i class="fa fa-chevron-left"></i> <span>{{ __('Go back') }}</span>
-                        </a>
+                        @can('viewAny', \App\Models\Denomination::class)
+                            <a href="{{ route('admin.denomination.index') }}" class="btn btn-secondary">
+                                @include('components.datatables.button-back')
+                            </a>
+                        @endcan
 
                         <button type="submit"
                             formaction="{{ $action }}"

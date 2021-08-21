@@ -5,7 +5,9 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
+                    </a>
                 </div>
             </div>
         </div>

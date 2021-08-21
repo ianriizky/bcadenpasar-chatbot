@@ -46,7 +46,9 @@ class CheckOrderStatusConversation extends Conversation
 
             $order->load('customer:id,fullname', 'user:id,fullname', 'branch', 'items.denomination');
 
-            return $this->sayRenderable('conversations.check-order-status.alert-order', compact('order'));
+            return $this->sayRenderable('conversations.check-order-status.alert-order', compact('order'), [], ['reply_markup' => json_encode([
+                'remove_keyboard' => true,
+            ])]);
         }, additionalParameters: Keyboard::create(Keyboard::TYPE_KEYBOARD)->addRow(
             KeyboardButton::create($this->cancelText())
         )->toArray());

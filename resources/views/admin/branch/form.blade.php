@@ -34,12 +34,6 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
-                <div class="breadcrumb-item">
                     <a href="{{ route('admin.branch.index') }}">
                         <i class="fas fa-building"></i> <span>{{ __('admin-lang.branch') }}</span>
                     </a>
@@ -53,9 +47,8 @@
             </div>
         </div>
 
-        <form action="{{ $action }}" method="post">
+        <form method="post">
             @csrf
-            @isset($method) @method($method) @endisset
 
             <div class="section-body">
                 <div class="card">
@@ -158,11 +151,26 @@
                     </div>
 
                     <div class="card-footer">
-                        <a href="{{ route('admin.branch.index') }}" class="btn btn-secondary">
-                            <i class="fa fa-chevron-left"></i> <span>{{ __('Go back') }}</span>
-                        </a>
+                        @can('viewAny', \App\Models\Branch::class)
+                            <a href="{{ route('admin.branch.index') }}" class="btn btn-secondary">
+                                @include('components.datatables.button-back')
+                            </a>
+                        @endcan
 
-                        <button type="submit" class="btn btn-primary">
+                        @isset($destroy_action)
+                            <button type="submit"
+                                formaction="{{ $destroy_action }}"
+                                @isset($method) name="_method" value="DELETE" @endisset
+                                onclick="return (confirm('{{ __('Are you sure you want to delete this data?') }}'))"
+                                class="btn btn-danger">
+                                <i class="fa fa-trash"></i> <span>{{ __('Delete') }}</span>
+                            </button>
+                        @endisset
+
+                        <button type="submit"
+                            formaction="{{ $submit_action }}"
+                            @isset($method) name="_method" value="{{ $method }}" @endisset
+                            class="btn btn-primary">
                             <i class="fa fa-save"></i> <span>{{ __('Save') }}</span>
                         </button>
                     </div>

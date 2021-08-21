@@ -3,6 +3,9 @@
 namespace App\Models\Concerns\User;
 
 use App\Models\Branch;
+use App\Models\Support\Relation\MorphManyIssueCustomers;
+use App\Models\Support\Relation\MorphManyIssueOrderStatus;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -15,7 +18,9 @@ use Spatie\Permission\Traits\HasRoles;
  */
 trait Relation
 {
-    use HasRoles;
+    use HasRoles,
+        MorphManyIssueOrderStatus,
+        MorphManyIssueCustomers;
 
     /**
      * Define an inverse one-to-one or many relationship with \App\Models\Branch.
@@ -48,5 +53,15 @@ trait Relation
         $this->branch()->associate($branch);
 
         return $this;
+    }
+
+    /**
+     * Return collection of \App\Models\Order model relation value.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Contracts\Issuerable>
+     */
+    public function getIssuersRelationValue(): Collection
+    {
+        return $this->issuerOrderStatuses->merge($this->issuerCustomers);
     }
 }

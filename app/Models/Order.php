@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Infrastructure\Database\Eloquent\Model;
 use App\Models\OrderStatus as ModelOrderStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -39,6 +40,34 @@ class Order extends Model
         'item_total_bundle_quantity',
         'item_total',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resolveChildRouteBinding($childType, $value, $field)
+    {
+        $relationship = $this->{Str::plural(Str::camel($childType))}();
+
+        if ($relationship->getRelated() instanceof OrderStatus) {
+            return $relationship->where('status', EnumOrderStatus::from($value))->first();
+        }
+
+        if ($relationship->getRelated() instanceof Item) {
+            return $relationship->whereHas('denomination', function (Builder $query) use ($value) {
+                return $query->where('value', $value);
+            })->first();
+        }
+
+        return parent::resolveChildRouteBinding($childType, $value, $field);
+    }
 
     /**
      * Generate code for this model.

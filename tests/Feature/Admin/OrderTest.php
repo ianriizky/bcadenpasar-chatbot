@@ -19,7 +19,7 @@ class OrderTest extends TestCase
 
     public function test_assert_index()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->get(route('admin.order.index'))
@@ -28,7 +28,7 @@ class OrderTest extends TestCase
 
     public function test_assert_datatable()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->post(route('admin.order.datatable'))
@@ -38,39 +38,39 @@ class OrderTest extends TestCase
 
     // public function test_assert_create()
     // {
-    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
     //     $this->actingAs($admin, 'web')
     //         ->get(route('admin.order.create'))
     //         ->assertOk();
     // }
 
-    public function test_assert_store()
-    {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+    // public function test_assert_store()
+    // {
+    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
-        $data = Order::factory()
-            ->for(Customer::factory())
-            ->raw([
-                'order_status' => OrderStatus::factory()->draft()->raw(),
-            ]);
+    //     $data = Order::factory()
+    //         ->for(Customer::factory())
+    //         ->raw([
+    //             'order_status' => OrderStatus::factory()->draft()->raw(),
+    //         ]);
 
-        foreach (Item::factory()->count(3)->raw() as $key => $item) {
-            foreach ($item as $attribute => $value) {
-                data_set($data, 'items.' . $key . '.' . $attribute, $value);
-            }
-        }
+    //     foreach (Item::factory()->count(3)->raw() as $key => $item) {
+    //         foreach ($item as $attribute => $value) {
+    //             data_set($data, 'items.' . $key . '.' . $attribute, $value);
+    //         }
+    //     }
 
-        $this->actingAs($admin, 'web')
-            ->post(route('admin.order.store'), $data)
-            ->assertRedirect(route('admin.order.index'));
+    //     $this->actingAs($admin, 'web')
+    //         ->post(route('admin.order.store'), $data)
+    //         ->assertRedirect(route('admin.order.index'));
 
-        $this->assertDatabaseHas(Order::class, Arr::only($data, 'schedule_date'));
-    }
+    //     $this->assertDatabaseHas(Order::class, Arr::only($data, 'schedule_date'));
+    // }
 
     // public function test_assert_edit()
     // {
-    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
     //     $order = Order::factory()
     //         ->for($customer = Customer::factory())
@@ -79,26 +79,26 @@ class OrderTest extends TestCase
     //         ->create();
 
     //     $this->actingAs($admin, 'web')
-    //         ->get(route('admin.order.edit', $order))
+    //         ->get(route('admin.order.show', $order))
     //         ->assertOk();
     // }
 
     // public function test_assert_update()
     // {
-    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+    //     $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
     //     $order = Order::factory()->create();
 
     //     $this->actingAs($admin, 'web')
-    //         ->put(route('admin.order.update', $order), $data = Order::factory()->raw())
-    //         ->assertRedirect(route('admin.order.index'));
+    //         ->put(route('admin.order.???', $order), $data = Order::factory()->raw())
+    //         ->assertRedirect(route('admin.order.show', Order::firstWhere('code', $data['code'])));
 
     //     $this->assertDatabaseHas(Order::class, $data);
     // }
 
     public function test_assert_destroy()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $order = Order::factory()
             ->for($customer = Customer::factory())
@@ -115,7 +115,7 @@ class OrderTest extends TestCase
 
     public function test_assert_destroy_multiple()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $orders = Order::factory()->count(3)
             ->for($customer = Customer::factory())

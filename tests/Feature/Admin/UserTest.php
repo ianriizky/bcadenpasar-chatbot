@@ -93,6 +93,7 @@ class UserTest extends TestCase
         $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $user = User::factory()->for(Branch::first())->create();
+        $user->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->get(route('admin.user.edit', $user))
@@ -114,7 +115,7 @@ class UserTest extends TestCase
 
         $this->actingAs($admin, 'web')
             ->put(route('admin.user.update', $user), $data)
-            ->assertRedirect(route('admin.user.index'));
+            ->assertRedirect(route('admin.user.edit', User::firstWhere('username', $data['username'])));
 
         $this->assertDatabaseHas(User::class, Arr::only($data, 'username'));
     }

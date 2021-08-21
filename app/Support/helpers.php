@@ -171,3 +171,18 @@ if (! function_exists('format_rupiah')) {
         return $prefix . number_format($value, 0, ',', '.');
     }
 }
+
+if (! function_exists('gravatar_image')) {
+    /**
+     * Return avatar image url using gravatar.
+     *
+     * @param  string  $email
+     * @param  string  $extension
+     * @param  int  $size
+     * @return string
+     */
+    function gravatar_image(string $email, string $extension = 'png', int $size = 30): string
+    {
+        return sprintf('https://www.gravatar.com/avatar/%s.%s?s=%s', md5($email), $extension, $size);
+    }
+}

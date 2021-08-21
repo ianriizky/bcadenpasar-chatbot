@@ -14,7 +14,7 @@ class BranchTest extends TestCase
 
     public function test_assert_index()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->get(route('admin.branch.index'))
@@ -23,7 +23,7 @@ class BranchTest extends TestCase
 
     public function test_assert_datatable()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->post(route('admin.branch.datatable'))
@@ -33,7 +33,7 @@ class BranchTest extends TestCase
 
     public function test_assert_create()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->get(route('admin.branch.create'))
@@ -42,7 +42,7 @@ class BranchTest extends TestCase
 
     public function test_assert_store()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($admin, 'web')
             ->post(route('admin.branch.store'), $data = Branch::factory()->raw())
@@ -53,7 +53,7 @@ class BranchTest extends TestCase
 
     public function test_assert_edit()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $role = Branch::factory()->create();
 
@@ -64,20 +64,20 @@ class BranchTest extends TestCase
 
     public function test_assert_update()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $role = Branch::factory()->create();
 
         $this->actingAs($admin, 'web')
             ->put(route('admin.branch.update', $role), $data = Branch::factory()->raw())
-            ->assertRedirect(route('admin.branch.index'));
+            ->assertRedirect(route('admin.branch.edit', Branch::firstWhere('name', $data['name'])));
 
         $this->assertDatabaseHas(Branch::class, $data);
     }
 
     public function test_assert_destroy()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $role = Branch::factory()->create();
 
@@ -90,7 +90,7 @@ class BranchTest extends TestCase
 
     public function test_assert_destroy_multiple()
     {
-        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $admin = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $roles = Branch::factory()->count(3)->create();
 

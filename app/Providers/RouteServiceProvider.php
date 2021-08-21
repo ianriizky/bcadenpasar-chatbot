@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enum\OrderStatus;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -20,13 +21,18 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/';
 
     /**
-     * The controller namespace for the application.
-     *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
-     *
-     * @var string|null
+     * {@inheritDoc}
      */
     // protected $namespace = 'App\\Http\\Controllers';
+
+    /**
+     * List of request parameter that can be resolved into an enum instance.
+     *
+     * @var string[]
+     */
+    protected $enums = [
+        'enumOrderStatus' => OrderStatus::class,
+    ];
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -51,6 +57,8 @@ class RouteServiceProvider extends ServiceProvider
                 $this->mapBotManCommands();
             })->middleware('web_without_csrf');
         });
+
+        $this->resolveEnumBinding();
     }
 
     /**
@@ -75,5 +83,19 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapBotManCommands()
     {
         require base_path('routes/botman.php');
+    }
+
+    /**
+     * Resolve enum binding from route parameter.
+     *
+     * @return void
+     */
+    protected function resolveEnumBinding()
+    {
+        foreach ($this->enums as $name => $class) {
+            Route::bind($name, function ($value) use ($class) {
+                return $class::from($value);
+            });
+        }
     }
 }

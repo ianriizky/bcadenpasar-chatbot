@@ -123,6 +123,7 @@ return [
     'uuid' => 'The :attribute must be a valid UUID.',
 
     'phone' => 'The :attribute field contains an invalid number.',
+    'not_telegram_image' => 'The :attribute must not contains image.',
 
     /*
     |--------------------------------------------------------------------------

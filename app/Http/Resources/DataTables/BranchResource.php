@@ -18,6 +18,26 @@ class BranchResource extends JsonResource
      */
     public function toArray($request)
     {
+        $elements = [];
+
+        if ($request->user()->can('view', $this->resource)) {
+            $elements[] = view('components.datatables.link-show', [
+                'url' => route('admin.branch.show', $this->resource),
+            ])->render();
+        }
+
+        if ($request->user()->can('update', $this->resource)) {
+            $elements[] = view('components.datatables.link-edit', [
+                'url' => route('admin.branch.edit', $this->resource),
+            ])->render();
+        }
+
+        if ($request->user()->can('delete', $this->resource)) {
+            $elements[] = view('components.datatables.link-destroy', [
+                'url' => route('admin.branch.destroy', $this->resource),
+            ])->render();
+        }
+
         return [
             'checkbox' => view('components.datatables.checkbox', [
                 'value' => $this->resource->getKey(),
@@ -29,16 +49,7 @@ class BranchResource extends JsonResource
                 'name' => Str::limit($this->resource->google_map_url, 50),
                 'is_new_tab' => true,
             ])->render(),
-            'action' => view('components.datatables.button-group', [
-                'elements' => [
-                    view('components.datatables.link-show', [
-                        'url' => route('admin.branch.edit', $this->resource),
-                    ])->render(),
-                    view('components.datatables.link-destroy', [
-                        'url' => route('admin.branch.destroy', $this->resource),
-                    ])->render(),
-                ],
-            ])->render(),
+            'action' => view('components.datatables.button-group', compact('elements'))->render(),
         ];
     }
 }

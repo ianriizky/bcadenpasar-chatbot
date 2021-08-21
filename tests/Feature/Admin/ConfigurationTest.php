@@ -70,7 +70,7 @@ class ConfigurationTest extends TestCase
 
         $this->actingAs($admin, 'web')
             ->put(route('admin.configuration.update', $configuration), $data = Configuration::factory()->raw())
-            ->assertRedirect(route('admin.configuration.index'));
+            ->assertRedirect(route('admin.configuration.edit', Configuration::firstWhere('key', $data['key'])));
 
         $this->assertDatabaseHas(Configuration::class, $data);
     }

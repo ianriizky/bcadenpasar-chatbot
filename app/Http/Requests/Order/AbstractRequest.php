@@ -2,15 +2,14 @@
 
 namespace App\Http\Requests\Order;
 
+use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Infrastructure\Foundation\Http\FormRequest;
 use App\Models\Branch;
 use App\Models\Customer;
-use App\Models\Denomination;
-use App\Models\Item;
 use App\Models\Order;
-use App\Models\OrderStatus;
+use App\Models\OrderStatus as ModelsOrderStatus;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 abstract class AbstractRequest extends FormRequest
 {
@@ -19,7 +18,7 @@ abstract class AbstractRequest extends FormRequest
      */
     public static function getAttributes()
     {
-        $attributes = [
+        return [
             'customer_id' => trans('admin-lang.customer'),
             'user_id' => trans('admin-lang.user'),
             'branch_id' => trans('admin-lang.branch'),
@@ -28,16 +27,6 @@ abstract class AbstractRequest extends FormRequest
             'order_status.status' => trans('Order Status'),
             'order_status.note' => trans('Note'),
         ];
-
-        foreach (request()->input('items', []) as $index => $item) {
-            $number = $index + 1;
-
-            $attributes['items.' . $index . '.denomination_id'] = trans('admin-lang.denomination') . ' ' . $number;
-            $attributes['items.' . $index . '.quantity_per_bundle'] = trans('Quantity Per Bundle') . ' ' . $number;
-            $attributes['items.' . $index . '.bundle_quantity'] = trans('Bundle Quantity') . ' ' . $number;
-        }
-
-        return $attributes;
     }
 
     /**
@@ -55,26 +44,12 @@ abstract class AbstractRequest extends FormRequest
      *
      * @return \App\Models\OrderStatus
      */
-    public function getOrderStatus(): OrderStatus
+    public function getOrderStatus(): ModelsOrderStatus
     {
-        return OrderStatus::make([
-            'status' => data_get($this->validated(), 'order_status.status'),
+        return ModelsOrderStatus::make([
+            'status' => data_get($this->validated(), 'order_status.status', EnumOrderStatus::on_progress()),
             'note' => data_get($this->validated(), 'order_status.note'),
-        ])->setIssuerableRelationValue($this->getCustomer());
-    }
-
-    /**
-     * Return collection of new item model based on the validated data from request.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Item>
-     */
-    public function getItems(): Collection
-    {
-        return Collection::make(data_get($this->validated(), 'items.*', []))->map(
-            fn (array $item) => Item::make($item)->setDenominationRelationValue(
-                Denomination::find($item['denomination_id'])
-            )
-        );
+        ])->setIssuerableRelationValue(Auth::user());
     }
 
     /**

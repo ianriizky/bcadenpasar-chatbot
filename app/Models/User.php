@@ -6,17 +6,17 @@ use App\Enum\Gender;
 use App\Infrastructure\Foundation\Auth\User as Authenticatable;
 use App\Models\Contracts\HasTelegramChatId;
 use App\Models\Contracts\Issuerable;
-use App\Models\Support\HasIssuerable;
 use App\Notifications\ResetPasswordQueued;
 use App\Notifications\VerifyEmailQueued;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Propaganistas\LaravelPhone\Casts\E164PhoneNumberCast;
 
 class User extends Authenticatable implements MustVerifyEmail, Issuerable, HasTelegramChatId
 {
-    use HasFactory, Notifiable, HasIssuerable,
+    use HasFactory, Notifiable,
         Concerns\User\Attribute,
         Concerns\User\Event,
         Concerns\User\Relation;
@@ -79,12 +79,37 @@ class User extends Authenticatable implements MustVerifyEmail, Issuerable, HasTe
     }
 
     /**
-     * Return model instance data where role is "admin".
-     *
-     * @return static|null
+     * {@inheritDoc}
      */
-    public static function findAdmin()
+    public function getIssuerFullname(): string
     {
-        return static::role(Role::ROLE_ADMIN)->first();
+        return $this->fullname;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIssuerRole(): string
+    {
+        return trans('admin-lang.user');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIssuerUrl(): string
+    {
+        return route('admin.user.show', $this);
+    }
+
+    /**
+     * Return collection of model instance data where role is "admin".
+     *
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Collection<static>
+     */
+    public static function getAdmin($columns = ['*']): Collection
+    {
+        return static::role(Role::ROLE_ADMIN)->get($columns);
     }
 }

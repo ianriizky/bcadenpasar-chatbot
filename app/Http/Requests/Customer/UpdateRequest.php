@@ -4,6 +4,7 @@ namespace App\Http\Requests\Customer;
 
 use App\Enum\Gender;
 use App\Models\Customer;
+use App\Rules\NotTelegramImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -42,8 +43,8 @@ class UpdateRequest extends AbstractRequest
                     $fail(trans('validation.unique', compact('attribute')));
                 }
             }],
-            'username' => 'required|string|max:255',
-            'fullname' => 'required|string|max:255',
+            'username' => ['required', 'string', 'max:255', new NotTelegramImage],
+            'fullname' => ['required', 'string', 'max:255', new NotTelegramImage],
             'gender' => 'sometimes|nullable|enum:' . Gender::class,
             'email' => ['required', 'string', 'email', 'max:255', function ($attribute, $email, $fail) {
                 $validator = Validator::make(compact('email'), [
@@ -53,16 +54,16 @@ class UpdateRequest extends AbstractRequest
                 if ($validator->fails()) {
                     $fail(trans('validation.unique', compact('attribute')));
                 }
-            }],
+            }, new NotTelegramImage],
             'phone_country' => 'sometimes|in:ID',
-            'phone' => value($phoneRule),
+            'phone' => [value($phoneRule), new NotTelegramImage],
             'whatsapp_phone_country' => 'sometimes|in:ID',
-            'whatsapp_phone' => value($phoneRule),
-            'account_number' => ['required_without:identitycard_number'] + (request()->filled('account_number') ? ['numeric'] : []),
-            'identitycard_number' => ['required_without:account_number'] + (request()->filled('identitycard_number') ? ['numeric'] : []),
+            'whatsapp_phone' => [value($phoneRule), new NotTelegramImage],
+            'account_number' => ['required_without:identitycard_number', new NotTelegramImage] + (request()->filled('account_number') ? ['numeric'] : []),
+            'identitycard_number' => ['required_without:account_number', new NotTelegramImage] + (request()->filled('identitycard_number') ? ['numeric'] : []),
             'identitycard_image' => 'sometimes|nullable|image',
-            'location_latitude' => 'required|numeric',
-            'location_longitude' => 'required|numeric',
+            'location_latitude' => ['required', 'numeric', new NotTelegramImage(false)],
+            'location_longitude' => ['required', 'numeric', new NotTelegramImage(false)],
         ];
     }
 

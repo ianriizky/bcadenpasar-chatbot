@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\CustomerRegistered;
 use App\Events\OrderCreated;
+use App\Events\OrderStatusCreated;
 use App\Listeners\SendTelegramNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -13,9 +14,7 @@ use Illuminate\Support\Facades\Event;
 class EventServiceProvider extends ServiceProvider
 {
     /**
-     * The event listener mappings for the application.
-     *
-     * @var array
+     * {@inheritDoc}
      */
     protected $listen = [
         Registered::class => [
@@ -27,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         OrderCreated::class => [
+            SendTelegramNotification::class,
+        ],
+
+        OrderStatusCreated::class => [
             SendTelegramNotification::class,
         ],
     ];

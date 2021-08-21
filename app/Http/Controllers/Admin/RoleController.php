@@ -8,10 +8,21 @@ use App\Http\Requests\Role\UpdateRequest;
 use App\Http\Resources\DataTables\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Role::class, 'role');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +40,8 @@ class RoleController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Role::class);
+
         return DataTables::eloquent(Role::query())
             ->setTransformer(fn ($model) => RoleResource::make($model)->resolve())
             ->toJson();
@@ -84,7 +97,7 @@ class RoleController extends Controller
     {
         $role->update($request->validated());
 
-        return redirect()->route('admin.role.index')->with([
+        return redirect()->route('admin.role.edit', $role)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.role')]),
@@ -118,7 +131,15 @@ class RoleController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Role::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $role = Role::find($id, 'id');
+
+                $this->authorize('delete', $role);
+
+                $role->delete();
+            }
+        });
 
         return redirect()->route('admin.role.index')->with([
             'alert' => [

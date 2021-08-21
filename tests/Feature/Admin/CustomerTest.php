@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Concerns\HandleAuthentication;
 use Tests\Feature\Concerns\HandleDataTables;
@@ -17,7 +18,7 @@ class CustomerTest extends TestCase
 
     public function test_assert_index()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->get(route('admin.customer.index'))
@@ -26,7 +27,7 @@ class CustomerTest extends TestCase
 
     public function test_assert_datatable()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->post(route('admin.customer.datatable'))
@@ -36,7 +37,7 @@ class CustomerTest extends TestCase
 
     public function test_assert_create()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->get(route('admin.customer.create'))
@@ -46,8 +47,9 @@ class CustomerTest extends TestCase
     public function test_assert_store()
     {
         Storage::fake();
+        Event::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->post(route('admin.customer.store'), $data = Customer::factory()->raw())
@@ -62,7 +64,7 @@ class CustomerTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $customer = $this->createFromFactory();
 
@@ -75,13 +77,13 @@ class CustomerTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $customer = $this->createFromFactory();
 
         $this->actingAs($staff, 'web')
             ->put(route('admin.customer.update', $customer), $data = Customer::factory()->raw())
-            ->assertRedirect(route('admin.customer.index'));
+            ->assertRedirect(route('admin.customer.edit', Customer::firstWhere('username', $data['username'])));
 
         $this->assertDatabaseHas(Customer::class, Arr::only($data, 'username'));
 
@@ -93,7 +95,7 @@ class CustomerTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $customer = $this->createFromFactory();
 
@@ -110,7 +112,7 @@ class CustomerTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Customer> $customers */
         $customers = Collection::times(3, fn () => $this->createFromFactory());
@@ -132,7 +134,7 @@ class CustomerTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Customer> $customers */
         $customers = Collection::times(3, fn () => $this->createFromFactory());

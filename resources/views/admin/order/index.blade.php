@@ -20,7 +20,7 @@
             { data: 'status' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
-        const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
+        @include('components.datatables-id')
     </script>
     <script src="{{ asset('js/datatable-row-child.js') }}"></script>
 @endsection
@@ -32,12 +32,6 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
-                <div class="breadcrumb-item">
                     <a href="{{ route('admin.order.index') }}">
                         <i class="fas fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
                     </a>
@@ -45,37 +39,45 @@
             </div>
         </div>
 
-        <div class="section-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="{{ route('admin.order.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.order')]) }}</span>
-                            </a>
-                        </div>
+        <form method="post">
+            @csrf
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>@include('components.datatables.checkbox-all')</th>
-                                            <th></th>
-                                            <th>{{ __('Code') }}</th>
-                                            <th>{{ __('admin-lang.customer') }}</th>
-                                            <th>{{ __(':amount Total', ['amount' => __('admin-lang.order')]) }}</th>
-                                            <th>{{ __('Schedule Date') }}</th>
-                                            <th>Status</th>
-                                            <th>{{ __('Action') }}</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>@include('components.datatables.checkbox-all')</th>
+                                                <th></th>
+                                                <th>{{ __('Code') }}</th>
+                                                <th>{{ __('admin-lang.customer') }}</th>
+                                                <th>{{ __(':amount Total', ['amount' => __('admin-lang.order')]) }}</th>
+                                                <th>{{ __('Schedule Date') }}</th>
+                                                <th>Status</th>
+                                                <th>{{ __('Action') }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                {{ __('Selected') }} (<span id="checkbox-selected-display">0</span>)
+
+                                <br>
+
+                                <div class="btn-group">
+                                    @include('components.datatables.checkbox-delete', ['url' => route('admin.order.destroy-multiple')])
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
 </x-admin-layout>

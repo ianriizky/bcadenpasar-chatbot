@@ -18,7 +18,7 @@
             { data: 'quantity_per_bundle' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
-        const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
+        @include('components.datatables-id')
     </script>
     <script src="{{ asset('js/datatable.js') }}"></script>
 @endsection
@@ -29,12 +29,6 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.denomination')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.denomination.index') }}">
                         <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
@@ -51,9 +45,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('admin.denomination.create') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.denomination')]) }}</span>
-                                </a>
+                                @can('create', \App\Models\Denomination::class)
+                                    <a href="{{ route('admin.denomination.create') }}" class="btn btn-success">
+                                        <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.denomination')]) }}</span>
+                                    </a>
+                                @endcan
                             </div>
 
                             <div class="card-body">

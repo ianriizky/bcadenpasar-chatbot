@@ -11,14 +11,7 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            const olds = @json(Arr::except(old(), '_token'));
-
-            $('select.select2').each(function (index) {
-                name = $(this).attr('name')
-                old = name in olds ? olds[name] : null;
-
-                $(this).val(old).trigger('change');
-            });
+            @include('components.select2-change', ['olds' => Arr::except(old(), '_token')])
         });
     </script>
 @endsection

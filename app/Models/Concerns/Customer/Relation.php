@@ -3,6 +3,9 @@
 namespace App\Models\Concerns\Customer;
 
 use App\Models\Order;
+use App\Models\Support\Relation\MorphManyIssueCustomers;
+use App\Models\Support\Relation\MorphManyIssueOrderStatus;
+use App\Models\Support\Relation\MorphToIssuerable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,6 +16,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 trait Relation
 {
+    use MorphManyIssueOrderStatus,
+        MorphManyIssueCustomers,
+        MorphToIssuerable;
+
     /**
      * Define a one-to-many relationship with App\Models\Order.
      *
@@ -46,5 +53,15 @@ trait Relation
         }
 
         return $this;
+    }
+
+    /**
+     * Return collection of \App\Models\Order model relation value.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Contracts\Issuerable>
+     */
+    public function getIssuersRelationValue(): Collection
+    {
+        return $this->issuerOrderStatuses->merge($this->issuerCustomers);
     }
 }

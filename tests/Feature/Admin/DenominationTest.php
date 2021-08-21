@@ -17,7 +17,7 @@ class DenominationTest extends TestCase
 
     public function test_assert_index()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.index'))
@@ -26,7 +26,7 @@ class DenominationTest extends TestCase
 
     public function test_assert_datatable()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->post(route('admin.denomination.datatable'))
@@ -36,7 +36,7 @@ class DenominationTest extends TestCase
 
     public function test_assert_create()
     {
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->get(route('admin.denomination.create'))
@@ -47,7 +47,7 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $this->actingAs($staff, 'web')
             ->post(route('admin.denomination.store'), $data = Denomination::factory()->raw())
@@ -62,7 +62,7 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $denomination = static::createFromFactory();
 
@@ -75,13 +75,13 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $denomination = static::createFromFactory();
 
         $this->actingAs($staff, 'web')
             ->put(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
-            ->assertRedirect(route('admin.denomination.index'));
+            ->assertRedirect(route('admin.denomination.edit', Denomination::firstWhere('value', $data['value'])));
 
         $this->assertDatabaseHas(Denomination::class, Arr::except($data, 'image'));
 
@@ -93,7 +93,7 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         $denomination = static::createFromFactory();
 
@@ -110,7 +110,7 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
         $denominations = Collection::times(3, fn () => static::createFromFactory());
@@ -132,7 +132,7 @@ class DenominationTest extends TestCase
     {
         Storage::fake();
 
-        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_STAFF);
+        $staff = $this->createUserFromFactory()->syncRoles(Role::ROLE_ADMIN);
 
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Denomination> $denominations */
         $denominations = Collection::times(3, fn () => static::createFromFactory());

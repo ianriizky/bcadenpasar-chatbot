@@ -2,7 +2,8 @@
 
 namespace App\Models\Concerns\Order;
 
-use App\Enum\OrderStatus;
+use App\Enum\OrderStatus as EnumOrderStatus;
+use App\Models\OrderStatus as ModelsOrderStatus;
 
 /**
  * @property string $code
@@ -20,9 +21,11 @@ trait Attribute
      *
      * @return \App\Enum\OrderStatus
      */
-    public function getStatusAttribute(): OrderStatus
+    public function getStatusAttribute(): EnumOrderStatus
     {
-        return $this->latestStatus->status;
+        return ($this->latestStatus ?? new ModelsOrderStatus([
+            'status' => EnumOrderStatus::draft(),
+        ]))->status;
     }
 
     /**

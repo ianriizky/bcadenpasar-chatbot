@@ -17,7 +17,7 @@
             { data: 'description' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
         ];
-        const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
+        @include('components.datatables-id')
     </script>
     <script src="{{ asset('js/datatable.js') }}"></script>
 @endsection
@@ -28,12 +28,6 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.configuration')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.configuration.index') }}">
                         <i class="fas fa-cog"></i> <span>{{ __('admin-lang.configuration') }}</span>
@@ -50,9 +44,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('admin.configuration.create') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.configuration')]) }}</span>
-                                </a>
+                                @can('create', \App\Models\Configuration::class)
+                                    <a href="{{ route('admin.configuration.create') }}" class="btn btn-success">
+                                        <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.configuration')]) }}</span>
+                                    </a>
+                                @endcan
                             </div>
 
                             <div class="card-body">

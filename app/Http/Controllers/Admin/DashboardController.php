@@ -15,6 +15,8 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $this->authorize('view-dashboard');
+
         return view('admin.dashboard');
     }
 }

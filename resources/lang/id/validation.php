@@ -124,6 +124,7 @@ return [
     'uuid'                 => ':Attribute harus merupakan UUID yang valid.',
 
     'phone' => 'Format :attribute tidak valid.',
+    'not_telegram_image' => 'Format :attribute tidak boleh memuat gambar.',
 
     'custom'               => [
         'attribute-name' => [

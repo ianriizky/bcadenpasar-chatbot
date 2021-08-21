@@ -8,10 +8,21 @@ use App\Models\Configuration;
 use App\Http\Requests\Configuration\StoreRequest;
 use App\Http\Requests\Configuration\UpdateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class ConfigurationController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Configuration::class, 'configuration');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +40,8 @@ class ConfigurationController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Configuration::class);
+
         return DataTables::eloquent(Configuration::query())
             ->setTransformer(fn ($model) => ConfigurationResource::make($model)->resolve())
             ->toJson();
@@ -84,7 +97,7 @@ class ConfigurationController extends Controller
     {
         $configuration->update($request->validated());
 
-        return redirect()->route('admin.configuration.index')->with([
+        return redirect()->route('admin.configuration.edit', $configuration)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.configuration')]),
@@ -118,7 +131,15 @@ class ConfigurationController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Configuration::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $configuration = Configuration::find($id, 'id');
+
+                $this->authorize('delete', $configuration);
+
+                $configuration->delete();
+            }
+        });
 
         return redirect()->route('admin.configuration.index')->with([
             'alert' => [

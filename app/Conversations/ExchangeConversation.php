@@ -4,19 +4,17 @@ namespace App\Conversations;
 
 use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Events\OrderCreated;
-use App\Models\Configuration;
 use App\Models\Customer;
 use App\Models\Denomination;
 use App\Models\Item;
 use App\Models\Order;
-use App\Models\OrderStatus as ModelOrderStatus;
+use App\Models\OrderStatus as ModelsOrderStatus;
 use App\Models\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Telegram\Extensions\Keyboard;
 use BotMan\Drivers\Telegram\Extensions\KeyboardButton;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
@@ -267,7 +265,7 @@ class ExchangeConversation extends Conversation
 
             switch ($answer->getValue()) {
                 case 'update_order_status':
-                    $order->statuses()->save(ModelOrderStatus::make([
+                    $order->statuses()->save(ModelsOrderStatus::make([
                         'status' => EnumOrderStatus::on_progress(),
                     ])->setIssuerableRelationValue($order->getCustomerRelationValue()));
 

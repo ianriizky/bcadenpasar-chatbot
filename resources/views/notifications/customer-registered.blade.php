@@ -12,4 +12,4 @@ Username: {{ $customer->username }}
 {{ __('Identity Card Image') }}: {{ $customer->identitycard_image ?? '-' }}
 {{ __('Google Map Address') }}: {{ $customer->google_map_url }}
 
-<strong>Selengkapnya bisa diakses di {{ route('admin.customer.edit', $customer) }}.</strong>
+<strong>Selengkapnya bisa diakses di {{ route('admin.customer.show', $customer) }}.</strong>

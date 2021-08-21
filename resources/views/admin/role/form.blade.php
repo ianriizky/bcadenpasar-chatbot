@@ -8,14 +8,7 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            const olds = @json(Arr::except(old() ?: $role, '_token'));
-
-            $('select.select2').each(function (index) {
-                name = $(this).attr('name')
-                old = name in olds ? olds[name] : null;
-
-                $(this).val(old).trigger('change');
-            });
+            @include('components.select2-change', ['olds' => Arr::except(old() ?: $role, '_token')])
         });
     </script>
 @endsection
@@ -26,12 +19,6 @@
             <h1>{{ $title }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.role.index') }}">
                         <i class="fas fa-user-tag"></i> <span>{{ __('admin-lang.role') }}</span>
@@ -96,9 +83,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <a href="{{ route('admin.role.index') }}" class="btn btn-secondary">
-                            <i class="fa fa-chevron-left"></i> <span>{{ __('Go back') }}</span>
-                        </a>
+                        @can('viewAny', \App\Models\Role::class)
+                            <a href="{{ route('admin.role.index') }}" class="btn btn-secondary">
+                                @include('components.datatables.button-back')
+                            </a>
+                        @endcan
 
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-save"></i> <span>{{ __('Save') }}</span>

@@ -3,9 +3,8 @@
 namespace App\Events;
 
 use App\Contracts\Event\CanSendTelegramNotification;
-use App\Models\Contracts\HasTelegramChatId;
 use App\Models\Order;
-use App\Support\Events\HandleRecipient;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -14,50 +13,29 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderCreated implements CanSendTelegramNotification, ShouldQueue
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels, InteractsWithQueue,
-        HandleRecipient;
-
-    /**
-     * The order instance data.
-     *
-     * @var \App\Models\Order
-     */
-    protected Order $order;
-
-    /**
-     * The recipient data that will receive the notification.
-     *
-     * @var \App\Models\Contracts\HasTelegramChatId
-     */
-    protected HasTelegramChatId $recipient;
+    use Dispatchable, InteractsWithSockets, SerializesModels, InteractsWithQueue;
 
     /**
      * Create a new event instance.
      *
      * @param  \App\Models\Order  $order
-     * @param  \App\Models\Contracts\HasTelegramChatId|null  $recipient
      * @return void
      */
-    public function __construct(Order $order, HasTelegramChatId $recipient = null)
+    public function __construct(protected Order $order)
     {
-        $this->order = $order;
-        $this->recipient = $this->findRecipientFromUser($recipient);
+        //
     }
 
     /**
-     * Return telegram chat id value.
-     *
-     * @return string|array
+     * {@inheritDoc}
      */
-    public function getTelegramChatId()
+    public function getTelegramChatId(): array
     {
-        return $this->recipient->getTelegramChatId();
+        return User::getAdmin(['id', 'telegram_chat_id'])->pluck('telegram_chat_id')->toArray();
     }
 
     /**
-     * Return telegram chat message content.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getTelegramMessage(): string
     {

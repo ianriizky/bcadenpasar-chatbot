@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
  * @property boolean $is_active
  * @property string $is_active_badge
  * @property-read string $role
+ * @property string $gravatar_image
  *
  * @see \App\Models\User
  */
@@ -63,5 +64,15 @@ trait Attribute
         $this->load('roles:id,name');
 
         return $this->roles->first()->name;
+    }
+
+    /**
+     * Return "gravatar_image" attribute value.
+     *
+     * @return string
+     */
+    public function getGravatarImageAttribute(): string
+    {
+        return gravatar_image($this->email);
     }
 }

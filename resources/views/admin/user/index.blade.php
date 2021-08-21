@@ -17,9 +17,9 @@
             { data: 'fullname' },
             { data: 'email' },
             { data: 'is_active' },
-            { data: 'action', searchable: false, orderable: false, width: '20%' },
+            { data: 'action', searchable: false, orderable: false, width: '30%' },
         ];
-        const datatable_language_url = '{{ asset(sprintf('node_modules/datatables.net-plugins/i18n/%s.json', App::getLocale())) }}';
+        @include('components.datatables-id')
     </script>
     <script src="{{ asset('js/datatable.js') }}"></script>
 @endsection
@@ -30,12 +30,6 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.user')]) }}</h1>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="fas fa-fire"></i> <span>{{ __('Dashboard') }}</span>
-                    </a>
-                </div>
-
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.user.index') }}">
                         <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>
@@ -52,9 +46,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('admin.user.create') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.user')]) }}</span>
-                                </a>
+                                @can('create', \App\Models\User::class)
+                                    <a href="{{ route('admin.user.create') }}" class="btn btn-success">
+                                        <i class="fas fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __('admin-lang.user')]) }}</span>
+                                    </a>
+                                @endcan
                             </div>
 
                             <div class="card-body">

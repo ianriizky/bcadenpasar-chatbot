@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\CustomerRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Http\Requests\Customer\UpdateRequest;
@@ -9,11 +10,24 @@ use App\Http\Resources\DataTables\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
+    /**
+     * Create a new instance class.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Customer::class, 'customer');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +45,8 @@ class CustomerController extends Controller
      */
     public function datatable()
     {
+        $this->authorize('viewAny', Customer::class);
+
         return DataTables::eloquent(Customer::query())
             ->setTransformer(fn ($model) => CustomerResource::make($model)->resolve())
             ->toJson();
@@ -61,7 +77,14 @@ class CustomerController extends Controller
             $customer->identitycard_image = $filename;
         }
 
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $customer->setIssuerableRelationValue($user);
+
         $customer->save();
+
+        Event::dispatch(new CustomerRegistered($customer));
 
         return redirect()->route('admin.customer.index')->with([
             'alert' => [
@@ -69,6 +92,17 @@ class CustomerController extends Controller
                 'message' => trans('The :resource was created!', ['resource' => trans('admin-lang.customer')]),
             ],
         ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function show(Customer $customer)
+    {
+        return view('admin.customer.show', compact('customer'));
     }
 
     /**
@@ -99,7 +133,7 @@ class CustomerController extends Controller
 
         $customer->save();
 
-        return redirect()->route('admin.customer.index')->with([
+        return redirect()->route('admin.customer.edit', $customer)->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('admin-lang.customer')]),
@@ -133,7 +167,15 @@ class CustomerController extends Controller
      */
     public function destroyMultiple(Request $request)
     {
-        Customer::destroy($request->input('checkbox', []));
+        DB::transaction(function () use ($request) {
+            foreach ($request->input('checkbox', []) as $id) {
+                $customer = Customer::find($id, ['id', 'identitycard_image']);
+
+                $this->authorize('delete', $customer);
+
+                $customer->delete();
+            }
+        });
 
         return redirect()->route('admin.customer.index')->with([
             'alert' => [
