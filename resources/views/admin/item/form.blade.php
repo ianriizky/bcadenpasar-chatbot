@@ -59,7 +59,7 @@
                                     data-allow-clear="true"
                                     required
                                     autofocus>
-                                    @foreach (\App\Models\Denomination::pluck('name', 'id') as $value => $label)
+                                    @foreach (ModelsDenomination::pluck('name', 'id') as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>

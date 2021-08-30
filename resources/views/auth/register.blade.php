@@ -79,7 +79,7 @@
                                             data-placeholder="--{{ __('Choose :field', ['field' => __('admin-lang.branch') ]) }}--"
                                             data-allow-clear="true"
                                             tabindex="3">
-                                            @foreach (\App\Models\Branch::pluck('name', 'name') as $value => $label)
+                                            @foreach (ModelsBranch::pluck('name', 'name') as $value => $label)
                                                 <option value="{{ $value }}">{{ $label }}</option>
                                             @endforeach
                                         </select>
@@ -166,7 +166,7 @@
                                             data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
                                             data-allow-clear="true"
                                             tabindex="8">
-                                            @foreach (\App\Enum\Gender::toArray() as $value => $label)
+                                            @foreach (EnumGender::toArray() as $value => $label)
                                                 <option value="{{ $value }}">{{ $label }}</option>
                                             @endforeach
                                         </select>

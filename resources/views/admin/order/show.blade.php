@@ -43,6 +43,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.transaction') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.order.index') }}">
                         <i class="fas fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
                     </a>
@@ -106,51 +110,20 @@
                         </div>
                         {{-- /.user_id --}}
 
+                        {{-- items --}}
+                        <div class="form-group col-12">
+                            <label for="items"> {{ __(':resource Details', ['resource' => __('admin-lang.order')]) }} </label>
+
+                            @include('admin.item.index', ['items' => $order->items])
+                        </div>
+
                         {{-- statuses --}}
                         <div class="form-group col-12">
                             <label for="statuses">{{ __('Order Status') }}</label>
 
-                            @if (Auth::check() && Auth::user()->can('create', \App\Models\OrderStatus::class) && ($order->latestStatus->canCreateSchedule() || $order->latestStatus->hasBeenScheduled())) <div class="mb-3"> @endif
-                                <div class="btn-group-vertical">
-                                    @if (Auth::check() && Auth::user()->can('create', \App\Models\OrderStatus::class) && $order->latestStatus->canCreateSchedule())
-                                        <a href="{{ route('admin.order.status.create', ['order' => $order, 'enumOrderStatus' => \App\Enum\OrderStatus::scheduled()]) }}" class="btn btn-success btn-sm text-left">
-                                            <i class="fa fa-calendar-plus"></i> <span>{{ __('Create :name', ['name' => __('Schedule Date')]) }}</span>
-                                        </a>
-                                    @endif
-
-                                    @if (Auth::check() && Auth::user()->can('create', \App\Models\OrderStatus::class) && $order->latestStatus->hasBeenScheduled())
-                                        <a href="{{ route('admin.order.status.create', ['order' => $order, 'enumOrderStatus' => \App\Enum\OrderStatus::rescheduled()]) }}" class="btn btn-warning btn-sm text-left">
-                                            <i class="fa fa-calendar-week"></i> <span>{{ __('Create :name', ['name' => __('Reschedule Date')]) }}</span>
-                                        </a>
-                                        <a href="{{ route('admin.order.status.create', ['order' => $order, 'enumOrderStatus' => \App\Enum\OrderStatus::canceled()]) }}" class="btn btn-danger btn-sm text-left">
-                                            <i class="fa fa-calendar-times"></i> <span>{{ __('Cancel Order') }}</span>
-                                        </a>
-                                        <a href="{{ route('admin.order.status.create', ['order' => $order, 'enumOrderStatus' => \App\Enum\OrderStatus::finished()]) }}" class="btn btn-success btn-sm text-left">
-                                            <i class="fa fa-calendar-check"></i> <span>{{ __('Finish Order') }}</span>
-                                        </a>
-                                    @endif
-                                </div>
-                                @if (Auth::check() && Auth::user()->can('create', \App\Models\OrderStatus::class) && ($order->latestStatus->canCreateSchedule() || $order->latestStatus->hasBeenScheduled())) </div> @endif
-
                             @include('admin.order_status.index', ['statuses' => $order->statuses])
                         </div>
                         {{-- /.statuses --}}
-
-                        <div class="col-12 col-lg-6"></div>
-
-                        {{-- items --}}
-                        <div class="form-group col-12">
-                            <label for="items">
-                                {{ __(':resource Details', ['resource' => __('admin-lang.order')]) }}
-                                @can('create', \App\Models\Item::class)
-                                    <a href="{{ route('admin.order.item.create', $order) }}" class="btn btn-success btn-sm">
-                                        <i class="fa fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __(':resource Details', ['resource' => __('admin-lang.order')])]) }}</span>
-                                    </a>
-                                @endcan
-                            </label>
-
-                            @include('admin.item.index', ['items' => $order->items])
-                        </div>
 
                         {{-- item_total_bundle_quantity --}}
                         <div class="form-group col-12 col-lg-6">

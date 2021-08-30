@@ -28,4 +28,38 @@ class OrderStatus extends Enum
             'finished' => trans('order-status.finished'),
         ];
     }
+
+    /**
+     * Return fontawesome icon based on the enum value.
+     *
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return [
+            'draft' => 'fa-calendar',
+            'on_progress' => 'fa-calendar-alt',
+            'scheduled' => 'fa-calendar-plus',
+            'rescheduled' => 'fa-calendar-week',
+            'canceled' => 'fa-calendar-times',
+            'finished' => 'fa-calendar-check',
+        ][$this->value];
+    }
+
+    /**
+     * Return bootstrap color based on the enum value.
+     *
+     * @return string
+     */
+    public function getColor(): string
+    {
+        return [
+            'draft' => 'primary',
+            'on_progress' => 'primary',
+            'scheduled' => 'success',
+            'rescheduled' => 'warning',
+            'canceled' => 'danger',
+            'finished' => 'success',
+        ][$this->value];
+    }
 }

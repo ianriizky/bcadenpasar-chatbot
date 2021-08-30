@@ -11,4 +11,6 @@ return [
     'utility' => 'Utilitas',
     'role' => 'Peran',
     'configuration' => 'Konfigurasi',
+    'report' => 'Laporan',
+    'report-order' => 'Laporan Pesanan',
 ];

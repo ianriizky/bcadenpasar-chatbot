@@ -1,5 +1,5 @@
 @include('admin.configuration.form', [
-    'configuration' => new \App\Models\Configuration,
+    'configuration' => new ModelsConfiguration,
     'url' => route('admin.configuration.create'),
     'icon' => 'fa-plus-square',
     'title' => __('Create :name', ['name' => __('admin-lang.configuration')]),

@@ -10,5 +10,5 @@ namespace App\Models\Concerns\OrderStatus;
  */
 trait Attribute
 {
-
+    //
 }

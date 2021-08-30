@@ -5,6 +5,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.denomination.index') }}">
                         <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
                     </a>

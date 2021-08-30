@@ -1,5 +1,5 @@
 @include('admin.role.form', [
-    'role' => new \App\Models\Role,
+    'role' => new ModelsRole,
     'url' => route('admin.role.create'),
     'icon' => 'fa-plus-square',
     'title' => __('Create :name', ['name' => __('admin-lang.role')]),

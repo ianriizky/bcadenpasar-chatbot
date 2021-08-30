@@ -140,7 +140,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load([
-            'statuses',
+            'statuses' => fn (Relation $query) => $query->latest(),
             'items' => fn (Relation $query) => $query->with('denomination'),
         ]);
 

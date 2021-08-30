@@ -1,3 +1,13 @@
+@can('create', \App\Models\Item::class)
+    <div class="mb-3">
+        <div class="btn-group-vertical">
+            <a href="{{ route('admin.order.item.create', $order) }}" class="btn btn-success btn-sm">
+                <i class="fa fa-plus-square"></i> <span>{{ __('Add :name', ['name' => __(':resource Details', ['resource' => __('admin-lang.order')])]) }}</span>
+            </a>
+        </div>
+    </div>
+@endcan
+
 <div class="table-responsive">
     <table class="table table-striped datatable">
         <thead>

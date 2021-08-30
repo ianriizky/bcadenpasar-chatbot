@@ -34,6 +34,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.branch.index') }}">
                         <i class="fas fa-building"></i> <span>{{ __('admin-lang.branch') }}</span>
                     </a>

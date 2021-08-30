@@ -2,7 +2,7 @@
 
 Username: {{ $user->getUsername() }}
 {{ __('Full name') }}: {{ $userStorage->get('fullname') }}
-{{ __('Gender') }}: {{ \App\Enum\Gender::make($userStorage->get('gender'))->label }}
+{{ __('Gender') }}: {{ EnumGender::make($userStorage->get('gender'))->label }}
 {{ __('Email Address') }}: {{ $userStorage->get('email') }}
 {{ __('Phone Number') }}: {{ $userStorage->get('phone') }}
 {{ __('Whatsapp Phone Number') }}: {{ $userStorage->get('whatsapp_phone') }}

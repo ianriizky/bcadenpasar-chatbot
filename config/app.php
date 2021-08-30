@@ -243,6 +243,21 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // enum
+        'EnumDenominationType' => App\Enum\DenominationType::class,
+        'EnumGender' => App\Enum\Gender::class,
+        'EnumOrderStatus' => App\Enum\OrderStatus::class,
+
+        // model
+        'ModelsBranch' => App\Models\Branch::class,
+        'ModelsConfiguration' => App\Models\Configuration::class,
+        'ModelsCustomer' => App\Models\Customer::class,
+        'ModelsDenomination' => App\Models\Denomination::class,
+        'ModelsItem' => App\Models\Item::class,
+        'ModelsOrder' => App\Models\Order::class,
+        'ModelsOrderStatus' => App\Models\OrderStatus::class,
+        'ModelsRole' => App\Models\Role::class,
+        'ModelsUser' => App\Models\User::class,
     ],
 
 ];

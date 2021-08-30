@@ -3,6 +3,9 @@
 /public/hot
 /public/storage
 /public/css/stisla/*
+/public/fonts
+/public/js/stisla/master.js
+/public/webfonts
 /storage/*.key
 /vendor
 .env

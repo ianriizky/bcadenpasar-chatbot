@@ -4,6 +4,7 @@ namespace App\Conversations;
 
 use App\Enum\OrderStatus as EnumOrderStatus;
 use App\Events\OrderCreated;
+use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Denomination;
 use App\Models\Item;
@@ -143,8 +144,7 @@ class ExchangeConversation extends Conversation
             $this->deleteTelegramMessageFromResponse($response);
 
             /** @var \App\Models\Denomination|null $denomination */
-            if (!$denominations->contains($answer->getValue()) ||
-                !$denomination = Denomination::find($answer->getValue())) {
+            if (!$denominations->contains($answer->getValue()) || !$denomination = Denomination::find($answer->getValue())) {
                 return $this->recordOrder($customer, $this->fallbackMessage($answer->getText()));
             }
 
@@ -161,10 +161,70 @@ class ExchangeConversation extends Conversation
              * If there is an order's item that has same denomination with the selected one,
              * then it will be deleted first before customer continue to record item.
              */
-            if ($item = $order->items()->whereHas('denomination', function ($query) use ($denomination) {
-                $query->whereKey($denomination->getKey());
-            })->first('id')) {
+            if ($item = $order->items()->whereHasDenomination($denomination)->first('id')) {
                 $item->delete();
+            }
+
+            /**
+             * If customer want to add another item, we assume that
+             * the customer already choose the branch.
+             */
+            if ($order->branch && $order->has('items')->exists()) {
+                return $this->recordItem($order, $denomination);
+            }
+
+            return $this->recordBranch($order, $denomination);
+        }, question: $question, additionalParameters: $additionalParameters);
+    }
+
+    /**
+     * Record customer branch data.
+     *
+     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Denomination  $denomination
+     * @param  string|null  $validationErrorMessage
+     * @return $this
+     */
+    protected function recordBranch(Order $order, Denomination $denomination, string $validationErrorMessage = null)
+    {
+        $this->displayValidationErrorMessage($validationErrorMessage);
+
+        $branches = Branch::all('id', 'name');
+        $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
+
+        foreach ($branches as $branch) {
+            $keyboard->addRow(
+                KeyboardButton::create(
+                    view('conversations.exchange.reply-branch', compact('branch'))->render()
+                )->callbackData($branch->getKey())
+            );
+        }
+
+        $keyboard->addRow(
+            KeyboardButton::create(
+                view('conversations.exchange.reply-branch-empty')->render()
+            )->callbackData('branch_empty')
+        );
+
+        $response = $this->reply(
+            $question = view('conversations.exchange.alert-branch')->render(),
+            $additionalParameters = $keyboard->toArray()
+        );
+
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $order, $denomination, $branches) {
+            if (!$answer->isInteractiveMessageReply()) {
+                return;
+            }
+
+            $this->deleteTelegramMessageFromResponse($response);
+
+            /** @var \App\Models\Branch|null $branch */
+            if ((!$branches->contains($answer->getValue()) && $answer->getValue() !== 'branch_empty') || !$branch = Branch::find($answer->getValue())) {
+                return $this->recordBranch($order, $denomination, $this->fallbackMessage($answer->getText()));
+            }
+
+            if ($answer->getValue() !== 'branch_empty') {
+                $order->setBranchRelationValue($branch)->save();
             }
 
             return $this->recordItem($order, $denomination);
@@ -194,8 +254,8 @@ class ExchangeConversation extends Conversation
 
         $keyboard->addRow(
             KeyboardButton::create(
-                view('components.conversations.back', ['text' => 'opsi pilih nominal uang'])->render()
-            )->callbackData('back_to_denomination_option')
+                view('conversations.exchange.reply-bundle_quantity-custom')->render()
+            )->callbackData('bundle_quantity_custom')
         );
 
         $response = $this->reply(
@@ -206,29 +266,62 @@ class ExchangeConversation extends Conversation
         return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response, $order, $denomination) {
             $this->deleteTelegramMessageFromResponse($response);
 
-            if ($answer->getValue() === 'back_to_denomination_option') {
-                return $this->recordOrder($order->getCustomerRelationValue());
+            if ($answer->getValue() === 'bundle_quantity_custom') {
+                $this->deleteTelegramMessageFromResponse($response);
+
+                $response2 = $this->reply(
+                    $question2 = view('conversations.exchange.ask-bundle_quantity-custom', compact('denomination'))->render(),
+                    $additionalParameters2 = Keyboard::create(Keyboard::TYPE_KEYBOARD)
+                        ->resizeKeyboard()
+                        ->oneTimeKeyboard()
+                        ->addRow(KeyboardButton::create(
+                            $backToDenominationOption = trim(view('components.conversations.back', ['text' => 'opsi nominal'])->render())
+                        )->callbackData('back_to_denomination_option'))->toArray()
+                );
+
+                return $this->getBot()->storeConversation($this, function (Answer $answer) use ($response2, $order, $denomination, $backToDenominationOption) {
+                    $this->deleteTelegramMessageFromResponse($response2);
+
+                    if ($answer->getText() === $backToDenominationOption) {
+                        return $this->recordItem($order, $denomination);
+                    }
+
+                    return $this->createItem($order, $denomination, $answer->getText());
+                }, $question2, $additionalParameters2);
             }
 
-            if (!$denomination->isBetweenOrderBundle($answer->getValue())) {
-                return $this->recordItem($order, $denomination, trans('validation.between.numeric', [
-                    'attribute' => trans('Quantity Per Bundle'),
-                    'min' => $denomination->minimum_order_bundle,
-                    'max' => $denomination->maximum_order_bundle,
-                ]));
-            }
-
-            $item = new Item([
-                'quantity_per_bundle' => $denomination->quantity_per_bundle,
-                'bundle_quantity' => $answer->getValue(),
-            ]);
-
-            $item->setDenominationRelationValue($denomination);
-
-            $order->items()->save($item);
-
-            $this->confirmOrder($order);
+            return $this->createItem($order, $denomination, $answer->getValue());
         }, question: $question, additionalParameters: $additionalParameters);
+    }
+
+    /**
+     * Create an item data based on the given order, denomination, and value.
+     *
+     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Denomination  $denomination
+     * @param  int  $value
+     * @return $this
+     */
+    protected function createItem(Order $order, Denomination $denomination, int $value)
+    {
+        if (!$denomination->isBetweenOrderBundle($value)) {
+            return $this->recordItem($order, $denomination, trans('validation.between.numeric', [
+                'attribute' => trans('Quantity Per Bundle'),
+                'min' => $denomination->minimum_order_bundle,
+                'max' => $denomination->maximum_order_bundle,
+            ]));
+        }
+
+        $item = new Item([
+            'quantity_per_bundle' => $denomination->quantity_per_bundle,
+            'bundle_quantity' => $value,
+        ]);
+
+        $item->setDenominationRelationValue($denomination);
+
+        $order->items()->save($item);
+
+        return $this->confirmOrder($order);
     }
 
     /**

@@ -10,6 +10,7 @@ class Item extends Model
     use HasFactory,
         Concerns\Item\Attribute,
         Concerns\Item\Event,
+        Concerns\Item\QueryScope,
         Concerns\Item\Relation;
 
     /**

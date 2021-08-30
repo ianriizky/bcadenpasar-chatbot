@@ -11,4 +11,6 @@ return [
     'utility' => 'Utility',
     'role' => 'Role',
     'configuration' => 'Configuration',
+    'report' => 'Report',
+    'report-order' => 'Order Report',
 ];

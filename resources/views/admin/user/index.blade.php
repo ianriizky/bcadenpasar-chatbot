@@ -17,7 +17,7 @@
             { data: 'fullname' },
             { data: 'email' },
             { data: 'is_active' },
-            { data: 'action', searchable: false, orderable: false, width: '30%' },
+            { data: 'action', searchable: false, orderable: false, width: '26%' },
         ];
         @include('components.datatables-id')
     </script>
@@ -30,6 +30,10 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.user')]) }}</h1>
 
             <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.user.index') }}">
                         <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>

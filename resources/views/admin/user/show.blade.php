@@ -5,6 +5,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.user.index') }}">
                         <i class="fas fa-id-badge"></i> <span>{{ __('admin-lang.user') }}</span>
                     </a>

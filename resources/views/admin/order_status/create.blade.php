@@ -47,7 +47,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            @if (\App\Enum\OrderStatus::scheduled()->equals($enumOrderStatus) || \App\Enum\OrderStatus::rescheduled()->equals($enumOrderStatus))
+                            @if ($enumOrderStatus->isScheduled() || $enumOrderStatus->isRescheduled())
                                 {{-- branch_id --}}
                                 <div class="form-group col-12 col-lg-6">
                                     <label for="branch_id">{{ __('admin-lang.branch') }}<span class="text-danger">*</span></label>
@@ -59,7 +59,7 @@
                                         data-allow-clear="true"
                                         required
                                         autofocus>
-                                        @foreach (\App\Models\Branch::pluck('name', 'id') as $value => $label)
+                                        @foreach (ModelsBranch::pluck('name', 'id') as $value => $label)
                                             <option value="{{ $value }}">{{ $label }}</option>
                                         @endforeach
                                     </select>
@@ -67,6 +67,30 @@
                                     <x-invalid-feedback :name="'branch_id'"/>
                                 </div>
                                 {{-- /.branch_id --}}
+
+                                {{-- user_id --}}
+                                <div class="form-group col-12 col-lg-6">
+                                    <label for="user_id">{{ __('admin-lang.user') }}<span class="text-danger">*</span></label>
+
+                                    @role('admin')
+                                        <select name="user_id"
+                                            id="user_id"
+                                            class="form-control select2 @error('user_id') is-invalid @enderror"
+                                            data-placeholder="--{{ __('Choose :field', ['field' => __('admin-lang.user') ]) }}--"
+                                            data-allow-clear="true"
+                                            required
+                                            autofocus>
+                                            @foreach ($optionUsers as $value => $label)
+                                                <option value="{{ $value }}">{{ $label }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <p class="form-control-plaintext">{{ Auth::user()->fullname }}</p>
+                                    @endrole
+
+                                    <x-invalid-feedback :name="'user_id'"/>
+                                </div>
+                                {{-- /.user_id --}}
 
                                 {{-- schedule_date --}}
                                 <div class="form-group col-12 col-lg-6">
@@ -76,7 +100,7 @@
                                         name="schedule_date"
                                         id="schedule_date"
                                         class="form-control @error('schedule_date') is-invalid @enderror"
-                                        value="{{ old('schedule_date') }}"
+                                        value="{{ old('schedule_date', $order->schedule_date) }}"
                                         required>
 
                                     <x-invalid-feedback :name="'schedule_date'"/>

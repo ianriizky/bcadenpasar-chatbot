@@ -44,6 +44,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.customer.index') }}">
                         <i class="fas fa-user-tie"></i> <span>{{ __('admin-lang.customer') }}</span>
                     </a>
@@ -123,7 +127,7 @@
                                     data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
                                     data-allow-clear="true"
                                     required>
-                                    @foreach (\App\Enum\Gender::toArray() as $value => $label)
+                                    @foreach (EnumGender::toArray() as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\OrderStatusController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +79,12 @@ Route::middleware('auth:web', 'verified', 'user_is_active')->name('admin.')->gro
     Route::prefix('/configuration')->name('configuration.')->group(function () {
         Route::post('/datatable', [ConfigurationController::class, 'datatable'])->name('datatable');
         Route::delete('/multiple', [ConfigurationController::class, 'destroyMultiple'])->name('destroy-multiple');
+    });
+
+    Route::name('report.')->group(function () {
+        Route::get('/report-order', [Report\OrderController::class, 'index'])->name('order.index');
+        Route::post('/report-order/datatable', [Report\OrderController::class, 'datatable'])->name('order.datatable');
+        Route::post('/report-order/export', [Report\OrderController::class, 'export'])->name('order.export');
     });
 
     Route::resource('/order', OrderController::class)->except('create', 'show', 'edit', 'update');

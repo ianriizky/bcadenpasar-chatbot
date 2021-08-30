@@ -18,7 +18,7 @@ use Illuminate\Support\Arr;
 /** @var \BotMan\BotMan\BotMan $botman */
 $botman = resolve('botman');
 
-foreach (HomeConservation::conversations() as $conversation) {
+foreach (HomeConservation::conversations(withHidden: true) as $conversation) {
     $commands = Arr::wrap($conversation['command']);
 
     data_set($commands, 0, '/' . data_get($commands, 0));

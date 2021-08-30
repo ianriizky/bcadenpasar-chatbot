@@ -8,5 +8,4 @@ Username: {{ $customer->username }}
 {{ __('Whatsapp Phone Number') }}: <a href="{{ $customer->whatsapp_phone_url }}">{{ $customer->whatsapp_phone }}</a>
 {{ __('Account Number') }}: {{ $customer->account_number ?? '-' }}
 {{ __('Identity Card Number') }}: {{ $customer->identitycard_number ?? '-' }}
-{{ __('Identity Card Image') }}: {{ $customer->identitycard_image ?? '-' }}
 {{ __('Google Map Address') }}: {{ $customer->google_map_url }}

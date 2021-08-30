@@ -5,7 +5,7 @@ namespace App\Models\Concerns\Branch;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @method static \Illuminate\Database\Eloquent\Builder|static nearestLocation()
+ * @method static \Illuminate\Database\Eloquent\Builder|static nearestLocation($latitude, $longitude)
  *
  * @see \App\Models\Branch
  * @see \Illuminate\Database\Eloquent\Builder @callScope()

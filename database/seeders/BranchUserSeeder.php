@@ -18,16 +18,16 @@ class BranchUserSeeder extends Seeder
      */
     public function run()
     {
-        $branch = Branch::create([
+        $branch_1 = Branch::create([
             'name' => 'BCA KCU Denpasar',
             'address' => 'Jl. Hasanuddin No.58, Pemecutan, Kec. Denpasar Bar., Kota Denpasar, Bali 80232',
             'address_latitude' => '-8.6581162',
             'address_longitude' => '115.2127812',
-            'google_map_url' => 'https://www.google.com/maps/place/BCA+KCU+Denpasar/@-8.6581162,115.2127812,20z/data=!4m5!3m4!1s0x2dd240987c02083b:0x45b03e6b3ab46412!8m2!3d-8.6583514!4d115.2127877',
+            'google_map_url' => 'https://goo.gl/maps/g2NwTkzhg5sXWkPD9',
         ]);
 
         /** @var \App\Models\User $admin */
-        $admin = User::make([
+        $admin_1 = User::make([
             'username' => env('ADMIN_USERNAME', 'admin'),
             'fullname' => env('ADMIN_FULLNAME', 'Administrator'),
             'gender' => env('ADMIN_GENDER', Gender::undefined()),
@@ -37,10 +37,18 @@ class BranchUserSeeder extends Seeder
             'email_verified_at' => Carbon::now(),
             'password' => env('ADMIN_PASSWORD', 'admin12345'),
             'is_active' => true,
-        ])->setBranchRelationValue($branch);
+        ])->setBranchRelationValue($branch_1);
 
-        $admin->save();
+        $admin_1->save();
 
-        $admin->syncRoles(Role::ROLE_ADMIN);
+        $admin_1->syncRoles(Role::ROLE_ADMIN);
+
+        $branch_2 = Branch::create([
+            'name' => 'BCA KCP Gianyar',
+            'address' => 'Jl. By Pass Dharma Giri, Gianyar, Kec. Gianyar, Kabupaten Gianyar, Bali 80511',
+            'address_latitude' => '-8.5408833',
+            'address_longitude' => '115.3168043',
+            'google_map_url' => 'https://goo.gl/maps/ud1KbDx3G1hKTd3v7',
+        ]);
     }
 }

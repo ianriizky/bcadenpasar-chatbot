@@ -73,6 +73,18 @@
                     </li>
                 @endcan
 
+                @if (Auth::user()->can('viewAny', \App\Models\Order::class))
+                    <li class="menu-header">{{ __('admin-lang.report') }}</li>
+                @endif
+
+                @can('viewAny', \App\Models\Order::class)
+                    <li @if (Route::is('admin.report.order.*')) class="active" @endif>
+                        <a href="{{ route('admin.report.order.index') }}" class="nav-link">
+                            <i class="fa fa-file-alt"></i> <span>{{ __('admin-lang.report-order') }}</span>
+                        </a>
+                    </li>
+                @endcan
+
                 @if (Auth::user()->can('viewAny', \App\Models\Role::class))
                     <li class="menu-header">{{ __('admin-lang.utility') }}</li>
                 @endif

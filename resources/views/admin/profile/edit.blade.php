@@ -84,7 +84,7 @@
                                     data-placeholder="--{{ __('Choose :field', ['field' => __('Gender') ]) }}--"
                                     data-allow-clear="true"
                                     required>
-                                    @foreach (\App\Enum\Gender::toArray() as $value => $label)
+                                    @foreach (EnumGender::toArray() as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>

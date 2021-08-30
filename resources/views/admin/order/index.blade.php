@@ -15,10 +15,13 @@
             { data: 'detail', searchable: false, orderable: false, width: '5%', class: 'details-control' },
             { data: 'code' },
             { data: 'customer_fullname' },
-            { data: 'item_total', searchable: false, orderable: false },
+            { data: 'created_at' },
             { data: 'schedule_date' },
             { data: 'status' },
             { data: 'action', searchable: false, orderable: false, width: '20%' },
+        ];
+        const datatable_order = [
+            [4, 'desc'],
         ];
         @include('components.datatables-id')
     </script>
@@ -31,6 +34,10 @@
             <h1>{{ __('List :name', ['name' => __('admin-lang.order')]) }}</h1>
 
             <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.transaction') }}</span>
+                </div>
+
                 <div class="breadcrumb-item">
                     <a href="{{ route('admin.order.index') }}">
                         <i class="fas fa-shopping-cart"></i> <span>{{ __('admin-lang.order') }}</span>
@@ -55,7 +62,7 @@
                                                 <th></th>
                                                 <th>{{ __('Code') }}</th>
                                                 <th>{{ __('admin-lang.customer') }}</th>
-                                                <th>{{ __(':amount Total', ['amount' => __('admin-lang.order')]) }}</th>
+                                                <th>{{ __('Created At') }}</th>
                                                 <th>{{ __('Schedule Date') }}</th>
                                                 <th>Status</th>
                                                 <th>{{ __('Action') }}</th>

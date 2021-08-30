@@ -183,14 +183,14 @@ class RegisterCustomerConversation extends Conversation
     {
         $this->displayValidationErrorMessage($validationErrorMessage);
 
-        $response1 = $this->reply(
+        $response = $this->reply(
             $question = view('conversations.register-customer.ask-identitycard_number')->render(),
             $additionalParameters = $this->keyboardBackToIdentityNumberOption()->toArray()
         );
 
-        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response1) {
+        return $this->getBot()->storeConversation($this, next: function (Answer $answer) use ($response) {
             if (trim($answer->getText()) === $this->backToIdentityNumberOption()) {
-                $this->deleteTelegramMessageFromResponse($response1);
+                $this->deleteTelegramMessageFromResponse($response);
 
                 return $this->askIdentityNumberOption();
             }
@@ -204,40 +204,7 @@ class RegisterCustomerConversation extends Conversation
 
             $this->setUserStorage(['identitycard_number' => $validator->validated()['identitycard_number']]);
 
-            $response2 = $this->reply(
-                $question = view('conversations.register-customer.ask-identitycard_image')->render()
-            );
-
-            return $this->getBot()->storeConversation($this, function (Answer $answer) use ($response1, $response2) {
-                if (trim($answer->getText()) === $this->backToIdentityNumberOption()) {
-                    $this->deleteTelegramMessageFromResponse($response1);
-                    $this->deleteTelegramMessageFromResponse($response2);
-
-                    return $this->askIdentityNumberOption();
-                }
-
-                $photos = $this->getMessagePayload('photo', []);
-
-                if (empty($photos)) {
-                    return $this->askIdentityCard('❌ Foto KTP ' . trans('could not be found.'));
-                }
-
-                $response = $this->reply(view('components.conversations.please-wait')->render());
-
-                $filename = download_telegram_photo($this->getMessagePayload('photo'), Customer::IDENTITYCARD_IMAGE_PATH);
-
-                $this->deleteTelegramMessageFromResponse($response);
-
-                if (!$filename) {
-                    return $this->askIdentityCard('❌ Foto KTP ' . trans('could not be saved.'));
-                }
-
-                $this->setUserStorage(['identitycard_image' => $filename]);
-
-                return $this
-                    ->say('✅ ' . trans(':action ran successfully!', ['action' => 'Upload foto KTP']))
-                    ->askPhone();
-            }, $question);
+            return $this->askPhone();
         }, question: $question, additionalParameters: $additionalParameters);
     }
 

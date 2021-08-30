@@ -1,5 +1,5 @@
 @include('admin.denomination.form', [
-    'denomination' => new \App\Models\Denomination,
+    'denomination' => new ModelsDenomination,
     'url' => route('admin.denomination.create'),
     'icon' => 'fa-plus-square',
     'title' => __('Create :name', ['name' => __('admin-lang.denomination')]),

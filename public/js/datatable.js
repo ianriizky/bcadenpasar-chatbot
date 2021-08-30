@@ -1,8 +1,10 @@
+var datatable;
+
 $(document).ready(function () {
-  $('.datatable').DataTable({
+  datatable = $('.datatable').DataTable({
     processing: true,
     serverSide: true,
-    ajax: {
+    ajax: typeof datatable_ajax !== 'undefined' ? datatable_ajax : {
       url: datatable_url,
       type: 'POST',
       headers: {

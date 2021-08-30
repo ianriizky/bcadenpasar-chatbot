@@ -21,6 +21,10 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
+                    <span>{{ __('admin-lang.master') }}</span>
+                </div>
+
+                <div class="breadcrumb-item">
                     <a href="{{ route('admin.denomination.index') }}">
                         <i class="fas fa-money-bill-wave"></i> <span>{{ __('admin-lang.denomination') }}</span>
                     </a>
@@ -86,7 +90,7 @@
                                     data-placeholder="--{{ __('Choose :field', ['field' => __('Type') ]) }}--"
                                     data-allow-clear="true"
                                     required>
-                                    @foreach (\App\Enum\DenominationType::toArray() as $value => $label)
+                                    @foreach (EnumDenominationType::toArray() as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>

@@ -73,11 +73,13 @@ class HomeConservation extends Conversation
      * Return list of command and its conversation handler class.
      *
      * @param  bool  $withoutStartCommand
+     * @param  bool  $withHidden
      * @return \Illuminate\Support\Collection<array>
      */
-    public static function conversations(bool $withoutStartCommand = false): Collection
+    public static function conversations(bool $withoutStartCommand = false, bool $withHidden = false): Collection
     {
-        return collect([
+        /** @var \Illuminate\Support\Collection<array> $conversations */
+        $conversations = collect([
             [
                 'command' => 'start',
                 'handler' => fn () => new StartConservation,
@@ -106,6 +108,7 @@ class HomeConservation extends Conversation
                 ],
                 'handler' => fn () => new LoginConversation,
                 'description' => 'Mendaftarkan Chat ID Telegram pada akun (khusus admin dan staf)',
+                'is_hidden' => true,
             ],
             [
                 'command' => [
@@ -114,6 +117,7 @@ class HomeConservation extends Conversation
                 ],
                 'handler' => fn () => new LogoutConversation,
                 'description' => 'Menghapus Chat ID Telegram pada akun (khusus admin dan staf)',
+                'is_hidden' => true,
             ],
             [
                 'command' => [
@@ -122,6 +126,7 @@ class HomeConservation extends Conversation
                 ],
                 'handler' => fn () => new AskTelegramChatIdConversation,
                 'description' => 'Mengetahui Chat ID Telegram anda',
+                'is_hidden' => true,
             ],
             [
                 'command' => [
@@ -130,11 +135,22 @@ class HomeConservation extends Conversation
                 ],
                 'handler' => fn () => new CheckOrderStatusConversation,
                 'description' => 'Mengetahui status transaksi penukaran uang anda',
+                'is_hidden' => true,
             ],
-        ])->when($withoutStartCommand, fn (Collection $conversations) =>
-            $conversations->reject(fn ($conversation) =>
+        ]);
+
+        if ($withoutStartCommand) {
+            $conversations = $conversations->reject(fn (array $conversation) =>
                 in_array('start', Arr::wrap($conversation['command']))
-            )
-        );
+            );
+        }
+
+        if (!$withHidden) {
+            $conversations = $conversations->reject(fn (array $conversation) =>
+                ($conversation['is_hidden'] ?? false)
+            );
+        }
+
+        return $conversations;
     }
 }

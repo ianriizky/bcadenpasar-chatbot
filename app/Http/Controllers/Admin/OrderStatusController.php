@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStatus\StoreScheduledRequest;
 use App\Models\Order;
 use App\Models\OrderStatus as ModelsOrderStatus;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -78,8 +80,14 @@ class OrderStatusController extends Controller
 
         $url = route('admin.order.status.create', compact('order', 'enumOrderStatus'));
 
+        $optionUsers = User::when($order->branch, function (Builder $query) use ($order) {
+            $query->whereHas('branch', function (Builder $query) use ($order) {
+                $query->whereKey($order->branch->getKey());
+            });
+        })->pluck('fullname', 'id');
+
         return view('admin.order_status.create', compact(
-            'order', 'enumOrderStatus',
+            'order', 'enumOrderStatus', 'optionUsers',
             'url', 'icon', 'title'
         ));
     }
@@ -99,7 +107,7 @@ class OrderStatusController extends Controller
             $order
                 ->setAttribute('schedule_date', $request->getScheduleDate())
                 ->setBranchRelationValue($request->getBranchFromRequest())
-                ->setUserRelationValue(Auth::user())
+                ->setUserRelationValue($request->getUserFromRequest())
                 ->save();
         }
 
