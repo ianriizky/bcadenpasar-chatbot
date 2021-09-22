@@ -20,8 +20,12 @@ trait Event
     protected static function bootEvent()
     {
         static::saving(function (Item $model) {
-            if (is_null($model->quantity_per_bundle)) {
+            if (is_null($model->getAttributeFromArray('quantity_per_bundle'))) {
                 $model->quantity_per_bundle = $model->getDenominationRelationValue()->quantity_per_bundle;
+            }
+
+            if (!$model->is_order_custom_quantity) {
+                $model->quantity = $model->countQuantityAttribute();
             }
         });
     }

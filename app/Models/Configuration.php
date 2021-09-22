@@ -5,10 +5,14 @@ namespace App\Models;
 use App\Infrastructure\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property string $key
+ * @property string|null $value
+ * @property string|null $description
+ */
 class Configuration extends Model
 {
-    use HasFactory,
-        Concerns\Configuration\Attribute;
+    use HasFactory;
 
     /**
      * {@inheritDoc}
@@ -22,11 +26,11 @@ class Configuration extends Model
     /**
      * Return configuration value of "maximum_total_order_value".
      *
-     * @return float
+     * @return float|null
      */
-    public static function getMaximumTotalOrderValue(): float
+    public static function getMaximumTotalOrderValue(): ?float
     {
-        return (float) static::where('key', 'maximum_total_order_value')->first('value')->value;
+        return static::where('key', 'maximum_total_order_value')->value('value');
     }
 
     /**
@@ -36,6 +40,6 @@ class Configuration extends Model
      */
     public static function getMaximumOrderPerDay(): int
     {
-        return (int) static::where('key', 'maximum_order_per_day')->first('value')->value;
+        return static::where('key', 'maximum_order_per_day')->value('value');
     }
 }

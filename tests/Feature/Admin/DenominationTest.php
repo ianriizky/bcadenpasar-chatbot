@@ -53,7 +53,9 @@ class DenominationTest extends TestCase
             ->post(route('admin.denomination.store'), $data = Denomination::factory()->raw())
             ->assertRedirect(route('admin.denomination.index'));
 
-        $this->assertDatabaseHas(Denomination::class, Arr::except($data, 'image'));
+        $this->assertDatabaseHas(Denomination::class, Arr::except($data, [
+            'minimum_order_quantity', 'maximum_order_quantity', 'image'
+        ]));
 
         Storage::assertExists(Denomination::IMAGE_PATH . '/' . $data['image']->getClientOriginalName());
     }
@@ -83,7 +85,9 @@ class DenominationTest extends TestCase
             ->put(route('admin.denomination.update', $denomination), $data = Denomination::factory()->raw())
             ->assertRedirect(route('admin.denomination.edit', Denomination::firstWhere('value', $data['value'])));
 
-        $this->assertDatabaseHas(Denomination::class, Arr::except($data, 'image'));
+        $this->assertDatabaseHas(Denomination::class, Arr::except($data, [
+            'minimum_order_quantity', 'maximum_order_quantity', 'image'
+        ]));
 
         Storage::assertMissing(Denomination::IMAGE_PATH . '/' . $denomination->getRawOriginal('image'));
         Storage::assertExists(Denomination::IMAGE_PATH . '/' . $data['image']->getClientOriginalName());

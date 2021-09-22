@@ -19,6 +19,8 @@ class Item extends Model
     protected $fillable = [
         'quantity_per_bundle',
         'bundle_quantity',
+        'quantity',
+        'is_order_custom_quantity',
     ];
 
     /**
@@ -27,5 +29,17 @@ class Item extends Model
     protected $casts = [
         'quantity_per_bundle' => 'integer',
         'bundle_quantity' => 'integer',
+        'quantity' => 'integer',
+        'is_order_custom_quantity' => 'boolean',
     ];
+
+    /**
+     * Count value of "quantity" attribute.
+     *
+     * @return int
+     */
+    public function countQuantityAttribute(): int
+    {
+        return $this->quantity_per_bundle * $this->bundle_quantity;
+    }
 }

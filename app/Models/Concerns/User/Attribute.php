@@ -43,15 +43,15 @@ trait Attribute
      */
     public function getIsActiveBadgeAttribute(): string
     {
-        if ($this->is_active) {
-            return sprintf(<<<'html'
-            <div class="badge badge-success">%s</div>
-            html, trans('Active'));
-        }
-
         return sprintf(<<<'html'
-        <div class="badge badge-danger">%s</div>
-        html, trans('Not Active'));
+            <span class="badge badge-%s">
+                <i class="fa fa-%s"></i> %s
+            </span>
+        html,
+            $this->is_active ? 'success' : 'danger',
+            $this->is_active ? 'check-circle' : 'times-circle',
+            $this->is_active ? trans('Active') : trans('Not Active')
+        );
     }
 
     /**

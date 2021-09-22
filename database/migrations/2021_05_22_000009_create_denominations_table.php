@@ -20,12 +20,17 @@ return new class extends Migration
         Schema::create('denominations', function (Blueprint $table) {
             $table->id();
 
+            $table->string('key')->unique();
             $table->string('name');
-            $table->unsignedDecimal('value')->unique();
+            $table->unsignedDecimal('value');
             $table->string('type')->comment('Enum of ' . DenominationType::class);
             $table->unsignedInteger('quantity_per_bundle');
             $table->unsignedInteger('minimum_order_bundle');
             $table->unsignedInteger('maximum_order_bundle');
+            $table->unsignedInteger('minimum_order_quantity');
+            $table->unsignedInteger('maximum_order_quantity');
+            $table->boolean('can_order_custom_quantity')->default(true);
+            $table->boolean('is_visible')->default(false);
             $table->string('image')->nullable();
             $table->timestamps();
         });

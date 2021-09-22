@@ -10,6 +10,54 @@
             $('.select2').select2();
 
             @include('components.select2-change', ['olds' => Arr::except(old() ?: $denomination, '_token')])
+
+            $('select#type').change(function () {
+                switch (this.value) {
+                    case @json(App\Enum\DenominationType::coin()):
+                        $('div#minimum_order_quantity_text_append').text('{{ Str::lower(App\Enum\DenominationType::coin()->label) }}');
+                        $('div#maximum_order_quantity_text_append').text('{{ Str::lower(App\Enum\DenominationType::coin()->label) }}');
+                        break;
+
+                    case @json(App\Enum\DenominationType::banknote()):
+                        $('div#minimum_order_quantity_text_append').text('{{ Str::lower(App\Enum\DenominationType::banknote()->label) }}');
+                        $('div#maximum_order_quantity_text_append').text('{{ Str::lower(App\Enum\DenominationType::banknote()->label) }}');
+                        break;
+
+                    default:
+                    $('div#minimum_order_quantity_text_append').text(null);
+                    $('div#maximum_order_quantity_text_append').text(null);
+                        break;
+                }
+            }).trigger('change');
+
+            $('input[name=can_order_custom_quantity]').change(function () {
+                if (this.value == 1) {
+                    $('input#minimum_order_quantity').removeAttr('disabled');
+                    $('input#maximum_order_quantity').removeAttr('disabled');
+                } else {
+                    $('input#minimum_order_quantity').attr('disabled', 'disabled');
+                    $('input#maximum_order_quantity').attr('disabled', 'disabled');
+
+                    $('.minimum_order_quantity_listener').trigger('change');
+                    $('.maximum_order_quantity_listener').trigger('change');
+                }
+            }).filter(':checked').trigger('change');
+
+            $('.minimum_order_quantity_listener').change(function () {
+                if ($('input[name=can_order_custom_quantity]:checked').val() == 0) {
+                    $('input#minimum_order_quantity').val(
+                        $('input#quantity_per_bundle').val() * $('input#minimum_order_bundle').val()
+                    );
+                }
+            });
+
+            $('.maximum_order_quantity_listener').change(function () {
+                if ($('input[name=can_order_custom_quantity]:checked').val() == 0) {
+                    $('input#maximum_order_quantity').val(
+                        $('input#quantity_per_bundle').val() * $('input#maximum_order_bundle').val()
+                    );
+                }
+            });
         });
     </script>
 @endsection
@@ -45,6 +93,22 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            {{-- key --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="key">{{ __('Key') }}<span class="text-danger">*</span></label>
+
+                                <input type="text"
+                                    name="key"
+                                    id="key"
+                                    class="form-control @error('key') is-invalid @enderror"
+                                    value="{{ old('key', $denomination->key) }}"
+                                    required
+                                    autofocus>
+
+                                <x-invalid-feedback :name="'key'"/>
+                            </div>
+                            {{-- /.key --}}
+
                             {{-- name --}}
                             <div class="form-group col-12 col-lg-6">
                                 <label for="name">{{ __('Name') }}<span class="text-danger">*</span></label>
@@ -60,8 +124,6 @@
                                 <x-invalid-feedback :name="'name'"/>
                             </div>
                             {{-- /.name --}}
-
-                            <div class="col-12 col-lg-6"></div>
 
                             {{-- value --}}
                             <div class="form-group col-12 col-lg-6">
@@ -107,7 +169,7 @@
                                     <input type="number"
                                         name="quantity_per_bundle"
                                         id="quantity_per_bundle"
-                                        class="form-control @error('quantity_per_bundle') is-invalid @enderror"
+                                        class="form-control minimum_order_quantity_listener maximum_order_quantity_listener @error('quantity_per_bundle') is-invalid @enderror"
                                         value="{{ old('quantity_per_bundle', $denomination->quantity_per_bundle) }}"
                                         min="0"
                                         required
@@ -130,7 +192,7 @@
                                     <input type="number"
                                         name="minimum_order_bundle"
                                         id="minimum_order_bundle"
-                                        class="form-control @error('minimum_order_bundle') is-invalid @enderror"
+                                        class="form-control minimum_order_quantity_listener @error('minimum_order_bundle') is-invalid @enderror"
                                         value="{{ old('minimum_order_bundle', $denomination->minimum_order_bundle) }}"
                                         min="0"
                                         required
@@ -153,7 +215,7 @@
                                     <input type="number"
                                         name="maximum_order_bundle"
                                         id="maximum_order_bundle"
-                                        class="form-control @error('maximum_order_bundle') is-invalid @enderror"
+                                        class="form-control maximum_order_quantity_listener @error('maximum_order_bundle') is-invalid @enderror"
                                         value="{{ old('maximum_order_bundle', $denomination->maximum_order_bundle) }}"
                                         min="0"
                                         required
@@ -167,6 +229,112 @@
                                 </div>
                             </div>
                             {{-- /.maximum_order_bundle --}}
+
+                            {{-- can_order_custom_quantity --}}
+                            <div class="form-group col-12 col-lg-6">
+                                <label for="can_order_custom_quantity" class="d-block">{{ __('Can Order Custom Quantity') }}<span class="text-danger">*</span> <i class="fa fa-question-circle" data-toggle="tooltip" title="{{ __('If the number of orders can be customized, then the minimum and maximum value of the number of orders will following the minimum and maximum value of the number of bundles') }}"></i></label>
+
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                        name="can_order_custom_quantity"
+                                        id="can_order_custom_quantity_true"
+                                        value="1"
+                                        @if (old('can_order_custom_quantity', $denomination->can_order_custom_quantity)) checked @endif
+                                        class="custom-control-input">
+
+                                    <label class="custom-control-label" for="can_order_custom_quantity_true">{{ __('Yes') }}</label>
+                                </div>
+
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                        name="can_order_custom_quantity"
+                                        id="can_order_custom_quantity_false"
+                                        value="0"
+                                        @unless (old('can_order_custom_quantity', $denomination->can_order_custom_quantity)) checked @endunless
+                                        class="custom-control-input">
+
+                                    <label class="custom-control-label" for="can_order_custom_quantity_false">{{ __('No') }}</label>
+                                </div>
+
+                                <x-invalid-feedback :name="'can_order_custom_quantity'"/>
+                            </div>
+                            {{-- /.can_order_custom_quantity --}}
+
+                            {{-- minimum_order_quantity --}}
+                            <div class="form-group col-12 col-lg-3">
+                                <label for="minimum_order_quantity">{{ __('Minimum Order Quantity') }}</label>
+
+                                <div class="input-group">
+                                    <input type="number"
+                                        name="minimum_order_quantity"
+                                        id="minimum_order_quantity"
+                                        class="form-control @error('minimum_order_quantity') is-invalid @enderror"
+                                        value="{{ old('minimum_order_quantity', $denomination->minimum_order_quantity) }}"
+                                        min="0"
+                                        required
+                                        autofocus>
+
+                                    <div class="input-group-append">
+                                        <div id="minimum_order_quantity_text_append" class="input-group-text"></div>
+                                    </div>
+
+                                    <x-invalid-feedback :name="'minimum_order_quantity'"/>
+                                </div>
+                            </div>
+                            {{-- /.minimum_order_quantity --}}
+
+                            {{-- maximum_order_quantity --}}
+                            <div class="form-group col-12 col-lg-3">
+                                <label for="maximum_order_quantity">{{ __('Maximum Order Quantity') }}</label>
+
+                                <div class="input-group">
+                                    <input type="number"
+                                        name="maximum_order_quantity"
+                                        id="maximum_order_quantity"
+                                        class="form-control @error('maximum_order_quantity') is-invalid @enderror"
+                                        value="{{ old('maximum_order_quantity', $denomination->maximum_order_quantity) }}"
+                                        min="0"
+                                        required
+                                        autofocus>
+
+                                    <div class="input-group-append">
+                                        <div id="maximum_order_quantity_text_append" class="input-group-text"></div>
+                                    </div>
+
+                                    <x-invalid-feedback :name="'maximum_order_quantity'"/>
+                                </div>
+                            </div>
+                            {{-- /.maximum_order_quantity --}}
+
+                            {{-- is_visible --}}
+                            <div class="form-group col-12 col-lg-12">
+                                <label for="is_visible" class="d-block">{{ __('Visible') }}<span class="text-danger">*</span></label>
+
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                        name="is_visible"
+                                        id="is_visible_true"
+                                        value="1"
+                                        @if (old('is_visible', $denomination->is_visible)) checked @endif
+                                        class="custom-control-input">
+
+                                    <label class="custom-control-label" for="is_visible_true">{{ __('Yes') }}</label>
+                                </div>
+
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                        name="is_visible"
+                                        id="is_visible_false"
+                                        value="0"
+                                        @unless (old('is_visible', $denomination->is_visible)) checked @endunless
+                                        class="custom-control-input">
+
+                                    <label class="custom-control-label" for="is_visible_false">{{ __('No') }}</label>
+                                </div>
+
+                                <x-invalid-feedback :name="'is_visible'"/>
+                            </div>
+                            {{-- /.is_visible --}}
 
                             {{-- image --}}
                             <div class="form-group col-12 col-lg-6">

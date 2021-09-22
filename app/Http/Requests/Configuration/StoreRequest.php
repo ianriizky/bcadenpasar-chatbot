@@ -13,7 +13,7 @@ class StoreRequest extends AbstractRequest
     {
         return [
             'key' => 'required|string|max:255|unique:' . Configuration::class,
-            'value' => 'required|string|max:255',
+            'value' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string',
         ];
     }

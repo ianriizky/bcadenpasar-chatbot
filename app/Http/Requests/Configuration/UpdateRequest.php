@@ -14,7 +14,7 @@ class UpdateRequest extends AbstractRequest
     {
         return [
             'key' => ['required', 'string', 'max:255', Rule::unique(Configuration::class)->ignoreModel($this->route('configuration'))],
-            'value' => 'required|string|max:255',
+            'value' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string',
         ];
     }

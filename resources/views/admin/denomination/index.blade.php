@@ -15,7 +15,8 @@
             { data: 'name' },
             { data: 'value' },
             { data: 'type' },
-            { data: 'quantity_per_bundle' },
+            { data: 'is_visible' },
+            { data: 'can_order_custom_quantity' },
             { data: 'action', searchable: false, orderable: false, width: '26%' },
         ];
         @include('components.datatables-id')
@@ -65,7 +66,8 @@
                                                 <th>{{ __('Name') }}</th>
                                                 <th>{{ __('Value') }}</th>
                                                 <th>{{ __('Type') }}</th>
-                                                <th>{{ __('Quantity Per Bundle') }}</th>
+                                                <th>{{ __('Visible') }}</th>
+                                                <th>{{ __('Can Order Custom Quantity') }}</th>
                                                 <th>{{ __('Action') }}</th>
                                             </tr>
                                         </thead>

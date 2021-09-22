@@ -24,7 +24,9 @@ return new class extends Migration
             $table->foreignIdFor(Denomination::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
 
             $table->unsignedInteger('quantity_per_bundle');
-            $table->unsignedInteger('bundle_quantity');
+            $table->unsignedInteger('bundle_quantity')->nullable();
+            $table->unsignedInteger('quantity');
+            $table->boolean('is_order_custom_quantity')->default(true);
             $table->timestamps();
         });
     }

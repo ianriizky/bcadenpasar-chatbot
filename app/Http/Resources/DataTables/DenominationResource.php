@@ -3,6 +3,7 @@
 namespace App\Http\Resources\DataTables;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 /**
  * @property \App\Models\Denomination $resource
@@ -17,16 +18,6 @@ class DenominationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $typeBadge = sprintf(<<<'html'
-            <span class="badge badge-%s">
-                <i class="fa fa-%s"></i> %s
-            </span>
-        html,
-            $this->resource->type->isCoin() ? 'danger' : 'success',
-            $this->resource->type->isCoin() ? 'coins' : 'money-bill',
-            $this->resource->type->label
-        );
-
         $elements = [];
 
         if ($request->user()->can('view', $this->resource)) {
@@ -53,8 +44,9 @@ class DenominationResource extends JsonResource
             ])->render(),
             'name' => $this->resource->name,
             'value' => $this->resource->value_rupiah,
-            'type' => $typeBadge,
-            'quantity_per_bundle' => $this->resource->quantity_per_bundle . ' ' . trans('bundle'),
+            'type' => $this->resource->type_badge,
+            'is_visible' => $this->resource->is_visible_badge,
+            'can_order_custom_quantity' => $this->resource->can_order_custom_quantity_badge,
             'action' => view('components.datatables.button-group', compact('elements'))->render(),
         ];
     }

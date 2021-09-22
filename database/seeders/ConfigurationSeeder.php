@@ -17,13 +17,13 @@ class ConfigurationSeeder extends Seeder
         array_map(fn (array $attributes) => Configuration::create($attributes), [
             [
                 'key' => 'maximum_total_order_value',
-                'value' => 44000000,
+                'value' => null,
                 'description' => 'Maximum total order value in one transaction/order',
             ],
             [
                 'key' => 'maximum_order_per_day',
                 'value' => 20,
-                'description' => 'Maximum total order value in one transaction/order',
+                'description' => 'Maximum number of order in one day',
             ],
         ]);
     }

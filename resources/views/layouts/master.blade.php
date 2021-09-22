@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ mix('css/stisla/style.css') }}">
     <link rel="stylesheet" href="{{ mix('css/stisla/components.css') }}">
     @yield('style')
+    @stack('styles')
 </head>
 
 <body>
@@ -35,4 +36,5 @@
     <script src="{{ asset('js/stisla/app.js') }}"></script>
     <script src="{{ asset('js/stisla/scripts.js') }}"></script>
     @yield('script')
+    @stack('scripts')
 </body>

@@ -24,12 +24,17 @@ class Denomination extends Model
      * {@inheritDoc}
      */
     protected $fillable = [
+        'key',
         'name',
         'value',
         'type',
         'quantity_per_bundle',
         'minimum_order_bundle',
         'maximum_order_bundle',
+        'minimum_order_quantity',
+        'maximum_order_quantity',
+        'can_order_custom_quantity',
+        'is_visible',
         'image',
     ];
 
@@ -42,6 +47,10 @@ class Denomination extends Model
         'quantity_per_bundle' => 'integer',
         'minimum_order_bundle' => 'integer',
         'maximum_order_bundle' => 'integer',
+        'minimum_order_quantity' => 'integer',
+        'maximum_order_quantity' => 'integer',
+        'can_order_custom_quantity' => 'boolean',
+        'is_visible' => 'boolean',
     ];
 
     /**
@@ -62,5 +71,45 @@ class Denomination extends Model
         return
             $value > $this->minimum_order_bundle &&
             $value < $this->maximum_order_bundle;
+    }
+
+    /**
+     * Determine whether the given value is between the minimum and maximum order quantity.
+     *
+     * @param  int  $value
+     * @param  bool  $equal
+     * @return bool
+     */
+    public function isBetweenOrderQuantity(int $value, bool $equal = true): bool
+    {
+        if ($equal) {
+            return
+                $value >= $this->minimum_order_quantity &&
+                $value <= $this->maximum_order_quantity;
+        }
+
+        return
+            $value > $this->minimum_order_quantity &&
+            $value < $this->maximum_order_quantity;
+    }
+
+    /**
+     * Count value of "minimum_order_quantity" attribute.
+     *
+     * @return int
+     */
+    public function countMinimumOrderQuantityAttribute(): int
+    {
+        return $this->quantity_per_bundle * $this->minimum_order_bundle;
+    }
+
+    /**
+     * Count value of "maximum_order_quantity" attribute.
+     *
+     * @return int
+     */
+    public function countMaximumOrderQuantityAttribute(): int
+    {
+        return $this->quantity_per_bundle * $this->maximum_order_bundle;
     }
 }

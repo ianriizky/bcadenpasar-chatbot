@@ -26,6 +26,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
+                        {{-- key --}}
+                        <div class="form-group col-12 col-lg-6">
+                            <label for="key">{{ __('Key') }}</label>
+
+                            <p class="form-control-plaintext">{{ $denomination->key }}</p>
+                        </div>
+                        {{-- /.key --}}
+
                         {{-- name --}}
                         <div class="form-group col-12 col-lg-6">
                             <label for="name">{{ __('Name') }}</label>
@@ -33,8 +41,6 @@
                             <p class="form-control-plaintext">{{ $denomination->name }}</p>
                         </div>
                         {{-- /.name --}}
-
-                        <div class="col-12 col-lg-6"></div>
 
                         {{-- value --}}
                         <div class="form-group col-12 col-lg-6">
@@ -75,6 +81,38 @@
                             <p class="form-control-plaintext">{{ $denomination->maximum_order_bundle }} {{ __('bundle') }}</p>
                         </div>
                         {{-- /.maximum_order_bundle --}}
+
+                        {{-- can_order_custom_quantity --}}
+                        <div class="form-group col-12 col-lg-6">
+                            <label for="can_order_custom_quantity">{{ __('Can Order Custom Quantity') }} <i class="fa fa-question-circle" data-toggle="tooltip" title="{{ __('If the number of orders can be customized, then the minimum and maximum value of the number of orders will following the minimum and maximum value of the number of bundles') }}"></i></label>
+
+                            <p class="form-control-plaintext">{!! $denomination->can_order_custom_quantity_badge !!}</p>
+                        </div>
+                        {{-- /.can_order_custom_quantity --}}
+
+                        {{-- minimum_order_quantity --}}
+                        <div class="form-group col-12 col-lg-3">
+                            <label for="minimum_order_quantity">{{ __('Minimum Order Quantity') }}</label>
+
+                            <p class="form-control-plaintext">{{ $denomination->minimum_order_quantity }} {{ Str::lower($denomination->type->label) }}</p>
+                        </div>
+                        {{-- /.minimum_order_quantity --}}
+
+                        {{-- maximum_order_quantity --}}
+                        <div class="form-group col-12 col-lg-3">
+                            <label for="maximum_order_quantity">{{ __('Maximum Order Quantity') }}</label>
+
+                            <p class="form-control-plaintext">{{ $denomination->maximum_order_quantity }} {{ Str::lower($denomination->type->label) }}</p>
+                        </div>
+                        {{-- /.maximum_order_quantity --}}
+
+                        {{-- is_visible --}}
+                        <div class="form-group col-12 col-lg-12">
+                            <label for="is_visible">{{ __('Visible') }}</label>
+
+                            <p class="form-control-plaintext">{!! $denomination->is_visible_badge !!}</p>
+                        </div>
+                        {{-- /.is_visible --}}
 
                         {{-- image_preview --}}
                         <div class="form-group col-12 col-lg-6">
