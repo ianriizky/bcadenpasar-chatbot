@@ -15,7 +15,7 @@ class UpdateRequest extends AbstractRequest
     public function rules()
     {
         return [
-            'key' => ['required', 'string', 'max:255', Rule::unique(Denomination::class)->ignoreModel($this->route('denomination'))],
+            'code' => ['required', 'string', 'max:255', Rule::unique(Denomination::class)->ignoreModel($this->route('denomination'))],
             'name' => 'required|string|max:255',
             'value' => 'required|numeric|min:0',
             'type' => 'required|enum:' . DenominationType::class,

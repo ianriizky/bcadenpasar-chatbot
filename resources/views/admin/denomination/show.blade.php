@@ -26,13 +26,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        {{-- key --}}
+                        {{-- code --}}
                         <div class="form-group col-12 col-lg-6">
-                            <label for="key">{{ __('Key') }}</label>
+                            <label for="code">{{ __('Code') }}</label>
 
-                            <p class="form-control-plaintext">{{ $denomination->key }}</p>
+                            <p class="form-control-plaintext">{{ $denomination->code }}</p>
                         </div>
-                        {{-- /.key --}}
+                        {{-- /.code --}}
 
                         {{-- name --}}
                         <div class="form-group col-12 col-lg-6">

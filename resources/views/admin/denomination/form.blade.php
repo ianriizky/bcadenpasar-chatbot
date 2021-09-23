@@ -93,21 +93,21 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            {{-- key --}}
+                            {{-- code --}}
                             <div class="form-group col-12 col-lg-6">
-                                <label for="key">{{ __('Key') }}<span class="text-danger">*</span></label>
+                                <label for="code">{{ __('Code') }}<span class="text-danger">*</span></label>
 
                                 <input type="text"
-                                    name="key"
-                                    id="key"
-                                    class="form-control @error('key') is-invalid @enderror"
-                                    value="{{ old('key', $denomination->key) }}"
+                                    name="code"
+                                    id="code"
+                                    class="form-control @error('code') is-invalid @enderror"
+                                    value="{{ old('code', $denomination->code) }}"
                                     required
                                     autofocus>
 
-                                <x-invalid-feedback :name="'key'"/>
+                                <x-invalid-feedback :name="'code'"/>
                             </div>
-                            {{-- /.key --}}
+                            {{-- /.code --}}
 
                             {{-- name --}}
                             <div class="form-group col-12 col-lg-6">

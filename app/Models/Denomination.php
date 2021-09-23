@@ -11,6 +11,7 @@ class Denomination extends Model
     use HasFactory,
         Concerns\Denomination\Attribute,
         Concerns\Denomination\Event,
+        Concerns\Denomination\QueryScope,
         Concerns\Denomination\Relation;
 
     /**
@@ -24,7 +25,7 @@ class Denomination extends Model
      * {@inheritDoc}
      */
     protected $fillable = [
-        'key',
+        'code',
         'name',
         'value',
         'type',

@@ -120,14 +120,14 @@ class ExchangeConversation extends Conversation
     {
         $this->displayValidationErrorMessage($validationErrorMessage);
 
-        $denominations = Denomination::all('id', 'name', 'value');
+        $denominations = Denomination::whereIsVisible()->get(['id', 'code', 'name', 'value']);
         $keyboard = Keyboard::create(Keyboard::TYPE_INLINE)->resizeKeyboard();
 
         foreach ($denominations as $denomination) {
             $keyboard->addRow(
                 KeyboardButton::create(
                     view('conversations.exchange.reply-denomination', compact('denomination'))->render()
-                )->callbackData($denomination->getKey())
+                )->callbackData($denomination->code)
             );
         }
 
@@ -144,7 +144,7 @@ class ExchangeConversation extends Conversation
             $this->deleteTelegramMessageFromResponse($response);
 
             /** @var \App\Models\Denomination|null $denomination */
-            if (!$denominations->contains($answer->getValue()) || !$denomination = Denomination::find($answer->getValue())) {
+            if (!$denominations->contains('code', $answer->getValue()) || !$denomination = Denomination::firstWhere('code', $answer->getValue())) {
                 return $this->recordOrder($customer, $this->fallbackMessage($answer->getText()));
             }
 

@@ -13,7 +13,7 @@ class StoreRequest extends AbstractRequest
     public function rules()
     {
         return [
-            'key' => 'required|string|max:255|unique:' . Denomination::class,
+            'code' => 'required|string|max:255|unique:' . Denomination::class,
             'name' => 'required|string|max:255',
             'value' => 'required|numeric|min:0',
             'type' => 'required|enum:' . DenominationType::class,

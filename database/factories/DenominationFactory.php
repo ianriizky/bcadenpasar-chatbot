@@ -33,7 +33,7 @@ class DenominationFactory extends Factory
             : $this->faker->randomElement([1000, 2000, 5000, 10000, 20000, 50000, 75000, 100000]);
 
         return [
-            'key' => $type->value . '-' . $value,
+            'code' => $type->value . '-' . $value,
             'name' => terbilang($value),
             'value' => $value,
             'type' => $type,

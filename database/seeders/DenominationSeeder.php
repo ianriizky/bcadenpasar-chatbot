@@ -38,7 +38,7 @@ class DenominationSeeder extends Seeder
     {
         return [
             [
-                'key' => 'coin-100',
+                'code' => 'coin-100',
                 'name' => 'Seratus',
                 'value' => 100,
                 'type' => DenominationType::coin(),
@@ -49,7 +49,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'coin-100.png',
             ],
             [
-                'key' => 'coin-200',
+                'code' => 'coin-200',
                 'name' => 'Dua ratus',
                 'value' => 200,
                 'type' => DenominationType::coin(),
@@ -60,7 +60,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'coin-200.png',
             ],
             [
-                'key' => 'coin-500',
+                'code' => 'coin-500',
                 'name' => 'Lima ratus',
                 'value' => 500,
                 'type' => DenominationType::coin(),
@@ -71,7 +71,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'coin-500.png',
             ],
             [
-                'key' => 'coin-1000',
+                'code' => 'coin-1000',
                 'name' => 'Seribu',
                 'value' => 1000,
                 'type' => DenominationType::coin(),
@@ -93,7 +93,7 @@ class DenominationSeeder extends Seeder
     {
         return [
             [
-                'key' => 'banknote-1000',
+                'code' => 'banknote-1000',
                 'name' => 'Seribu',
                 'value' => 1000,
                 'type' => DenominationType::banknote(),
@@ -104,7 +104,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'banknote-1000.jpg',
             ],
             [
-                'key' => 'banknote-2000',
+                'code' => 'banknote-2000',
                 'name' => 'Dua ribu',
                 'value' => 2000,
                 'type' => DenominationType::banknote(),
@@ -116,7 +116,7 @@ class DenominationSeeder extends Seeder
                 'is_visible' => true,
             ],
             [
-                'key' => 'banknote-5000',
+                'code' => 'banknote-5000',
                 'name' => 'Lima ribu',
                 'value' => 5000,
                 'type' => DenominationType::banknote(),
@@ -128,7 +128,7 @@ class DenominationSeeder extends Seeder
                 'is_visible' => true,
             ],
             [
-                'key' => 'banknote-10000',
+                'code' => 'banknote-10000',
                 'name' => 'Sepuluh ribu',
                 'value' => 10000,
                 'type' => DenominationType::banknote(),
@@ -140,7 +140,7 @@ class DenominationSeeder extends Seeder
                 'is_visible' => true,
             ],
             [
-                'key' => 'banknote-20000',
+                'code' => 'banknote-20000',
                 'name' => 'Dua puluh ribu',
                 'value' => 20000,
                 'type' => DenominationType::banknote(),
@@ -152,7 +152,7 @@ class DenominationSeeder extends Seeder
                 'is_visible' => true,
             ],
             [
-                'key' => 'banknote-50000',
+                'code' => 'banknote-50000',
                 'name' => 'Lima puluh ribu',
                 'value' => 50000,
                 'type' => DenominationType::banknote(),
@@ -163,7 +163,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'banknote-50000.jpg',
             ],
             [
-                'key' => 'banknote-75000',
+                'code' => 'banknote-75000',
                 'name' => 'Tujuh puluh lima ribu',
                 'value' => 75000,
                 'type' => DenominationType::banknote(),
@@ -174,7 +174,7 @@ class DenominationSeeder extends Seeder
                 'image' => 'banknote-75000.jpg',
             ],
             [
-                'key' => 'banknote-100000',
+                'code' => 'banknote-100000',
                 'name' => 'Seratus ribu',
                 'value' => 100000,
                 'type' => DenominationType::banknote(),

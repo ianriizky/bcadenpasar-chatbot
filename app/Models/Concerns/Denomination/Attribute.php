@@ -5,7 +5,7 @@ namespace App\Models\Concerns\Denomination;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * @property string $key
+ * @property string $code
  * @property string $name
  * @property float $value
  * @property \App\Enum\DenominationType $type

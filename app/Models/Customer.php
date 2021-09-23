@@ -161,7 +161,8 @@ class Customer extends Model implements Issuerable, HasTelegramChatId, MorphToIs
                 });
             }
 
-            return $model;
+            /** @var static $model */
+            return $model->refresh();
         });
     }
 }

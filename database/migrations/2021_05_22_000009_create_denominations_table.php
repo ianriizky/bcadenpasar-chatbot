@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::create('denominations', function (Blueprint $table) {
             $table->id();
 
-            $table->string('key')->unique();
+            $table->string('code')->unique();
             $table->string('name');
             $table->unsignedDecimal('value');
             $table->string('type')->comment('Enum of ' . DenominationType::class);
