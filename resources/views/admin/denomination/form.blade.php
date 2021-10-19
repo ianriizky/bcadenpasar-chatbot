@@ -345,14 +345,16 @@
                                 @endif
 
                                 <div class="custom-file">
-                                    <label class="custom-file-label" for="image">{{ __('Choose file') }}</label>
+                                    <label class="custom-file-label" for="image">{{ __('Choose File') }}</label>
 
                                     <input type="file"
                                         name="image"
                                         id="image"
-                                        class="custom-file-input"
+                                        class="custom-file-input form-control @error('image') is-invalid @enderror"
                                         data-preview="#image_preview"
                                         accept="image/*">
+
+                                    <x-invalid-feedback :name="'image'"/>
                                 </div>
                             </div>
                             {{-- /.image --}}

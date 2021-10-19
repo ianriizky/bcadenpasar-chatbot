@@ -11,10 +11,7 @@ use Illuminate\Support\Str;
 class DenominationResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * {@inheritDoc}
      */
     public function toArray($request)
     {

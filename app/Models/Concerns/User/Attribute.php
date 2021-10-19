@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
  * @property boolean $is_active
  * @property string $is_active_badge
  * @property-read string $role
- * @property string $gravatar_image
+ * @property-read string $gravatar_image
  *
  * @see \App\Models\User
  */

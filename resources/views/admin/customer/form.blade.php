@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <form action="{{ $action }}" method="post">
+        <form action="{{ $action }}" method="post" enctype="multipart/form-data">
             @csrf
             @isset($method) @method($method) @endisset
 
@@ -285,14 +285,16 @@
                                 @endif
 
                                 <div class="custom-file">
-                                    <label class="custom-file-label" for="identitycard_image">{{ __('Choose file') }}</label>
+                                    <label class="custom-file-label" for="identitycard_image">{{ __('Choose File') }}</label>
 
                                     <input type="file"
                                         name="identitycard_image"
                                         id="identitycard_image"
-                                        class="custom-file-input"
+                                        class="custom-file-input form-control @error('identitycard_image') is-invalid @enderror"
                                         data-preview="#identitycard_image_preview"
                                         accept="image/*">
+
+                                    <x-invalid-feedback :name="'identitycard_image'"/>
                                 </div>
                             </div>
                             {{-- /.identitycard_image --}}

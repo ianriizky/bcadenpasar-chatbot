@@ -18,6 +18,7 @@ class BranchUserSeeder extends Seeder
      */
     public function run()
     {
+        /** @var \App\Models\Branch $branch_1 */
         $branch_1 = Branch::create([
             'name' => 'BCA KCU Denpasar',
             'address' => 'Jl. Hasanuddin No.58, Pemecutan, Kec. Denpasar Bar., Kota Denpasar, Bali 80232',
@@ -26,7 +27,7 @@ class BranchUserSeeder extends Seeder
             'google_map_url' => 'https://goo.gl/maps/g2NwTkzhg5sXWkPD9',
         ]);
 
-        /** @var \App\Models\User $admin */
+        /** @var \App\Models\User $admin_1 */
         $admin_1 = User::make([
             'username' => env('ADMIN_USERNAME', 'admin'),
             'fullname' => env('ADMIN_FULLNAME', 'Administrator'),
@@ -43,6 +44,7 @@ class BranchUserSeeder extends Seeder
 
         $admin_1->syncRoles(Role::ROLE_ADMIN);
 
+        /** @var \App\Models\Branch $branch_2 */
         $branch_2 = Branch::create([
             'name' => 'BCA KCP Gianyar',
             'address' => 'Jl. By Pass Dharma Giri, Gianyar, Kec. Gianyar, Kabupaten Gianyar, Bali 80511',

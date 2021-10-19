@@ -32,8 +32,7 @@ class OrderStatusController extends Controller
             /** @var \App\Enum\OrderStatus $enumOrderStatus */
             $enumOrderStatus = EnumOrderStatus::from($enumOrderStatus);
 
-            if (EnumOrderStatus::on_progress()->equals($enumOrderStatus) ||
-                EnumOrderStatus::draft()->equals($enumOrderStatus)) {
+            if (EnumOrderStatus::draft()->equals($enumOrderStatus)) {
                 Session::flash('alert', [
                     'type' => 'alert-danger',
                     'message' => 'Status pesanan tidak valid',
@@ -50,33 +49,43 @@ class OrderStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Order  $order
      * @param  \App\Enum\OrderStatus  $enumOrderStatus
-     * @return \Illuminate\Contracts\Support\Renderable
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return \Illuminate\Contracts\Support\Renderable|\Illuminate\Http\RedirectResponse
      */
     public function create(Request $request, Order $order, EnumOrderStatus $enumOrderStatus)
     {
         switch ($enumOrderStatus) {
+            case EnumOrderStatus::on_progress():
+                if ($order->items->isEmpty()) {
+                    Session::flash('alert', [
+                        'type' => 'alert-danger',
+                        'message' => 'Detail pesanan tidak boleh kosong',
+                    ]);
+
+                    return redirect()->route('admin.order.show', $order);
+                    abort(Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
+
+                $title = trans('Finish Draft');
+                break;
+
             case EnumOrderStatus::scheduled():
-                $icon = 'fa-calendar-plus';
                 $title = trans('Create :name', ['name' => __('Schedule Date')]);
                 break;
 
             case EnumOrderStatus::rescheduled():
-                $icon = 'fa-calendar-week';
                 $title = trans('Create :name', ['name' => __('Reschedule Date')]);
                 break;
 
             case EnumOrderStatus::canceled():
-                $icon = 'fa-calendar-times';
                 $title = trans('Cancel Order');
                 break;
 
             case EnumOrderStatus::finished():
-                $icon = 'fa-calendar-check';
                 $title = trans('Finish Order');
                 break;
         }
+
+        $icon = $enumOrderStatus->getIcon();
 
         $url = route('admin.order.status.create', compact('order', 'enumOrderStatus'));
 

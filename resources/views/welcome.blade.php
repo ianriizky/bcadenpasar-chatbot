@@ -9,10 +9,10 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="{{ asset('img/logo.jpeg') }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="icon" href="{{ asset('img/logo.jpeg') }}">
 </head>
 
 <body class="antialiased">

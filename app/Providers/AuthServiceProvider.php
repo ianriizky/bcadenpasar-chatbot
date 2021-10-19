@@ -17,7 +17,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         OrderStatus::class => OrderPolicy::class,
-        Item::class => OrderPolicy::class,
     ];
 
     /**
