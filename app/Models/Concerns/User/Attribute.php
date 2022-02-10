@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $password
  * @property string $remember_token
  * @property boolean $is_active
- * @property string $is_active_badge
+ * @property-read string $is_active_badge
  * @property-read string $role
  * @property-read string $gravatar_image
  *
