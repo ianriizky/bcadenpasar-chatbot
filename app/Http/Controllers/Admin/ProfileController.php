@@ -33,7 +33,7 @@ class ProfileController extends Controller
 
         $user->update($request->validated());
 
-        return redirect()->route('admin.profile.show')->with([
+        return redirect()->route('admin.profile.edit')->with([
             'alert' => [
                 'type' => 'alert-success',
                 'message' => trans('The :resource was updated!', ['resource' => trans('Profile')]),

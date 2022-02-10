@@ -20,7 +20,7 @@
 
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <a href="{{ route('admin.user.create') }}">
+                    <a href="{{ route('admin.profile.edit') }}">
                         <i class="fas fa-user"></i> <span>{{ __('Profile') }}</span>
                     </a>
                 </div>
