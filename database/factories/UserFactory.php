@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enum\Gender;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class UserFactory extends Factory
@@ -22,12 +24,19 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $gender = $this->faker->randomElement(Gender::toValues());
+
         return [
-            'name' => $this->faker->name(),
+            'username' => $this->faker->userName,
+            'fullname' => $this->faker->name($gender),
+            'gender' => $gender,
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'phone_country' => env('PHONE_COUNTRY', 'ID'),
+            'phone' => $this->faker->numerify('081#########'),
+            'email_verified_at' => Carbon::now(),
+            'password' => 'password',
             'remember_token' => Str::random(10),
+            'is_active' => true,
         ];
     }
 
@@ -41,6 +50,34 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's account should be unactivate.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function unactivate()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_active' => false,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's account should be activate.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function activate()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_active' => true,
             ];
         });
     }

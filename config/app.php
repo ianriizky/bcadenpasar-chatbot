@@ -17,6 +17,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Short Name
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    'shortname' => env('APP_SHORTNAME', 'Lrv'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
@@ -56,6 +66,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'mix_url' => env('MIX_ASSET_URL', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -80,7 +92,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'en'),
+    'locale' => env('APP_LOCALE', 'id'),
 
     /*
     |--------------------------------------------------------------------------
@@ -174,6 +186,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 
@@ -195,6 +208,7 @@ return [
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
         'Blade' => Illuminate\Support\Facades\Blade::class,
+        'BotMan' => BotMan\BotMan\Facades\BotMan::class,
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
@@ -214,6 +228,7 @@ return [
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
+        'PhoneNumber' => \Propaganistas\LaravelPhone\PhoneNumber::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
         // 'Redis' => Illuminate\Support\Facades\Redis::class,
@@ -228,6 +243,21 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        // enum
+        'EnumDenominationType' => App\Enum\DenominationType::class,
+        'EnumGender' => App\Enum\Gender::class,
+        'EnumOrderStatus' => App\Enum\OrderStatus::class,
+
+        // model
+        'ModelsBranch' => App\Models\Branch::class,
+        'ModelsConfiguration' => App\Models\Configuration::class,
+        'ModelsCustomer' => App\Models\Customer::class,
+        'ModelsDenomination' => App\Models\Denomination::class,
+        'ModelsItem' => App\Models\Item::class,
+        'ModelsOrder' => App\Models\Order::class,
+        'ModelsOrderStatus' => App\Models\OrderStatus::class,
+        'ModelsRole' => App\Models\Role::class,
+        'ModelsUser' => App\Models\User::class,
     ],
 
 ];

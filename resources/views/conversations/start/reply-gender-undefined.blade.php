@@ -1,0 +1,1 @@
+🦄 Tidak memilih

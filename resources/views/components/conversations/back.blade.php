@@ -1,0 +1,1 @@
+⏪ Kembali ke menu {{ $text }}
