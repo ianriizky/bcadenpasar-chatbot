@@ -1,6 +1,6 @@
 # BCA Denpasar Chatbot
 
-[![Build Status](https://github.com/ianriizky/bcadenpasar-chatbot/workflows/test/badge.svg)](https://github.com/ianriizky/bcadenpasar-chatbot/actions)
+[![Build Status](https://github.com/ianriizky/bcadenpasar-chatbot/actions/workflows/test.yml/badge.svg)](https://github.com/ianriizky/bcadenpasar-chatbot/actions)
 [![Quality Score](https://img.shields.io/scrutinizer/g/ianriizky/bcadenpasar-chatbot.svg?style=flat)](https://scrutinizer-ci.com/g/ianriizky/bcadenpasar-chatbot)
 [![Coverage Status](https://coveralls.io/repos/github/ianriizky/bcadenpasar-chatbot/badge.svg)](https://coveralls.io/github/ianriizky/bcadenpasar-chatbot)
 [![Latest Stable Version](https://poser.pugx.org/ianriizky/bcadenpasar-chatbot/v/stable.svg)](https://packagist.org/packages/ianriizky/bcadenpasar-chatbot)
