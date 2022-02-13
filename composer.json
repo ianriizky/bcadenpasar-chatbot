@@ -82,7 +82,8 @@
             "composer laravel-session-clear",
             "composer debugbar-clear",
             "@php artisan migrate:refresh --seed"
-        ]
+        ],
+        "test": "./vendor/bin/phpunit"
     },
     "extra": {
         "laravel": {
