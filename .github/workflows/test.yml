@@ -65,10 +65,10 @@ jobs:
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
-      - name: Test with pest
+      - name: Test with phpunit
         run: |
           mkdir -p build/logs
-          vendor/bin/pest --verbose --coverage-clover build/logs/clover.xml
+          vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
